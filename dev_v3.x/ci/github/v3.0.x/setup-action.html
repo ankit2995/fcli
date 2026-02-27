@@ -1,6 +1,6 @@
 ---
-title: fortify/github-action/setup
-fcli_version: 0.20260211.062824-dev_v3.x
+title: 'fortify/github-action/setup'
+fcli_version: 0.20260227.043416-dev_v3.x
 ---
 
 <!DOCTYPE html>
@@ -14,251 +14,25 @@ fcli_version: 0.20260211.062824-dev_v3.x
 {% include asciidoc-head.html %}
 {% include fcli-enhancements.html %}
 
-<style>
-  #toc.toc2 {
-    padding-bottom: 100px;
-  }
-  
-  /* Theme toggle button */
-  #theme-toggle {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.7);
-    border-radius: 20px;
-    padding: 6px 12px;
-    cursor: pointer;
-    font-size: 18px;
-    line-height: 1;
-    transition: all 0.3s ease;
-    z-index: 3000;
-  }
-  
-  #theme-toggle:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 1);
-  }
-  
-  #theme-toggle .light-icon {
-    display: none;
-  }
-  
-  #theme-toggle .dark-icon {
-    display: inline;
-  }
-  
-  [data-theme="dark"] #theme-toggle .light-icon {
-    display: inline;
-  }
-  
-  [data-theme="dark"] #theme-toggle .dark-icon {
-    display: none;
-  }
-  
-  /* Copy button styles */
-  .listingblock,
-  .literalblock {
-    position: relative;
-  }
-  
-  .copy-button {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    padding: 6px 12px;
-    background-color: var(--code-bg);
-    border: 1px solid var(--code-border);
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
-    color: var(--text-color);
-    opacity: 0;
-    transition: opacity 0.2s ease, background-color 0.2s ease;
-    z-index: 10;
-  }
-  
-  .listingblock:hover .copy-button,
-  .literalblock:hover .copy-button {
-    opacity: 1;
-  }
-  
-  .copy-button:hover {
-    background-color: var(--link-color);
-    color: #ffffff;
-    border-color: var(--link-color);
-  }
-  
-  .copy-button.copied {
-    background-color: #28a745;
-    color: #ffffff;
-    border-color: #28a745;
-  }
-  
-  [data-theme="dark"] .copy-button {
-    background-color: #3e3e42;
-    border-color: #555555;
-  }
-  
-  [data-theme="dark"] .copy-button:hover {
-    background-color: var(--link-color);
-    border-color: var(--link-color);
-  }
-</style>
-<script>
-(function() {
-  'use strict';
-  const STORAGE_KEY = 'fcli-theme';
-  const DARK_THEME = 'dark';
-  const LIGHT_THEME = 'light';
-
-  function applyTheme(theme) {
-    if (theme === DARK_THEME) {
-      document.documentElement.setAttribute('data-theme', DARK_THEME);
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-    }
-    localStorage.setItem(STORAGE_KEY, theme);
-  }
-
-  function getCurrentTheme() {
-    const storedTheme = localStorage.getItem(STORAGE_KEY);
-    if (storedTheme) {
-      return storedTheme;
-    }
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return DARK_THEME;
-    }
-    return LIGHT_THEME;
-  }
-
-  function toggleTheme() {
-    const currentTheme = getCurrentTheme();
-    const newTheme = currentTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
-    applyTheme(newTheme);
-  }
-
-  function initTheme() {
-    const theme = getCurrentTheme();
-    applyTheme(theme);
-  }
-
-  function setupToggleButton() {
-    const toggleButton = document.getElementById('theme-toggle');
-    if (toggleButton) {
-      toggleButton.addEventListener('click', toggleTheme);
-    }
-  }
-
-  function listenForSystemThemeChanges() {
-    if (window.matchMedia) {
-      const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      darkModeQuery.addEventListener('change', function(e) {
-        if (!localStorage.getItem(STORAGE_KEY)) {
-          applyTheme(e.matches ? DARK_THEME : LIGHT_THEME);
-        }
-      });
-    }
-  }
-
-  initTheme();
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-      setupToggleButton();
-      listenForSystemThemeChanges();
-      addCopyButtons();
-    });
-  } else {
-    setupToggleButton();
-    listenForSystemThemeChanges();
-    addCopyButtons();
-  }
-
-  function addCopyButtons() {
-    const codeBlocks = document.querySelectorAll('.listingblock > .content > pre, .literalblock > .content > pre');
-    
-    codeBlocks.forEach(function(codeBlock) {
-      const container = codeBlock.closest('.listingblock, .literalblock');
-      if (!container || container.querySelector('.copy-button')) {
-        return;
-      }
-      
-      const button = document.createElement('button');
-      button.className = 'copy-button';
-      button.textContent = 'Copy';
-      button.setAttribute('aria-label', 'Copy code to clipboard');
-      
-      button.addEventListener('click', function() {
-        const code = codeBlock.textContent;
-        
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(code).then(function() {
-            showCopySuccess(button);
-          }).catch(function(err) {
-            console.error('Failed to copy:', err);
-            fallbackCopy(code, button);
-          });
-        } else {
-          fallbackCopy(code, button);
-        }
-      });
-      
-      container.style.position = 'relative';
-      container.insertBefore(button, container.firstChild);
-    });
-  }
-  
-  function showCopySuccess(button) {
-    const originalText = button.textContent;
-    button.textContent = 'Copied!';
-    button.classList.add('copied');
-    
-    setTimeout(function() {
-      button.textContent = originalText;
-      button.classList.remove('copied');
-    }, 2000);
-  }
-  
-  function fallbackCopy(text, button) {
-    const textArea = document.createElement('textarea');
-    textArea.value = text;
-    textArea.style.position = 'fixed';
-    textArea.style.left = '-999999px';
-    textArea.style.top = '-999999px';
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-    
-    try {
-      document.execCommand('copy');
-      showCopySuccess(button);
-    } catch (err) {
-      console.error('Fallback copy failed:', err);
-    }
-    
-    document.body.removeChild(textArea);
-  }
-})();
-</script>
 </head>
 <body class="article toc2 toc-left">
 
-{% include banner.html bannerTitle="FCLI: The Universal Fortify CLI" currentVersion="0.20260211.062824-dev_v3.x" %}
+{% include banner.html bannerTitle="FCLI: The Universal Fortify CLI" currentVersion="0.20260227.043416-dev_v3.x" %}
 
 
 <div id="header">
 <h1>fortify/github-action/setup</h1>
 <div class="details">
-<span id="revnumber">version 0.20260211.062824-dev_v3.x</span>
+<span id="revnumber">version 0.20260227.043416-dev_v3.x</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_overview">Overview</a>
-<ul class="sectlevel2">
+<li><a href="#_overview">Overview</a></li>
 <li><a href="#_quick_start_example">Quick Start Example</a></li>
+<li><a href="#_tips_recommendations">Tips &amp; Recommendations</a>
+<ul class="sectlevel2">
+<li><a href="#_air_gapped_environments">Air-Gapped Environments</a></li>
 </ul>
 </li>
 <li><a href="#_configuration">Configuration</a>
@@ -273,19 +47,23 @@ fcli_version: 0.20260211.062824-dev_v3.x
 </div>
 </div>
 <div id="content">
+{% raw %}
 <div class="sect1">
 <h2 id="_overview"><a class="anchor" href="#_overview"></a>Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The <code>fortify/github-action/setup</code> action allows for setting up fcli and various other Fortify tools for use in custom CI/CD workflows.
+<p>The <code>fortify/github-action/setup@v3</code> action allows for setting up fcli and various other Fortify tools for use in custom CI/CD workflows.
 This allows you to implement fully customized AST scan workflows or other automation workflows that interact with Fortify products.</p>
 </div>
 <div class="paragraph">
 <p>The Fortify tools to be installed are specified through action inputs, whereas optional bootstrapping behavior for fcli and supporting
 tools can be controlled through environment variables.</p>
 </div>
-<div class="sect2">
-<h3 id="_quick_start_example"><a class="anchor" href="#_quick_start_example"></a>Quick Start Example</h3>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_quick_start_example"><a class="anchor" href="#_quick_start_example"></a>Quick Start Example</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>Basic setup for custom workflows with fcli version pinning.</p>
 </div>
@@ -312,6 +90,30 @@ jobs:
           # Your custom workflow here
           fcli fod session logout ...</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tips_recommendations"><a class="anchor" href="#_tips_recommendations"></a>Tips &amp; Recommendations</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_air_gapped_environments"><a class="anchor" href="#_air_gapped_environments"></a>Air-Gapped Environments</h3>
+<div class="paragraph">
+<p>For air-gapped or restricted network environments, host custom tool definitions and tool bundles in an internal
+SCM repository or artifact registry. Configure the integration to use these internal resources:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Set <code>TOOL_DEFINITIONS</code> to point to your internally hosted tool definitions file</p>
+</li>
+<li>
+<p>Set <code>FCLI_BOOTSTRAP_URL</code> to download fcli from your internal mirror</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This ensures all required tools are accessible without external internet access.</p>
 </div>
 </div>
 </div>
@@ -500,11 +302,12 @@ However, bootstrapping behavior for fcli has changed; please review the followin
 </div>
 </div>
 </div>
+{% endraw %}
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.20260211.062824-dev_v3.x<br>
-Last updated 2026-02-11 06:31:58 UTC
+Version 0.20260227.043416-dev_v3.x<br>
+Last updated 2026-02-27 04:38:04 UTC
 </div>
 </div>
 </body>

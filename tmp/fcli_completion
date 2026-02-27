@@ -49127,10 +49127,11 @@ function _picocli_fcli_tool_env_github() {
 
   local extraCompGenOpts=()  local commands=""
   local flag_opts="-h --help --debug"
-  local arg_opts="--env-prefix --log-file --log-level --log-mask --tools --excludes"
+  local arg_opts="--env-prefix --log-file --log-level --log-mask --tools --excludes --output-as"
   local logLevel_option_args=("TRACE" "DEBUG" "INFO" "WARN" "ERROR" "NONE") # --log-level values
   local level_option_args=("high" "medium" "low" "none") # --log-mask values
   local exclude_option_args=("path" "vars") # --excludes values
+  local outputAs_option_args=("shell" "pwsh") # --output-as values
 
   type compopt &>/dev/null && compopt +o default
 
@@ -49162,6 +49163,11 @@ function _picocli_fcli_tool_env_github() {
       COMPREPLY=( $( compReplyArray "${exclude_option_args[@]}" ) )
       return $?
       ;;
+    --output-as)
+      local IFS=$'\n'
+      COMPREPLY=( $( compReplyArray "${outputAs_option_args[@]}" ) )
+      return $?
+      ;;
   esac
 
   if [[ "${curr_word}" == -* ]]; then
@@ -49181,10 +49187,11 @@ function _picocli_fcli_tool_env_gitlab() {
 
   local extraCompGenOpts=()  local commands=""
   local flag_opts="-h --help --debug"
-  local arg_opts="--env-prefix --log-file --log-level --log-mask --tools --excludes -f --file"
+  local arg_opts="--env-prefix --log-file --log-level --log-mask --tools --excludes -f --file --output-as"
   local logLevel_option_args=("TRACE" "DEBUG" "INFO" "WARN" "ERROR" "NONE") # --log-level values
   local level_option_args=("high" "medium" "low" "none") # --log-mask values
   local exclude_option_args=("path" "vars") # --excludes values
+  local outputAs_option_args=("shell" "pwsh") # --output-as values
 
   type compopt &>/dev/null && compopt +o default
 
@@ -49222,6 +49229,11 @@ function _picocli_fcli_tool_env_gitlab() {
       COMPREPLY=( $( compgen -f -- "${curr_word}" ) ) # files
       return $?
       ;;
+    --output-as)
+      local IFS=$'\n'
+      COMPREPLY=( $( compReplyArray "${outputAs_option_args[@]}" ) )
+      return $?
+      ;;
   esac
 
   if [[ "${curr_word}" == -* ]]; then
@@ -49241,10 +49253,11 @@ function _picocli_fcli_tool_env_ado() {
 
   local extraCompGenOpts=()  local commands=""
   local flag_opts="-h --help --debug"
-  local arg_opts="--env-prefix --log-file --log-level --log-mask --tools --excludes"
+  local arg_opts="--env-prefix --log-file --log-level --log-mask --tools --excludes --output-as"
   local logLevel_option_args=("TRACE" "DEBUG" "INFO" "WARN" "ERROR" "NONE") # --log-level values
   local level_option_args=("high" "medium" "low" "none") # --log-mask values
   local exclude_option_args=("path" "vars") # --excludes values
+  local outputAs_option_args=("shell" "pwsh") # --output-as values
 
   type compopt &>/dev/null && compopt +o default
 
@@ -49274,6 +49287,11 @@ function _picocli_fcli_tool_env_ado() {
     --excludes)
       local IFS=$'\n'
       COMPREPLY=( $( compReplyArray "${exclude_option_args[@]}" ) )
+      return $?
+      ;;
+    --output-as)
+      local IFS=$'\n'
+      COMPREPLY=( $( compReplyArray "${outputAs_option_args[@]}" ) )
       return $?
       ;;
   esac

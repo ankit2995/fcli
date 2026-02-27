@@ -1,6 +1,6 @@
 ---
-title: Fcli Action Development Guide
-fcli_version: 0.20260211.062824-dev_v3.x
+title: 'Fcli Action Development Guide'
+fcli_version: 0.20260227.043416-dev_v3.x
 ---
 
 <!DOCTYPE html>
@@ -14,244 +14,16 @@ fcli_version: 0.20260211.062824-dev_v3.x
 {% include asciidoc-head.html %}
 {% include fcli-enhancements.html %}
 
-<style>
-  #toc.toc2 {
-    padding-bottom: 100px;
-  }
-  
-  /* Theme toggle button */
-  #theme-toggle {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.7);
-    border-radius: 20px;
-    padding: 6px 12px;
-    cursor: pointer;
-    font-size: 18px;
-    line-height: 1;
-    transition: all 0.3s ease;
-    z-index: 3000;
-  }
-  
-  #theme-toggle:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 1);
-  }
-  
-  #theme-toggle .light-icon {
-    display: none;
-  }
-  
-  #theme-toggle .dark-icon {
-    display: inline;
-  }
-  
-  [data-theme="dark"] #theme-toggle .light-icon {
-    display: inline;
-  }
-  
-  [data-theme="dark"] #theme-toggle .dark-icon {
-    display: none;
-  }
-  
-  /* Copy button styles */
-  .listingblock,
-  .literalblock {
-    position: relative;
-  }
-  
-  .copy-button {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    padding: 6px 12px;
-    background-color: var(--code-bg);
-    border: 1px solid var(--code-border);
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
-    color: var(--text-color);
-    opacity: 0;
-    transition: opacity 0.2s ease, background-color 0.2s ease;
-    z-index: 10;
-  }
-  
-  .listingblock:hover .copy-button,
-  .literalblock:hover .copy-button {
-    opacity: 1;
-  }
-  
-  .copy-button:hover {
-    background-color: var(--link-color);
-    color: #ffffff;
-    border-color: var(--link-color);
-  }
-  
-  .copy-button.copied {
-    background-color: #28a745;
-    color: #ffffff;
-    border-color: #28a745;
-  }
-  
-  [data-theme="dark"] .copy-button {
-    background-color: #3e3e42;
-    border-color: #555555;
-  }
-  
-  [data-theme="dark"] .copy-button:hover {
-    background-color: var(--link-color);
-    border-color: var(--link-color);
-  }
-</style>
-<script>
-(function() {
-  'use strict';
-  const STORAGE_KEY = 'fcli-theme';
-  const DARK_THEME = 'dark';
-  const LIGHT_THEME = 'light';
-
-  function applyTheme(theme) {
-    if (theme === DARK_THEME) {
-      document.documentElement.setAttribute('data-theme', DARK_THEME);
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-    }
-    localStorage.setItem(STORAGE_KEY, theme);
-  }
-
-  function getCurrentTheme() {
-    const storedTheme = localStorage.getItem(STORAGE_KEY);
-    if (storedTheme) {
-      return storedTheme;
-    }
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return DARK_THEME;
-    }
-    return LIGHT_THEME;
-  }
-
-  function toggleTheme() {
-    const currentTheme = getCurrentTheme();
-    const newTheme = currentTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
-    applyTheme(newTheme);
-  }
-
-  function initTheme() {
-    const theme = getCurrentTheme();
-    applyTheme(theme);
-  }
-
-  function setupToggleButton() {
-    const toggleButton = document.getElementById('theme-toggle');
-    if (toggleButton) {
-      toggleButton.addEventListener('click', toggleTheme);
-    }
-  }
-
-  function listenForSystemThemeChanges() {
-    if (window.matchMedia) {
-      const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      darkModeQuery.addEventListener('change', function(e) {
-        if (!localStorage.getItem(STORAGE_KEY)) {
-          applyTheme(e.matches ? DARK_THEME : LIGHT_THEME);
-        }
-      });
-    }
-  }
-
-  initTheme();
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-      setupToggleButton();
-      listenForSystemThemeChanges();
-      addCopyButtons();
-    });
-  } else {
-    setupToggleButton();
-    listenForSystemThemeChanges();
-    addCopyButtons();
-  }
-
-  function addCopyButtons() {
-    const codeBlocks = document.querySelectorAll('.listingblock > .content > pre, .literalblock > .content > pre');
-    
-    codeBlocks.forEach(function(codeBlock) {
-      const container = codeBlock.closest('.listingblock, .literalblock');
-      if (!container || container.querySelector('.copy-button')) {
-        return;
-      }
-      
-      const button = document.createElement('button');
-      button.className = 'copy-button';
-      button.textContent = 'Copy';
-      button.setAttribute('aria-label', 'Copy code to clipboard');
-      
-      button.addEventListener('click', function() {
-        const code = codeBlock.textContent;
-        
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(code).then(function() {
-            showCopySuccess(button);
-          }).catch(function(err) {
-            console.error('Failed to copy:', err);
-            fallbackCopy(code, button);
-          });
-        } else {
-          fallbackCopy(code, button);
-        }
-      });
-      
-      container.style.position = 'relative';
-      container.insertBefore(button, container.firstChild);
-    });
-  }
-  
-  function showCopySuccess(button) {
-    const originalText = button.textContent;
-    button.textContent = 'Copied!';
-    button.classList.add('copied');
-    
-    setTimeout(function() {
-      button.textContent = originalText;
-      button.classList.remove('copied');
-    }, 2000);
-  }
-  
-  function fallbackCopy(text, button) {
-    const textArea = document.createElement('textarea');
-    textArea.value = text;
-    textArea.style.position = 'fixed';
-    textArea.style.left = '-999999px';
-    textArea.style.top = '-999999px';
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-    
-    try {
-      document.execCommand('copy');
-      showCopySuccess(button);
-    } catch (err) {
-      console.error('Fallback copy failed:', err);
-    }
-    
-    document.body.removeChild(textArea);
-  }
-})();
-</script>
 </head>
 <body class="article toc2 toc-left">
 
-{% include banner.html bannerTitle="FCLI: The Universal Fortify CLI" currentVersion="0.20260211.062824-dev_v3.x" %}
+{% include banner.html bannerTitle="FCLI: The Universal Fortify CLI" currentVersion="0.20260227.043416-dev_v3.x" %}
 
 
 <div id="header">
 <h1>Fcli Action Development Guide</h1>
 <div class="details">
-<span id="revnumber">version 0.20260211.062824-dev_v3.x</span>
+<span id="revnumber">version 0.20260227.043416-dev_v3.x</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -274,7 +46,7 @@ fcli_version: 0.20260211.062824-dev_v3.x
 <li><a href="#_formatters"><code>formatters</code></a></li>
 </ul>
 </li>
-<li><a href="#type-step">YAML step instructions</a>
+<li><a href="#type-step-regular">YAML step instructions</a>
 <ul class="sectlevel2">
 <li><a href="#_step_var_set"><code>[step] var.set</code></a></li>
 <li><a href="#_step_var_rm"><code>[step] var.rm</code></a></li>
@@ -290,10 +62,16 @@ fcli_version: 0.20260211.062824-dev_v3.x
 <li><a href="#_step_records_for_each"><code>[step] records.for-each</code></a></li>
 <li><a href="#_step_with"><code>[step] with</code></a></li>
 <li><a href="#_step_writer_append"><code>[step] writer.append</code></a></li>
-<li><a href="#_step_steps"><code>[step] steps</code></a></li>
+<li><a href="#_step_do"><code>[step] do</code></a></li>
 <li><a href="#_step_throw"><code>[step] throw</code></a></li>
 <li><a href="#_step_exit"><code>[step] exit</code></a></li>
-<li><a href="#_step_if"><code>[step] if</code></a></li>
+</ul>
+</li>
+<li><a href="#type-step">YAML step control instructions</a>
+<ul class="sectlevel2">
+<li><a href="#_control_if"><code>[control] if</code></a></li>
+<li><a href="#_control_on_fail"><code>[control] on.fail</code></a></li>
+<li><a href="#_control_on_success"><code>[control] on.success</code></a></li>
 </ul>
 </li>
 <li><a href="#yaml-types">YAML types</a>
@@ -303,6 +81,7 @@ fcli_version: 0.20260211.062824-dev_v3.x
 <li><a href="#type-config"><code>[type] config</code></a></li>
 <li><a href="#type-for-each"><code>[type] for-each</code></a></li>
 <li><a href="#type-mask"><code>[type] mask</code></a></li>
+<li><a href="#type-msg-and-cause"><code>[type] msg-and-cause</code></a></li>
 <li><a href="#type-rest.call"><code>[type] rest.call</code></a></li>
 <li><a href="#type-rest.call-for-each"><code>[type] rest.call-for-each</code></a></li>
 <li><a href="#type-rest.call-log.progress"><code>[type] rest.call-log.progress</code></a></li>
@@ -322,28 +101,19 @@ fcli_version: 0.20260211.062824-dev_v3.x
 <li><a href="#_spel_functions">SpEL Functions</a></li>
 <li><a href="#_ci">[ci]</a></li>
 <li><a href="#_ci_detect"><code>_ci.detect</code></a></li>
-<li><a href="#_ado_addprthread"><code>ado.addPrThread</code></a></li>
-<li><a href="#_ado_getenv"><code>ado.getEnv</code></a></li>
-<li><a href="#_ado_gettype"><code>ado.getType</code></a></li>
-<li><a href="#_ado_publishtestresults"><code>ado.publishTestResults</code></a></li>
-<li><a href="#_ado_uploadsarif"><code>ado.uploadSarif</code></a></li>
-<li><a href="#_bitbucket_addreportannotations"><code>bitbucket.addReportAnnotations</code></a></li>
-<li><a href="#_bitbucket_getenv"><code>bitbucket.getEnv</code></a></li>
-<li><a href="#_bitbucket_gettype"><code>bitbucket.getType</code></a></li>
-<li><a href="#_bitbucket_uploadreport"><code>bitbucket.uploadReport</code></a></li>
-<li><a href="#_github_addprcomment"><code>github.addPrComment</code></a></li>
-<li><a href="#_github_addreviewcomment"><code>github.addReviewComment</code></a></li>
-<li><a href="#_github_createcheckrun"><code>github.createCheckRun</code></a></li>
-<li><a href="#_github_createcheckrunwithannotations"><code>github.createCheckRunWithAnnotations</code></a></li>
-<li><a href="#_github_getenv"><code>github.getEnv</code></a></li>
-<li><a href="#_github_gettype"><code>github.getType</code></a></li>
-<li><a href="#_github_tryuploadsarif"><code>github.tryUploadSarif</code></a></li>
-<li><a href="#_github_uploadsarif"><code>github.uploadSarif</code></a></li>
-<li><a href="#_gitlab_addmrcomment"><code>gitlab.addMrComment</code></a></li>
-<li><a href="#_gitlab_getenv"><code>gitlab.getEnv</code></a></li>
-<li><a href="#_gitlab_gettype"><code>gitlab.getType</code></a></li>
-<li><a href="#_gitlab_uploadcodequalityreport"><code>gitlab.uploadCodeQualityReport</code></a></li>
-<li><a href="#_gitlab_uploadsecurityreport"><code>gitlab.uploadSecurityReport</code></a></li>
+<li><a href="#_ado_env"><code>ado.env</code></a></li>
+<li><a href="#_ado_type"><code>ado.type</code></a></li>
+<li><a href="#_ado_project"><code>ado.project</code></a></li>
+<li><a href="#_ado_repo"><code>ado.repo</code></a></li>
+<li><a href="#_bitbucket_env"><code>bitbucket.env</code></a></li>
+<li><a href="#_bitbucket_type"><code>bitbucket.type</code></a></li>
+<li><a href="#_bitbucket_repo"><code>bitbucket.repo</code></a></li>
+<li><a href="#_github_env"><code>github.env</code></a></li>
+<li><a href="#_github_type"><code>github.type</code></a></li>
+<li><a href="#_github_repo"><code>github.repo</code></a></li>
+<li><a href="#_gitlab_env"><code>gitlab.env</code></a></li>
+<li><a href="#_gitlab_type"><code>gitlab.type</code></a></li>
+<li><a href="#_gitlab_project"><code>gitlab.project</code></a></li>
 <li><a href="#_date">[date]</a></li>
 <li><a href="#_currentdatetime"><code>currentDateTime</code></a></li>
 <li><a href="#_date_2"><code>date</code></a></li>
@@ -354,8 +124,6 @@ fcli_version: 0.20260211.062824-dev_v3.x
 <li><a href="#_now"><code>now</code></a></li>
 <li><a href="#_fcli">[fcli]</a></li>
 <li><a href="#_action_fmt"><code>action.fmt</code></a></li>
-<li><a href="#_actionschema"><code>actionSchema</code></a></li>
-<li><a href="#_actionspelfunctions"><code>actionSpelFunctions</code></a></li>
 <li><a href="#_copyright"><code>copyright</code></a></li>
 <li><a href="#_decrypt"><code>decrypt</code></a></li>
 <li><a href="#_encrypt"><code>encrypt</code></a></li>
@@ -383,6 +151,7 @@ fcli_version: 0.20260211.062824-dev_v3.x
 <li><a href="#_htmltosinglelinetext"><code>htmlToSingleLineText</code></a></li>
 <li><a href="#_htmltotext"><code>htmlToText</code></a></li>
 <li><a href="#_ifblank"><code>ifBlank</code></a></li>
+<li><a href="#_indent"><code>indent</code></a></li>
 <li><a href="#_isblank"><code>isBlank</code></a></li>
 <li><a href="#_isnotblank"><code>isNotBlank</code></a></li>
 <li><a href="#_join"><code>join</code></a></li>
@@ -395,6 +164,13 @@ fcli_version: 0.20260211.062824-dev_v3.x
 <li><a href="#_substringbefore"><code>substringBefore</code></a></li>
 <li><a href="#_util">[util]</a></li>
 <li><a href="#_env"><code>env</code></a></li>
+<li><a href="#_fs_exists"><code>fs.exists</code></a></li>
+<li><a href="#_fs_isdirectory"><code>fs.isDirectory</code></a></li>
+<li><a href="#_fs_isfile"><code>fs.isFile</code></a></li>
+<li><a href="#_fs_isreadable"><code>fs.isReadable</code></a></li>
+<li><a href="#_fs_isreadablefile"><code>fs.isReadableFile</code></a></li>
+<li><a href="#_fs_iswritable"><code>fs.isWritable</code></a></li>
+<li><a href="#_fs_iswritabledir"><code>fs.isWritableDir</code></a></li>
 <li><a href="#_jsonstringify"><code>jsonStringify</code></a></li>
 <li><a href="#_properties"><code>properties</code></a></li>
 <li><a href="#_resolveagainstcurrentworkdir"><code>resolveAgainstCurrentWorkDir</code></a></li>
@@ -417,12 +193,15 @@ fcli_version: 0.20260211.062824-dev_v3.x
 <li><a href="#_skipreasonif"><code>skipReasonIf</code></a></li>
 <li><a href="#_internal">[internal]</a></li>
 <li><a href="#_action_docrenderer"><code>action.docRenderer</code></a></li>
-<li><a href="#_action_docrenderer_asciidoc"><code>action.docRenderer.asciidoc</code></a></li>
-<li><a href="#_action_docrenderer_cicontext"><code>action.docRenderer.ciContext</code></a></li>
-<li><a href="#_action_docrenderer_currentproduct"><code>action.docRenderer.currentProduct</code></a></li>
-<li><a href="#_action_docrenderer_manpagebaseurl"><code>action.docRenderer.manpageBaseUrl</code></a></li>
-<li><a href="#_action_docrenderer_render"><code>action.docRenderer.render</code></a></li>
-<li><a href="#_action_docrenderer_text"><code>action.docRenderer.text</code></a></li>
+<li><a href="#_action_docrenderer_asciidoc"><code>action.docRenderer().asciidoc</code></a></li>
+<li><a href="#_action_docrenderer_cicontext"><code>action.docRenderer().ciContext</code></a></li>
+<li><a href="#_action_docrenderer_currentproduct"><code>action.docRenderer().currentProduct</code></a></li>
+<li><a href="#_action_docrenderer_manpagebaseurl"><code>action.docRenderer().manpageBaseUrl</code></a></li>
+<li><a href="#_action_docrenderer_render"><code>action.docRenderer().render</code></a></li>
+<li><a href="#_action_docrenderer_tablecell"><code>action.docRenderer().tableCell</code></a></li>
+<li><a href="#_action_docrenderer_text"><code>action.docRenderer().text</code></a></li>
+<li><a href="#_actionschema"><code>actionSchema</code></a></li>
+<li><a href="#_actionspelfunctions"><code>actionSpelFunctions</code></a></li>
 <li><a href="#_localrepo"><code>localRepo</code></a></li>
 </ul>
 </li>
@@ -430,6 +209,7 @@ fcli_version: 0.20260211.062824-dev_v3.x
 </div>
 </div>
 <div id="content">
+{% raw %}
 <div id="preamble">
 <div class="sectionbody">
 <table class="tableblock frame-all grid-all fit-content">
@@ -445,7 +225,7 @@ fcli_version: 0.20260211.062824-dev_v3.x
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0.20260211.062824-dev_v3.x</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0.20260227.043416-dev_v3.x</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">2.6.0</p></td>
 </tr>
 </tbody>
@@ -567,7 +347,7 @@ your action YAML file, your IDE or YAML editor may automatically provide support
 YAML files. If not, try closing and re-opening the YAML file, or consult the documentation of your IDE or YAML editor.</p>
 </div>
 <div class="paragraph">
-<p>As shown in the sample schema statements above, the current fcli version 0.20260211.062824-dev_v3.x supports
+<p>As shown in the sample schema statements above, the current fcli version 0.20260227.043416-dev_v3.x supports
 schema version <a href="https://fortify.github.io/fcli/schemas/action/fcli-action-schema-2.6.0.json">2.6.0</a>. Other
 fcli versions may support different schema versions. In general, fcli provides backward compatibility for earlier schema
 versions with the same schema major version range, and forward compatibility for later schema patch versions within the
@@ -863,13 +643,13 @@ provide more details on the expected contents for each property type.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="type-step"><a class="anchor" href="#type-step"></a>YAML step instructions</h2>
+<h2 id="type-step-regular"><a class="anchor" href="#type-step-regular"></a>YAML step instructions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The sections below list all supported step instructions, that can for example be used in the top-level
-<code>steps</code> instruction, but also other instructions that accept a list of steps, for example within
-<code>for-each</code> blocks. Where applicable, links are provided to <a href="#yaml-types">YAML types</a> sub-sections that
-provide more details on the expected contents for each property type.</p>
+<p>The sections below list all supported step instructions except control instructions (see next section). These can for example
+be used in the top-level <code>steps</code> instruction, but also other instructions that accept a list of steps,
+for example within <code>for-each</code> blocks. Where applicable, links are provided to <a href="#yaml-types">YAML types</a>
+sub-sections that provide more details on the expected contents for each property type.</p>
 </div>
 <div class="sect2">
 <h3 id="_step_var_set"><a class="anchor" href="#_step_var_set"></a><code>[step] var.set</code></h3>
@@ -917,7 +697,7 @@ formatterValue2: {value: "${myVar}", fmt: "${myVarFormatterExpression}"}</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-yaml" data-lang="yaml">steps:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">do:
   - var.set:
       var1: Hello ${name}
       var2.p1: This is property 1 on var2
@@ -965,7 +745,7 @@ formatterValue2: {value: "${myVar}", fmt: "${myVarFormatterExpression}"}</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-yaml" data-lang="yaml">steps:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">do:
   - var.rm:
       - var1    # Remove variable named 'var1'
       - ${var2} # Remove variable name as stored in var2 variable</code></pre>
@@ -994,7 +774,7 @@ formatterValue2: {value: "${myVar}", fmt: "${myVarFormatterExpression}"}</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-yaml" data-lang="yaml">steps:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">do:
   - log.progress: Processing record ${recordNumber}</code></pre>
 </div>
 </div></div></td>
@@ -1010,19 +790,27 @@ formatterValue2: {value: "${myVar}", fmt: "${myVarFormatterExpression}"}</p>
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>[step] log.info</code> - <a href="#expression">expression</a></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>[step] log.info</code> - <a href="#type-msg-and-cause">msg-and-cause</a></strong></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Write an informational message to console and log file (if enabled). Note that depending on the config:output setting, informational messages may be shown either immediately, or only after all action steps have been executed, to not interfere with progress messages.<br></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Write an informational message to console and log file (if enabled). Note that depending on the config:output setting, informational messages may be shown either immediately, or only after all action steps have been executed, to not interfere with progress messages. This instruction can be specified as either a simple SpEL template expression, or as a structured object with <code>msg</code> and optional <code>cause</code> properties for including exception details.<br></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>Sample snippet</strong></p>
+<p><strong>Sample snippets</strong></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-yaml" data-lang="yaml">steps:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">do:
   - log.info: Output written to ${fileName}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">do:
+  - log.info:
+      msg: 'Operation completed with warnings'
+      cause: ${lastException}</code></pre>
 </div>
 </div></div></td>
 </tr>
@@ -1037,19 +825,27 @@ formatterValue2: {value: "${myVar}", fmt: "${myVarFormatterExpression}"}</p>
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>[step] log.warn</code> - <a href="#expression">expression</a></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>[step] log.warn</code> - <a href="#type-msg-and-cause">msg-and-cause</a></strong></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Write a warning message to console and log file (if enabled). Note that depending on the config:output setting, warning messages may be shown either immediately, or only after all action steps have been executed, to not interfere with progress messages.<br></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Write a warning message to console and log file (if enabled). Note that depending on the config:output setting, warning messages may be shown either immediately, or only after all action steps have been executed, to not interfere with progress messages. This instruction can be specified as either a simple SpEL template expression, or as a structured object with <code>msg</code> and optional <code>cause</code> properties for including exception details.<br></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>Sample snippet</strong></p>
+<p><strong>Sample snippets</strong></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-yaml" data-lang="yaml">steps:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">do:
   - log.warn: Skipping this part due to errors: ${errors}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">do:
+  - log.warn:
+      msg: 'Failed to complete operation'
+      cause: ${lastException}</code></pre>
 </div>
 </div></div></td>
 </tr>
@@ -1064,19 +860,27 @@ formatterValue2: {value: "${myVar}", fmt: "${myVarFormatterExpression}"}</p>
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>[step] log.debug</code> - <a href="#expression">expression</a></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>[step] log.debug</code> - <a href="#type-msg-and-cause">msg-and-cause</a></strong></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Write a debug message to log file (if enabled).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Write a debug message to log file (if enabled). This instruction can be specified as either a simple SpEL template expression, or as a structured object with <code>msg</code> and optional <code>cause</code> properties for including exception details.<br></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>Sample snippet</strong></p>
+<p><strong>Sample snippets</strong></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-yaml" data-lang="yaml">steps:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">do:
    - log.debug: ${#this}   # Log all action variables</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">do:
+  - log.debug:
+      msg: 'Debug information'
+      cause: ${lastException}</code></pre>
 </div>
 </div></div></td>
 </tr>
@@ -1247,7 +1051,7 @@ x.failed: Set to true if fcli invocation failed, false if successfull</p></td>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-yaml" data-lang="yaml">steps:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">do:
   - out.write:
       ${cli.file}: {fmt: output}</code></pre>
 </div>
@@ -1401,17 +1205,18 @@ x.failed: Set to true if fcli invocation failed, false if successfull</p></td>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_step_steps"><a class="anchor" href="#_step_steps"></a><code>[step] steps</code></h3>
+<h3 id="_step_do"><a class="anchor" href="#_step_do"></a><code>[step] do</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 100%;">
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>[step] steps</code> - array&lt;<a href="#type-step">step</a>&gt;</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>[step] do</code> - array&lt;<a href="#type-step">step</a>&gt;</strong></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Sub-steps to be executed; useful for grouping or conditional execution of multiple steps.<br></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sub-steps to be executed; useful for grouping or conditional execution of multiple steps.</p>
+<p class="tableblock">Note: The 'steps' property name is deprecated; use 'do' instead. For backward compatibility, 'steps' is still accepted.<br></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -1419,10 +1224,10 @@ x.failed: Set to true if fcli invocation failed, false if successfull</p></td>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-yaml" data-lang="yaml">steps:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">do:
   - ...
   - if: ${condition}
-    steps:
+    do:
       - ... # One or more steps to execute if ${condition} evaluates to true</code></pre>
 </div>
 </div></div></td>
@@ -1438,19 +1243,35 @@ x.failed: Set to true if fcli invocation failed, false if successfull</p></td>
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>[step] throw</code> - <a href="#expression">expression</a></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>[step] throw</code> - <a href="#type-msg-and-cause">msg-and-cause</a></strong></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Throw an exception, thereby terminating action execution.<br></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Throw an exception, thereby terminating action execution. This instruction can be specified as either a simple SpEL template expression that evaluates to a message string, or as a structured object with <code>msg</code> and/or <code>cause</code> properties. When only <code>cause</code> is specified without <code>msg</code>, the exception will be rethrown preserving its original type (if FcliException) or wrapped.<br></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>Sample snippet</strong></p>
+<p><strong>Sample snippets</strong></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-yaml" data-lang="yaml">steps:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">do:
   - throw: ERROR: ${errorMessage}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">do:
+  - throw:
+      msg: 'Operation failed'
+      cause: ${lastException}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml"># Rethrow original exception
+do:
+  - throw:
+      cause: ${lastException}</code></pre>
 </div>
 </div></div></td>
 </tr>
@@ -1476,7 +1297,7 @@ x.failed: Set to true if fcli invocation failed, false if successfull</p></td>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-yaml" data-lang="yaml">steps:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">do:
   - if: ${someCondition}
     exit: 1</code></pre>
 </div>
@@ -1485,18 +1306,81 @@ x.failed: Set to true if fcli invocation failed, false if successfull</p></td>
 </tbody>
 </table>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="type-step"><a class="anchor" href="#type-step"></a>YAML step control instructions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The sections below list all supported YAML step control instructions. These control instructions can be used in combination with
+the YAML step instructions listed in the previous section to control execution flow and success/error handling, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">- if: false
+  log.info: Scan passed, continuing with post-scan steps</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">- run.fcli:
+    SSC_EXPORT:
+      cmd: ssc artifact download --appversion 123
+      on.fail:
+        - log.warn: Download failed, continuing without artifact</code></pre>
+</div>
+</div>
 <div class="sect2">
-<h3 id="_step_if"><a class="anchor" href="#_step_if"></a><code>[step] if</code></h3>
+<h3 id="_control_if"><a class="anchor" href="#_control_if"></a><code>[control] if</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 100%;">
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>[step] if</code> - <a href="#expression">expression</a></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>[control] if</code> - <a href="#expression">expression</a></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Optional SpEL template expression: Only execute this instruction if the given if-expression evaluates to 'true'<br></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_control_on_fail"><a class="anchor" href="#_control_on_fail"></a><code>[control] on.fail</code></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 100%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>[control] on.fail</code> - array&lt;<a href="#type-step">step</a>&gt;</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution fails, for example<br>
+due to an exception or step-specific failure. If not specified, the exception will propagate and action execution will terminate (fail-fast behavior). If specified, failure of the current step will not automatically<br>
+result in action execution termination, but <code>on.fail</code> steps may for example include the<br>
+<code>throw</code> step to (conditionally) rethrow the exception.</p>
+<p class="tableblock">Steps executed in <code>on.fail</code> can access exception details via the following properties:<br>
+- <code>lastException.type</code>: Java simple class name of the exception<br>
+- <code>lastException.message</code>: The exception message (the exception object, e.g., ${lastException.message}, ${lastException.getClass().simpleName}). - <code>lastException.pojo</code>: The Java exception object itself, for example for use in <code>log.*</code> or <code>throw</code> steps<br>
+For named elements, '&lt;name&gt;_exception' is also available with the same properties.<br></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_control_on_success"><a class="anchor" href="#_control_on_success"></a><code>[control] on.success</code></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 100%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>[control] on.success</code> - array&lt;<a href="#type-step">step</a>&gt;</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution succeeds.<br></p></td>
 </tr>
 </tbody>
 </table>
@@ -1577,6 +1461,23 @@ HIDE: Hide the check from output<br></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">if</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#expression">expression</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Optional SpEL template expression: Only execute this instruction if the given if-expression evaluates to 'true'<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.fail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution fails, for example<br>
+due to an exception or step-specific failure. If not specified, the exception will propagate and action execution will terminate (fail-fast behavior). If specified, failure of the current step will not automatically<br>
+result in action execution termination, but <code>on.fail</code> steps may for example include the<br>
+<code>throw</code> step to (conditionally) rethrow the exception.</p>
+<p class="tableblock">Steps executed in <code>on.fail</code> can access exception details via the following properties:<br>
+- <code>lastException.type</code>: Java simple class name of the exception<br>
+- <code>lastException.message</code>: The exception message (the exception object, e.g., ${lastException.message}, ${lastException.getClass().simpleName}). - <code>lastException.pojo</code>: The Java exception object itself, for example for use in <code>log.*</code> or <code>throw</code> steps<br>
+For named elements, '&lt;name&gt;_exception' is also available with the same properties.<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.success</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution succeeds.<br></p></td>
 </tr>
 </tbody>
 </table>
@@ -1803,6 +1704,23 @@ options: --option, -o<br></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#expression">expression</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Optional SpEL template expression: Only execute this instruction if the given if-expression evaluates to 'true'<br></p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.fail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution fails, for example<br>
+due to an exception or step-specific failure. If not specified, the exception will propagate and action execution will terminate (fail-fast behavior). If specified, failure of the current step will not automatically<br>
+result in action execution termination, but <code>on.fail</code> steps may for example include the<br>
+<code>throw</code> step to (conditionally) rethrow the exception.</p>
+<p class="tableblock">Steps executed in <code>on.fail</code> can access exception details via the following properties:<br>
+- <code>lastException.type</code>: Java simple class name of the exception<br>
+- <code>lastException.message</code>: The exception message (the exception object, e.g., ${lastException.message}, ${lastException.getClass().simpleName}). - <code>lastException.pojo</code>: The Java exception object itself, for example for use in <code>log.*</code> or <code>throw</code> steps<br>
+For named elements, '&lt;name&gt;_exception' is also available with the same properties.<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.success</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution succeeds.<br></p></td>
+</tr>
 </tbody>
 </table>
 <div class="paragraph">
@@ -1872,6 +1790,65 @@ full value will be masked.<br></p></td>
 </table>
 <div class="paragraph">
 <p><em><sup>* Generated from com.fortify.cli.common.action.model.ActionInputMask</sup></em></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="type-msg-and-cause"><a class="anchor" href="#type-msg-and-cause"></a><code>[type] msg-and-cause</code></h3>
+<div class="paragraph">
+<p>A message with optional exception cause. This can be supplied as either a simple SpEL template expression (in which case it represents the message text), or as a structured object with <code>msg</code> and optional <code>cause</code> properties. Used by <code>throw</code> and <code>log.*</code> instructions.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">msg</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#expression">expression</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Message text, specified as an SpEL template expression.<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">cause</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#expression">expression</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional exception cause, specified as an SpEL template expression that evaluates to a Throwable.<br>
+Can be a direct Throwable reference, wrapped in POJONode, or an ObjectNode with a <code>pojo</code> property (e.g., <code>${lastException}</code> or <code>${lastException.pojo}</code>). If only cause is specified (no msg), the<br>
+exception will be rethrown if it&#8217;s an FcliException, otherwise wrapped.<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">if</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#expression">expression</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional SpEL template expression: Only execute this instruction if the given if-expression evaluates to 'true'<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.fail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution fails, for example<br>
+due to an exception or step-specific failure. If not specified, the exception will propagate and action execution will terminate (fail-fast behavior). If specified, failure of the current step will not automatically<br>
+result in action execution termination, but <code>on.fail</code> steps may for example include the<br>
+<code>throw</code> step to (conditionally) rethrow the exception.</p>
+<p class="tableblock">Steps executed in <code>on.fail</code> can access exception details via the following properties:<br>
+- <code>lastException.type</code>: Java simple class name of the exception<br>
+- <code>lastException.message</code>: The exception message (the exception object, e.g., ${lastException.message}, ${lastException.getClass().simpleName}). - <code>lastException.pojo</code>: The Java exception object itself, for example for use in <code>log.*</code> or <code>throw</code> steps<br>
+For named elements, '&lt;name&gt;_exception' is also available with the same properties.<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.success</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution succeeds.<br></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><em><sup>* Generated from com.fortify.cli.common.action.model.MessageWithCause</sup></em></p>
 </div>
 </div>
 <div class="sect2">
@@ -1955,16 +1932,6 @@ full value will be masked.<br></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Optional object: Log progress messages during the various stages of request/response processing.<br></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">on.success</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed on each successfull REST response. For simple requests, these steps will be executed once. For paged requests, these steps will be executed after every individual page has been received. Steps can reference the [requestName] and [requestName]_raw variables to access processed and raw response data respectively. Any steps define in 'on.success' will be executed before processing individual response records through the 'records.for-each' instruction.<br></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">on.fail</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed on request failure. If not specified, an exception will be thrown on request failure. Steps can reference a variable named after the identifier for this REST call, for example 'x_exception', to access the Java Exception object that represents the failure that occurred.<br></p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">records.for-each</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#type-rest.call-for-each">rest.call-for-each</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Optional object: If the processed (successfull) REST response provides an array of records, this instruction allows for executing the steps provided in the 'do' block for each individual record.<br></p></td>
@@ -1973,6 +1940,23 @@ full value will be masked.<br></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">if</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#expression">expression</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Optional SpEL template expression: Only execute this instruction if the given if-expression evaluates to 'true'<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.fail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution fails, for example<br>
+due to an exception or step-specific failure. If not specified, the exception will propagate and action execution will terminate (fail-fast behavior). If specified, failure of the current step will not automatically<br>
+result in action execution termination, but <code>on.fail</code> steps may for example include the<br>
+<code>throw</code> step to (conditionally) rethrow the exception.</p>
+<p class="tableblock">Steps executed in <code>on.fail</code> can access exception details via the following properties:<br>
+- <code>lastException.type</code>: Java simple class name of the exception<br>
+- <code>lastException.message</code>: The exception message (the exception object, e.g., ${lastException.message}, ${lastException.getClass().simpleName}). - <code>lastException.pojo</code>: The Java exception object itself, for example for use in <code>log.*</code> or <code>throw</code> steps<br>
+For named elements, '&lt;name&gt;_exception' is also available with the same properties.<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.success</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution succeeds.<br></p></td>
 </tr>
 </tbody>
 </table>
@@ -2042,6 +2026,23 @@ full value will be masked.<br></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">if</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#expression">expression</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Optional SpEL template expression: Only execute this instruction if the given if-expression evaluates to 'true'<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.fail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution fails, for example<br>
+due to an exception or step-specific failure. If not specified, the exception will propagate and action execution will terminate (fail-fast behavior). If specified, failure of the current step will not automatically<br>
+result in action execution termination, but <code>on.fail</code> steps may for example include the<br>
+<code>throw</code> step to (conditionally) rethrow the exception.</p>
+<p class="tableblock">Steps executed in <code>on.fail</code> can access exception details via the following properties:<br>
+- <code>lastException.type</code>: Java simple class name of the exception<br>
+- <code>lastException.message</code>: The exception message (the exception object, e.g., ${lastException.message}, ${lastException.getClass().simpleName}). - <code>lastException.pojo</code>: The Java exception object itself, for example for use in <code>log.*</code> or <code>throw</code> steps<br>
+For named elements, '&lt;name&gt;_exception' is also available with the same properties.<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.success</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution succeeds.<br></p></td>
 </tr>
 </tbody>
 </table>
@@ -2155,6 +2156,23 @@ full value will be masked.<br></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#expression">expression</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Optional SpEL template expression: Only execute this instruction if the given if-expression evaluates to 'true'<br></p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.fail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution fails, for example<br>
+due to an exception or step-specific failure. If not specified, the exception will propagate and action execution will terminate (fail-fast behavior). If specified, failure of the current step will not automatically<br>
+result in action execution termination, but <code>on.fail</code> steps may for example include the<br>
+<code>throw</code> step to (conditionally) rethrow the exception.</p>
+<p class="tableblock">Steps executed in <code>on.fail</code> can access exception details via the following properties:<br>
+- <code>lastException.type</code>: Java simple class name of the exception<br>
+- <code>lastException.message</code>: The exception message (the exception object, e.g., ${lastException.message}, ${lastException.getClass().simpleName}). - <code>lastException.pojo</code>: The Java exception object itself, for example for use in <code>log.*</code> or <code>throw</code> steps<br>
+For named elements, '&lt;name&gt;_exception' is also available with the same properties.<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.success</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution succeeds.<br></p></td>
+</tr>
 </tbody>
 </table>
 <div class="paragraph">
@@ -2259,22 +2277,12 @@ show:           Show fcli stderr output</p>
 <p class="tableblock">Default value: 'show'<br></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">on.success</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if the fcli command was completed successfully. Steps can reference the usual action variables generated by the fcli invocation to access any records, stdout/stderr output, and exit code produced by the fcli command.<br></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">on.fail</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if the fcli command returns a non-zero exit code. If not specified, an exception will be thrown and action execution will terminate if the fcli command returned a non-zero exit code, unless 'status' is configured to ignore exit status. Steps can reference the usual action variables generated by the fcli invocation to access any records, stdout/stderr output, and exit code produced by the fcli command.<br></p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">status.check</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">(PREVIEW) Optional boolean value, indicating whether exit status of the fcli command should be checked:</p>
 <p class="tableblock">true: Terminate action execution if the fcli command returned a non-zero exit code<br>
 false: Continue action execution if the fcli command returned a non-zero exit code</p>
-<p class="tableblock">Default value is taken from 'config:run.fcli.status.check.default'. If not specified, default value is 'false' if 'on.fail' is specified, 'true' otherwise.</p>
+<p class="tableblock">Default value is taken from 'config:run.fcli.status.check.default'. If not specified, default value is 'true'.</p>
 <p class="tableblock">For now, this instruction is meant to be used only by built-in fcli actions; custom actions using this instruction may fail to run on other fcli 3.x versions.<br></p></td>
 </tr>
 <tr>
@@ -2300,6 +2308,23 @@ false: Don&#8217;t output an informational message showing exit status</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">if</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#expression">expression</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Optional SpEL template expression: Only execute this instruction if the given if-expression evaluates to 'true'<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.fail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution fails, for example<br>
+due to an exception or step-specific failure. If not specified, the exception will propagate and action execution will terminate (fail-fast behavior). If specified, failure of the current step will not automatically<br>
+result in action execution termination, but <code>on.fail</code> steps may for example include the<br>
+<code>throw</code> step to (conditionally) rethrow the exception.</p>
+<p class="tableblock">Steps executed in <code>on.fail</code> can access exception details via the following properties:<br>
+- <code>lastException.type</code>: Java simple class name of the exception<br>
+- <code>lastException.message</code>: The exception message (the exception object, e.g., ${lastException.message}, ${lastException.getClass().simpleName}). - <code>lastException.pojo</code>: The Java exception object itself, for example for use in <code>log.*</code> or <code>throw</code> steps<br>
+For named elements, '&lt;name&gt;_exception' is also available with the same properties.<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.success</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution succeeds.<br></p></td>
 </tr>
 </tbody>
 </table>
@@ -2360,6 +2385,23 @@ false: Don&#8217;t output an informational message showing exit status</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">if</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#expression">expression</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Optional SpEL template expression: Only execute this instruction if the given if-expression evaluates to 'true'<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.fail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution fails, for example<br>
+due to an exception or step-specific failure. If not specified, the exception will propagate and action execution will terminate (fail-fast behavior). If specified, failure of the current step will not automatically<br>
+result in action execution termination, but <code>on.fail</code> steps may for example include the<br>
+<code>throw</code> step to (conditionally) rethrow the exception.</p>
+<p class="tableblock">Steps executed in <code>on.fail</code> can access exception details via the following properties:<br>
+- <code>lastException.type</code>: Java simple class name of the exception<br>
+- <code>lastException.message</code>: The exception message (the exception object, e.g., ${lastException.message}, ${lastException.getClass().simpleName}). - <code>lastException.pojo</code>: The Java exception object itself, for example for use in <code>log.*</code> or <code>throw</code> steps<br>
+For named elements, '&lt;name&gt;_exception' is also available with the same properties.<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.success</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution succeeds.<br></p></td>
 </tr>
 </tbody>
 </table>
@@ -2474,6 +2516,23 @@ for this instruction, may be specified as an SpEL template expression. If 'value
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#expression">expression</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Optional SpEL template expression: Only execute this instruction if the given if-expression evaluates to 'true'<br></p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.fail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution fails, for example<br>
+due to an exception or step-specific failure. If not specified, the exception will propagate and action execution will terminate (fail-fast behavior). If specified, failure of the current step will not automatically<br>
+result in action execution termination, but <code>on.fail</code> steps may for example include the<br>
+<code>throw</code> step to (conditionally) rethrow the exception.</p>
+<p class="tableblock">Steps executed in <code>on.fail</code> can access exception details via the following properties:<br>
+- <code>lastException.type</code>: Java simple class name of the exception<br>
+- <code>lastException.message</code>: The exception message (the exception object, e.g., ${lastException.message}, ${lastException.getClass().simpleName}). - <code>lastException.pojo</code>: The Java exception object itself, for example for use in <code>log.*</code> or <code>throw</code> steps<br>
+For named elements, '&lt;name&gt;_exception' is also available with the same properties.<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.success</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution succeeds.<br></p></td>
+</tr>
 </tbody>
 </table>
 <div class="paragraph">
@@ -2555,6 +2614,23 @@ for this instruction, may be specified as an SpEL template expression. If 'value
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#expression">expression</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Optional SpEL template expression: Only execute this instruction if the given if-expression evaluates to 'true'<br></p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.fail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution fails, for example<br>
+due to an exception or step-specific failure. If not specified, the exception will propagate and action execution will terminate (fail-fast behavior). If specified, failure of the current step will not automatically<br>
+result in action execution termination, but <code>on.fail</code> steps may for example include the<br>
+<code>throw</code> step to (conditionally) rethrow the exception.</p>
+<p class="tableblock">Steps executed in <code>on.fail</code> can access exception details via the following properties:<br>
+- <code>lastException.type</code>: Java simple class name of the exception<br>
+- <code>lastException.message</code>: The exception message (the exception object, e.g., ${lastException.message}, ${lastException.getClass().simpleName}). - <code>lastException.pojo</code>: The Java exception object itself, for example for use in <code>log.*</code> or <code>throw</code> steps<br>
+For named elements, '&lt;name&gt;_exception' is also available with the same properties.<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.success</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution succeeds.<br></p></td>
+</tr>
 </tbody>
 </table>
 <div class="paragraph">
@@ -2612,6 +2688,23 @@ for this instruction, may be specified as an SpEL template expression. If 'value
 <td class="tableblock halign-left valign-top"><p class="tableblock">if</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#expression">expression</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Optional SpEL template expression: Only execute this instruction if the given if-expression evaluates to 'true'<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.fail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution fails, for example<br>
+due to an exception or step-specific failure. If not specified, the exception will propagate and action execution will terminate (fail-fast behavior). If specified, failure of the current step will not automatically<br>
+result in action execution termination, but <code>on.fail</code> steps may for example include the<br>
+<code>throw</code> step to (conditionally) rethrow the exception.</p>
+<p class="tableblock">Steps executed in <code>on.fail</code> can access exception details via the following properties:<br>
+- <code>lastException.type</code>: Java simple class name of the exception<br>
+- <code>lastException.message</code>: The exception message (the exception object, e.g., ${lastException.message}, ${lastException.getClass().simpleName}). - <code>lastException.pojo</code>: The Java exception object itself, for example for use in <code>log.*</code> or <code>throw</code> steps<br>
+For named elements, '&lt;name&gt;_exception' is also available with the same properties.<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.success</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution succeeds.<br></p></td>
 </tr>
 </tbody>
 </table>
@@ -2692,6 +2785,23 @@ header, no-header, pretty, no-pretty, flat, no-flat, array, single, border, no-b
 <td class="tableblock halign-left valign-top"><p class="tableblock">if</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#expression">expression</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Optional SpEL template expression: Only execute this instruction if the given if-expression evaluates to 'true'<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.fail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution fails, for example<br>
+due to an exception or step-specific failure. If not specified, the exception will propagate and action execution will terminate (fail-fast behavior). If specified, failure of the current step will not automatically<br>
+result in action execution termination, but <code>on.fail</code> steps may for example include the<br>
+<code>throw</code> step to (conditionally) rethrow the exception.</p>
+<p class="tableblock">Steps executed in <code>on.fail</code> can access exception details via the following properties:<br>
+- <code>lastException.type</code>: Java simple class name of the exception<br>
+- <code>lastException.message</code>: The exception message (the exception object, e.g., ${lastException.message}, ${lastException.getClass().simpleName}). - <code>lastException.pojo</code>: The Java exception object itself, for example for use in <code>log.*</code> or <code>throw</code> steps<br>
+For named elements, '&lt;name&gt;_exception' is also available with the same properties.<br></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">on.success</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">array&lt;<a href="#type-step">step</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional list: Steps to be executed if this element&#8217;s execution succeeds.<br></p></td>
 </tr>
 </tbody>
 </table>
@@ -2782,7 +2892,7 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_ado_addprthread"><a class="anchor" href="#_ado_addprthread"></a><code>ado.addPrThread</code></h3>
+<h3 id="_ado_env"><a class="anchor" href="#_ado_env"></a><code>ado.env</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -2791,35 +2901,7 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #ado.addPrThread(string comment)</code></strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string comment</em> - comment text</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Created thread object</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
-<p>Adds a comment thread to the current pull request; auto-detects project, repository, and PR context</p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_ado_getenv"><a class="anchor" href="#_ado_getenv"></a><code>ado.getEnv</code></h3>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 1%;">
-<col>
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #ado.getEnv()</code></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #ado.env</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
@@ -2853,7 +2935,11 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
       "name" : "string",
       "when" : "string"
     },
-    "id" : {
+    "headId" : {
+      "full" : "string",
+      "short" : "string"
+    },
+    "mergeId" : {
       "full" : "string",
       "short" : "string"
     },
@@ -2889,7 +2975,7 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_ado_gettype"><a class="anchor" href="#_ado_gettype"></a><code>ado.getType</code></h3>
+<h3 id="_ado_type"><a class="anchor" href="#_ado_type"></a><code>ado.type</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -2898,7 +2984,7 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>string #ado.getType()</code></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>string #ado.type</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
@@ -2913,7 +2999,7 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_ado_publishtestresults"><a class="anchor" href="#_ado_publishtestresults"></a><code>ado.publishTestResults</code></h3>
+<h3 id="_ado_project"><a class="anchor" href="#_ado_project"></a><code>ado.project</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -2922,7 +3008,53 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #ado.publishTestResults(string testRunner, string testResults)</code></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #ado.project()</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ADO project client for CI operations</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>Returns a project-scoped Azure DevOps client using organization and project detected from the current pipeline run</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #ado.project().addPrThread(string comment)</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string comment</em> - comment text</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Created thread object</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>(PREVIEW) Adds a comment thread to the current pull request; auto-detects project, repository, and PR context. This function is not yet used by any built-in fcli actions; signature and implementation may change in future fcli versions based on new insights as to how to best integrate this functionality into fcli built-in actions.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #ado.project().publishTestResults(string testRunner, string testResults)</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
@@ -2935,14 +3067,14 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
-<p>Publishes test results (free tier); auto-detects project and build ID from the current pipeline run</p>
+<p>(PREVIEW) Publishes test results (free tier); auto-detects project and build ID from the current pipeline run. This function is not yet used by any built-in fcli actions; signature and implementation may change in future fcli versions based on new insights as to how to best integrate this functionality into fcli built-in actions.</p>
 </div></div></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_ado_uploadsarif"><a class="anchor" href="#_ado_uploadsarif"></a><code>ado.uploadSarif</code></h3>
+<h3 id="_ado_repo"><a class="anchor" href="#_ado_repo"></a><code>ado.repo</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -2951,7 +3083,28 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #ado.uploadSarif(string sarifContent)</code></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #ado.repo()</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ADO repository client for CI operations</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>Returns a repository-scoped Azure DevOps client using organization/project/repository detected from the current pipeline run</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #ado.repo().uploadSarif(string sarifContent)</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
@@ -2963,14 +3116,14 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
-<p>Uploads SARIF to ADO Advanced Security (paid tier); auto-detects organization/project/repository/commit from the current run</p>
+<p>(PREVIEW) Uploads SARIF to ADO Advanced Security (paid tier); auto-detects organization/project/repository/commit from the current run. This function is not yet used by any built-in fcli actions; signature and implementation may change in future fcli versions based on new insights as to how to best integrate this functionality into fcli built-in actions.</p>
 </div></div></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_bitbucket_addreportannotations"><a class="anchor" href="#_bitbucket_addreportannotations"></a><code>bitbucket.addReportAnnotations</code></h3>
+<h3 id="_bitbucket_env"><a class="anchor" href="#_bitbucket_env"></a><code>bitbucket.env</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -2979,36 +3132,7 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #bitbucket.addReportAnnotations(string reportId, string annotationsContent)</code></strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string reportId</em> - Code Insights report key to associate the annotations with<br>
-<em>string annotationsContent</em> - JSON array of annotation objects that match Bitbucket&#8217;s schema</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Response from Bitbucket API</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
-<p>Appends annotations to an existing Bitbucket Code Insights report for the detected commit</p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_bitbucket_getenv"><a class="anchor" href="#_bitbucket_getenv"></a><code>bitbucket.getEnv</code></h3>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 1%;">
-<col>
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #bitbucket.getEnv()</code></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #bitbucket.env</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
@@ -3041,7 +3165,11 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
       "name" : "string",
       "when" : "string"
     },
-    "id" : {
+    "headId" : {
+      "full" : "string",
+      "short" : "string"
+    },
+    "mergeId" : {
       "full" : "string",
       "short" : "string"
     },
@@ -3079,7 +3207,7 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_bitbucket_gettype"><a class="anchor" href="#_bitbucket_gettype"></a><code>bitbucket.getType</code></h3>
+<h3 id="_bitbucket_type"><a class="anchor" href="#_bitbucket_type"></a><code>bitbucket.type</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -3088,7 +3216,7 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>string #bitbucket.getType()</code></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>string #bitbucket.type</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
@@ -3103,7 +3231,7 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_bitbucket_uploadreport"><a class="anchor" href="#_bitbucket_uploadreport"></a><code>bitbucket.uploadReport</code></h3>
+<h3 id="_bitbucket_repo"><a class="anchor" href="#_bitbucket_repo"></a><code>bitbucket.repo</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -3112,7 +3240,54 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #bitbucket.uploadReport(string reportId, string reportContent)</code></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #bitbucket.repo()</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Bitbucket repository client for CI operations</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>Returns a repository-scoped Bitbucket client using workspace and repository detected from the current pipeline run</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #bitbucket.repo().addReportAnnotations(string reportId, string annotationsContent)</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string reportId</em> - Code Insights report key to associate the annotations with<br>
+<em>string annotationsContent</em> - JSON array of annotation objects that match Bitbucket&#8217;s schema</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Response from Bitbucket API</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>Appends annotations to an existing Bitbucket Code Insights report for the detected commit</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #bitbucket.repo().uploadReport(string reportId, string reportContent)</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
@@ -3132,7 +3307,7 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_github_addprcomment"><a class="anchor" href="#_github_addprcomment"></a><code>github.addPrComment</code></h3>
+<h3 id="_github_env"><a class="anchor" href="#_github_env"></a><code>github.env</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -3141,130 +3316,7 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #github.addPrComment(string body)</code></strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string body</em> - comment body (Markdown supported)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Created comment object</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
-<p>Adds a comment to the current pull request detected from the workflow run</p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_github_addreviewcomment"><a class="anchor" href="#_github_addreviewcomment"></a><code>github.addReviewComment</code></h3>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 1%;">
-<col>
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #github.addReviewComment(string path, object line, string body)</code></strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string path</em> - file path relative to repository root<br>
-<em>object line</em> - line number<br>
-<em>string body</em> - comment body (Markdown supported)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Created review comment object</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
-<p>Adds a review comment on a specific file and line in the pull request detected from the workflow run</p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_github_createcheckrun"><a class="anchor" href="#_github_createcheckrun"></a><code>github.createCheckRun</code></h3>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 1%;">
-<col>
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #github.createCheckRun(string name, string status, string conclusion, string title, string summary)</code></strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string name</em> - check run name<br>
-<em>string status</em> - status: queued, in_progress, completed<br>
-<em>string conclusion</em> - conclusion: success, failure, neutral, cancelled, skipped, timed_out, action_required<br>
-<em>string title</em> - summary title<br>
-<em>string summary</em> - summary text in Markdown (max 65535 chars)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Response from GitHub API</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
-<p>Creates check run (free tier, for summary only) using repository and commit detected from the current run</p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_github_createcheckrunwithannotations"><a class="anchor" href="#_github_createcheckrunwithannotations"></a><code>github.createCheckRunWithAnnotations</code></h3>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 1%;">
-<col>
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #github.createCheckRunWithAnnotations(string name, string status, string conclusion, string title, string summary, object annotations)</code></strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string name</em> - check run name<br>
-<em>string status</em> - status: queued, in_progress, completed<br>
-<em>string conclusion</em> - conclusion: success, failure, neutral, etc.<br>
-<em>string title</em> - summary title<br>
-<em>string summary</em> - summary text in Markdown<br>
-<em>object annotations</em> - array of annotation objects with path, line, level, message (auto-paginated)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Response from GitHub API</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
-<p>Creates check run with file/line annotations (free tier, shows vulnerabilities at source locations, auto-paginates) using the detected repository/commit</p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_github_getenv"><a class="anchor" href="#_github_getenv"></a><code>github.getEnv</code></h3>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 1%;">
-<col>
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #github.getEnv()</code></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #github.env</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
@@ -3297,7 +3349,11 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
       "name" : "string",
       "when" : "string"
     },
-    "id" : {
+    "headId" : {
+      "full" : "string",
+      "short" : "string"
+    },
+    "mergeId" : {
       "full" : "string",
       "short" : "string"
     },
@@ -3331,7 +3387,7 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_github_gettype"><a class="anchor" href="#_github_gettype"></a><code>github.getType</code></h3>
+<h3 id="_github_type"><a class="anchor" href="#_github_type"></a><code>github.type</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -3340,7 +3396,7 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>string #github.getType()</code></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>string #github.type</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
@@ -3355,7 +3411,7 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_github_tryuploadsarif"><a class="anchor" href="#_github_tryuploadsarif"></a><code>github.tryUploadSarif</code></h3>
+<h3 id="_github_repo"><a class="anchor" href="#_github_repo"></a><code>github.repo</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -3364,21 +3420,19 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #github.tryUploadSarif(string sarifContent)</code></strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string sarifContent</em> - SARIF report content as string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #github.repo()</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Result object: {success: true, data: &#8230;&#8203;} or {success: false, reason: 'ghas_unavailable'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GitHub repository client for CI operations</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>Returns a repository-scoped GitHub client using repository and owner detected from the current workflow run</p>
+</div></div></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="sect2">
-<h3 id="_github_uploadsarif"><a class="anchor" href="#_github_uploadsarif"></a><code>github.uploadSarif</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -3387,7 +3441,84 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #github.uploadSarif(string sarifContent)</code></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #github.repo().addPrComment(string body)</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string body</em> - comment body (Markdown supported)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Created comment object</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>(PREVIEW) Adds a comment to the current pull request detected from the workflow run. This function is not yet used by any built-in fcli actions; signature and implementation may change in future fcli versions based on new insights as to how to best integrate this functionality into fcli built-in actions.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #github.repo().addReviewComment(string path, object line, string body)</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string path</em> - file path relative to repository root<br>
+<em>object line</em> - line number<br>
+<em>string body</em> - comment body (Markdown supported)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Created review comment object</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>(PREVIEW) Adds a review comment on a specific file and line in the pull request detected from the workflow run. This function is not yet used by any built-in fcli actions; signature and implementation may change in future fcli versions based on new insights as to how to best integrate this functionality into fcli built-in actions.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #github.repo().createCheckRun(object body)</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>object body</em> - check run body object: {name, head_sha (optional), status, conclusion (optional), started_at (optional), completed_at (optional), output: {title, summary, annotations (optional)}}</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Response from GitHub API</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>Creates check run with optional annotations (free tier, auto-paginates &gt;50 annotations). Accepts body object per GitHub REST API spec (<a href="https://docs.github.com/en/rest/checks/runs" class="bare">https://docs.github.com/en/rest/checks/runs</a>). Automatically adds head_sha from detected commit if not present.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #github.repo().uploadSarif(string sarifContent)</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
@@ -3399,14 +3530,14 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
-<p>Uploads SARIF to GitHub Code Scanning (paid tier, requires GHAS) using repository/ref/commit from the current workflow run</p>
+<p>Uploads SARIF to GitHub Code Scanning (paid tier, requires GHAS) using repository/ref/commit from the current workflow run. Throws GhasUnavailableException if GitHub Advanced Security is not enabled. Use on.fail in action YAML to implement fallback logic.</p>
 </div></div></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_gitlab_addmrcomment"><a class="anchor" href="#_gitlab_addmrcomment"></a><code>gitlab.addMrComment</code></h3>
+<h3 id="_gitlab_env"><a class="anchor" href="#_gitlab_env"></a><code>gitlab.env</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -3415,35 +3546,7 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #gitlab.addMrComment(string body)</code></strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string body</em> - comment body (Markdown supported)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Created note object</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
-<p>Adds a comment to the merge request detected from the current pipeline run</p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_gitlab_getenv"><a class="anchor" href="#_gitlab_getenv"></a><code>gitlab.getEnv</code></h3>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 1%;">
-<col>
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #gitlab.getEnv()</code></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #gitlab.env</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
@@ -3476,7 +3579,11 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
       "name" : "string",
       "when" : "string"
     },
-    "id" : {
+    "headId" : {
+      "full" : "string",
+      "short" : "string"
+    },
+    "mergeId" : {
       "full" : "string",
       "short" : "string"
     },
@@ -3511,7 +3618,7 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_gitlab_gettype"><a class="anchor" href="#_gitlab_gettype"></a><code>gitlab.getType</code></h3>
+<h3 id="_gitlab_type"><a class="anchor" href="#_gitlab_type"></a><code>gitlab.type</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -3520,7 +3627,7 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>string #gitlab.getType()</code></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>string #gitlab.type</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
@@ -3535,7 +3642,7 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_gitlab_uploadcodequalityreport"><a class="anchor" href="#_gitlab_uploadcodequalityreport"></a><code>gitlab.uploadCodeQualityReport</code></h3>
+<h3 id="_gitlab_project"><a class="anchor" href="#_gitlab_project"></a><code>gitlab.project</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -3544,7 +3651,53 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #gitlab.uploadCodeQualityReport(string reportContent)</code></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #gitlab.project()</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GitLab project client for CI operations</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>Returns a project-scoped GitLab client using project ID detected from the current pipeline run</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #gitlab.project().addMrComment(string body)</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string body</em> - comment body (Markdown supported)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Created note object</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>(PREVIEW) Adds a comment to the merge request detected from the current pipeline run. This function is not yet used by any built-in fcli actions; signature and implementation may change in future fcli versions based on new insights as to how to best integrate this functionality into fcli built-in actions.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #gitlab.project().uploadCodeQualityReport(string reportContent)</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
@@ -3561,9 +3714,6 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="sect2">
-<h3 id="_gitlab_uploadsecurityreport"><a class="anchor" href="#_gitlab_uploadsecurityreport"></a><code>gitlab.uploadSecurityReport</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -3572,7 +3722,7 @@ will be an empty JSON object, and no other SpEL functions will be available.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #gitlab.uploadSecurityReport(string reportType, string reportContent)</code></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #gitlab.project().uploadSecurityReport(string reportType, string reportContent)</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
@@ -3828,44 +3978,6 @@ default time zone id will be used.</p>
 <td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
 <p>Formats the input value using the specified formatter as declared through the <code>formatters</code> YAML instruction</p>
 </div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_actionschema"><a class="anchor" href="#_actionschema"></a><code>actionSchema</code></h3>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 1%;">
-<col>
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #actionSchema()</code></strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">An object describing the fcli action YAML schema</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_actionspelfunctions"><a class="anchor" href="#_actionspelfunctions"></a><code>actionSpelFunctions</code></h3>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 1%;">
-<col>
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #actionSpelFunctions()</code></strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">An array listing all available SpEL functions</p></td>
 </tr>
 </tbody>
 </table>
@@ -4181,39 +4293,76 @@ default time zone id will be used.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Issue source file resolver</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Issue source file resolver with resolve() and exists() methods</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
-<p>Instantiates an issue source file resolver, allowing source file paths as reported by Fortify to be resolved against a locally cloned source code repository.</p>
+<p>Creates an issue source file resolver that maps Fortify-reported paths to workspace-relative paths. Fortify may add or strip leading directories during scanning; this resolver uses longest-suffix matching to find the correct file in the workspace.</p>
 </div>
 <div class="paragraph">
-<p>In some cases, there is a mismatch between source file paths as reported by SSC or FoD and actual repository source file paths, with Fortify either inserting or stripping leading directories. When third-party systems like GitHub or GitLab ingest fcli-generated reports, such mismatches may prevent third-party systems from properly rendering source code snippets or links.</p>
+<p>Configuration properties:
+* <code>workspaceDir</code> - Repository root directory (required for path resolution)
+* <code>sourceDir</code> - Directory that was scanned (optional; used to prioritize matches when multiple files share the same name)</p>
 </div>
 <div class="paragraph">
-<p>The issue source file resolver can be initialized like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>- var.set:
-    issueSourceFileResolver: ${#issueSourceFileResolver({sourceDir:cli.sourceDir})}</code></pre>
-</div>
+<p>Example: <code>${#issueSourceFileResolver({workspaceDir:"/workspace", sourceDir:"/workspace/src"})}</code></p>
 </div>
 <div class="paragraph">
-<p>Once initialized, Fortify-reported issue file paths can be matched and relativized against the given <code>sourceDir</code> through either:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>SSC: <code>${issueSourceFileResolver.resolve(issue.fullFileName)}</code></p>
-</li>
-<li>
-<p>FoD: `${issueSourceFileResolver.resolve(issue.primaryLocationFull)}</p>
-</li>
-</ul>
+<p>For backward compatibility, if only <code>sourceDir</code> is provided, it will be used as <code>workspaceDir</code>.</p>
 </div>
 <div class="paragraph">
-<p>Of course, the same approach can be used to resolve other Fortify-reported source file paths, for example in trace node entries. See the various fcli built-in <code>*-report</code> actions in SSC and FoD modules for examples.</p>
+<p>See available methods via SpEL function documentation of the returned IssueSourceFileResolver object.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>boolean #issueSourceFileResolver().exists(string issuePath, object lineNumber)</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string issuePath</em> - Fortify-reported source file path<br>
+<em>object lineNumber</em> - Line number to validate (1-based)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true if workspacePath is null (no validation), or if resolved file exists and lineNumber &gt; 0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>Validates that resolved path exists as a regular file with valid line number (&gt;0)</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>string #issueSourceFileResolver().resolve(string issuePath)</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string issuePath</em> - Fortify-reported source file path</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Workspace-relative path string, or null/original based on onNoMatch setting</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>Resolves Fortify-reported issue path to workspace-relative path string using configured file separator</p>
 </div></div></td>
 </tr>
 </tbody>
@@ -4526,6 +4675,35 @@ default time zone id will be used.</p>
 </table>
 </div>
 <div class="sect2">
+<h3 id="_indent"><a class="anchor" href="#_indent"></a><code>indent</code></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>string #indent(object input, string prefix)</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>object input</em> - the text to indent; if a JsonNode, its text value is used; if null, returns null<br>
+<em>string prefix</em> - string to prepend to each line</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The input text with each line prefixed by the given indent string, or <code>null</code> if the input is <code>null</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>Indents every line of the input text by prepending the given prefix string.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
 <h3 id="_isblank"><a class="anchor" href="#_isblank"></a><code>isBlank</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -4805,6 +4983,202 @@ values provided in the mapping object.</p>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The value of the given environment variable, or <code>null</code> if the environment variable is not set or its value is blank</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_fs_exists"><a class="anchor" href="#_fs_exists"></a><code>fs.exists</code></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>boolean #fs.exists(string path)</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string path</em> - the file or directory path to check</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> if the file or directory exists, <code>false</code> otherwise</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>Checks whether a file or directory exists at the given path.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_fs_isdirectory"><a class="anchor" href="#_fs_isdirectory"></a><code>fs.isDirectory</code></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>boolean #fs.isDirectory(string path)</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string path</em> - the path to check</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> if path exists and is a directory, <code>false</code> otherwise</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>Checks whether the given path points to an existing directory.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_fs_isfile"><a class="anchor" href="#_fs_isfile"></a><code>fs.isFile</code></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>boolean #fs.isFile(string path)</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string path</em> - the path to check</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> if path is a regular file, <code>false</code> otherwise</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>Checks whether the given path points to a regular file (may or may not exist).</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_fs_isreadable"><a class="anchor" href="#_fs_isreadable"></a><code>fs.isReadable</code></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>boolean #fs.isReadable(string path)</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string path</em> - the path to check</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> if path exists and is readable, <code>false</code> otherwise</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>Checks whether the given file or directory is readable.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_fs_isreadablefile"><a class="anchor" href="#_fs_isreadablefile"></a><code>fs.isReadableFile</code></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>boolean #fs.isReadableFile(string path)</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string path</em> - the file path to check</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> if path exists, is a regular file, and is readable, <code>false</code> otherwise</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>Checks whether the given path points to an existing, readable regular file.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_fs_iswritable"><a class="anchor" href="#_fs_iswritable"></a><code>fs.isWritable</code></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>boolean #fs.isWritable(string path)</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string path</em> - the path to check</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> if path exists and is writable, <code>false</code> otherwise</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>Checks whether the given file or directory is writable.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_fs_iswritabledir"><a class="anchor" href="#_fs_iswritabledir"></a><code>fs.isWritableDir</code></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>boolean #fs.isWritableDir(string path)</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string path</em> - the directory path to check</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> if path exists, is a directory, and is writable, <code>false</code> otherwise</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p>Checks whether the given path points to an existing, writable directory.</p>
+</div></div></td>
 </tr>
 </tbody>
 </table>
@@ -5404,7 +5778,7 @@ This is primarily for internal fcli use in documentation generation actions.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_action_docrenderer_asciidoc"><a class="anchor" href="#_action_docrenderer_asciidoc"></a><code>action.docRenderer.asciidoc</code></h3>
+<h3 id="_action_docrenderer_asciidoc"><a class="anchor" href="#_action_docrenderer_asciidoc"></a><code>action.docRenderer().asciidoc</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -5413,7 +5787,7 @@ This is primarily for internal fcli use in documentation generation actions.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #action.docRenderer.asciidoc()</code></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #action.docRenderer().asciidoc()</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
@@ -5431,7 +5805,7 @@ This is primarily for internal fcli use in documentation generation actions.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_action_docrenderer_cicontext"><a class="anchor" href="#_action_docrenderer_cicontext"></a><code>action.docRenderer.ciContext</code></h3>
+<h3 id="_action_docrenderer_cicontext"><a class="anchor" href="#_action_docrenderer_cicontext"></a><code>action.docRenderer().ciContext</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -5440,7 +5814,7 @@ This is primarily for internal fcli use in documentation generation actions.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #action.docRenderer.ciContext(string ciSystem, string version, object outputs)</code></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #action.docRenderer().ciContext(string ciSystem, string version, object outputs)</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
@@ -5464,7 +5838,7 @@ This is primarily for internal fcli use in documentation generation actions.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_action_docrenderer_currentproduct"><a class="anchor" href="#_action_docrenderer_currentproduct"></a><code>action.docRenderer.currentProduct</code></h3>
+<h3 id="_action_docrenderer_currentproduct"><a class="anchor" href="#_action_docrenderer_currentproduct"></a><code>action.docRenderer().currentProduct</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -5473,7 +5847,7 @@ This is primarily for internal fcli use in documentation generation actions.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #action.docRenderer.currentProduct(string product)</code></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #action.docRenderer().currentProduct(string product)</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
@@ -5495,7 +5869,7 @@ This is primarily for internal fcli use in documentation generation actions.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_action_docrenderer_manpagebaseurl"><a class="anchor" href="#_action_docrenderer_manpagebaseurl"></a><code>action.docRenderer.manpageBaseUrl</code></h3>
+<h3 id="_action_docrenderer_manpagebaseurl"><a class="anchor" href="#_action_docrenderer_manpagebaseurl"></a><code>action.docRenderer().manpageBaseUrl</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -5504,7 +5878,7 @@ This is primarily for internal fcli use in documentation generation actions.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #action.docRenderer.manpageBaseUrl(string url)</code></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #action.docRenderer().manpageBaseUrl(string url)</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
@@ -5526,7 +5900,7 @@ This is primarily for internal fcli use in documentation generation actions.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_action_docrenderer_render"><a class="anchor" href="#_action_docrenderer_render"></a><code>action.docRenderer.render</code></h3>
+<h3 id="_action_docrenderer_render"><a class="anchor" href="#_action_docrenderer_render"></a><code>action.docRenderer().render</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -5535,7 +5909,7 @@ This is primarily for internal fcli use in documentation generation actions.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>string #action.docRenderer.render(string text)</code></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>string #action.docRenderer().render(string text)</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
@@ -5563,7 +5937,7 @@ Use '_' for product to refer to current/generic context.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_action_docrenderer_text"><a class="anchor" href="#_action_docrenderer_text"></a><code>action.docRenderer.text</code></h3>
+<h3 id="_action_docrenderer_tablecell"><a class="anchor" href="#_action_docrenderer_tablecell"></a><code>action.docRenderer().tableCell</code></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 1%;">
@@ -5572,7 +5946,41 @@ Use '_' for product to refer to current/generic context.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #action.docRenderer.text()</code></strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>string #action.docRenderer().tableCell(string text)</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parameters</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>string text</em> - Text to format for table cell</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Text formatted for table cell display</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p><strong>INTERNAL USE ONLY</strong></p>
+</div>
+<div class="paragraph">
+<p>Format text for use in table cells, converting newlines to appropriate line breaks.
+For AsciiDoc: converts newlines to hard line breaks (space + plus + newline).
+For plain text: keeps newlines as-is.
+This method does NOT process other references - call render() first if needed.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_action_docrenderer_text"><a class="anchor" href="#_action_docrenderer_text"></a><code>action.docRenderer().text</code></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #action.docRenderer().text()</code></strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
@@ -5584,6 +5992,54 @@ Use '_' for product to refer to current/generic context.</p>
 </div>
 <div class="paragraph">
 <p>Configure renderer for plain text output</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_actionschema"><a class="anchor" href="#_actionschema"></a><code>actionSchema</code></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #actionSchema()</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">An object describing the fcli action YAML schema</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p><strong>INTERNAL USE ONLY</strong></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_actionspelfunctions"><a class="anchor" href="#_actionspelfunctions"></a><code>actionSpelFunctions</code></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 1%;">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Signature</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><code>object #actionSpelFunctions()</code></strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Returns</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">An array listing all available SpEL functions</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><div class="content"><div class="paragraph">
+<p><strong>INTERNAL USE ONLY</strong></p>
 </div></div></td>
 </tr>
 </tbody>
@@ -5651,7 +6107,11 @@ commit: {
       "name" : "string",
       "when" : "string"
     },
-    "id" : {
+    "headId" : {
+      "full" : "string",
+      "short" : "string"
+    },
+    "mergeId" : {
       "full" : "string",
       "short" : "string"
     },
@@ -5677,11 +6137,12 @@ commit: {
 </div>
 </div>
 </div>
+{% endraw %}
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.20260211.062824-dev_v3.x<br>
-Last updated 2026-02-11 06:31:10 UTC
+Version 0.20260227.043416-dev_v3.x<br>
+Last updated 2026-02-27 04:37:14 UTC
 </div>
 </div>
 </body>
