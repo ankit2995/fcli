@@ -20417,7 +20417,7 @@ function _picocli_fcli_fod_dastscan_start() {
 
   local extraCompGenOpts=()  local commands=""
   local flag_opts="-h --help --debug --validate-entitlement"
-  local arg_opts="--env-prefix --log-file --log-level --log-mask --fod-session --delim --release --rel -o --output --style --store --to-file --in-progress --in-progress-action --wait-interval --max-attempts --progress"
+  local arg_opts="--env-prefix --log-file --log-level --log-mask --fod-session --delim --release --rel -o --output --style --store --to-file --in-progress --in-progress-action --wait-interval --max-attempts --vpn --progress"
   local logLevel_option_args=("TRACE" "DEBUG" "INFO" "WARN" "ERROR" "NONE") # --log-level values
   local level_option_args=("high" "medium" "low" "none") # --log-mask values
   local typeargs_option_args=("csv" "table" "expr" "json" "xml" "yaml") # --output values
@@ -20484,6 +20484,9 @@ function _picocli_fcli_fod_dastscan_start() {
       return
       ;;
     --max-attempts)
+      return
+      ;;
+    --vpn)
       return
       ;;
     --progress)
@@ -21584,7 +21587,7 @@ function _picocli_fcli_fod_dast_start() {
 
   local extraCompGenOpts=()  local commands=""
   local flag_opts="-h --help --debug --validate-entitlement"
-  local arg_opts="--env-prefix --log-file --log-level --log-mask --fod-session --delim --release --rel -o --output --style --store --to-file --in-progress --in-progress-action --wait-interval --max-attempts --progress"
+  local arg_opts="--env-prefix --log-file --log-level --log-mask --fod-session --delim --release --rel -o --output --style --store --to-file --in-progress --in-progress-action --wait-interval --max-attempts --vpn --progress"
   local logLevel_option_args=("TRACE" "DEBUG" "INFO" "WARN" "ERROR" "NONE") # --log-level values
   local level_option_args=("high" "medium" "low" "none") # --log-mask values
   local typeargs_option_args=("csv" "table" "expr" "json" "xml" "yaml") # --output values
@@ -21651,6 +21654,9 @@ function _picocli_fcli_fod_dast_start() {
       return
       ;;
     --max-attempts)
+      return
+      ;;
+    --vpn)
       return
       ;;
     --progress)
