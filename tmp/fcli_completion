@@ -542,6 +542,7 @@ function _complete_fcli() {
   if [ "${COMP_LINE}" = "${COMP_WORDS[0]} fod oss lsc" ];    then _picocli_fcli_fod_oss; return $?; fi
   if [ "${COMP_LINE}" = "${COMP_WORDS[0]} fod issue list" ];    then _picocli_fcli_fod_issue; return $?; fi
   if [ "${COMP_LINE}" = "${COMP_WORDS[0]} fod issue ls" ];    then _picocli_fcli_fod_issue; return $?; fi
+  if [ "${COMP_LINE}" = "${COMP_WORDS[0]} fod issue get" ];    then _picocli_fcli_fod_issue; return $?; fi
   if [ "${COMP_LINE}" = "${COMP_WORDS[0]} fod issue update" ];    then _picocli_fcli_fod_issue; return $?; fi
   if [ "${COMP_LINE}" = "${COMP_WORDS[0]} fod report list" ];    then _picocli_fcli_fod_report; return $?; fi
   if [ "${COMP_LINE}" = "${COMP_WORDS[0]} fod report ls" ];    then _picocli_fcli_fod_report; return $?; fi
@@ -778,6 +779,7 @@ function _complete_fcli() {
   if [ "${COMP_LINE}" = "${COMP_WORDS[0]} ssc issue list-groups" ];    then _picocli_fcli_ssc_issue; return $?; fi
   if [ "${COMP_LINE}" = "${COMP_WORDS[0]} ssc issue lsg" ];    then _picocli_fcli_ssc_issue; return $?; fi
   if [ "${COMP_LINE}" = "${COMP_WORDS[0]} ssc issue count" ];    then _picocli_fcli_ssc_issue; return $?; fi
+  if [ "${COMP_LINE}" = "${COMP_WORDS[0]} ssc issue get" ];    then _picocli_fcli_ssc_issue; return $?; fi
   if [ "${COMP_LINE}" = "${COMP_WORDS[0]} ssc issue list" ];    then _picocli_fcli_ssc_issue; return $?; fi
   if [ "${COMP_LINE}" = "${COMP_WORDS[0]} ssc issue ls" ];    then _picocli_fcli_ssc_issue; return $?; fi
   if [ "${COMP_LINE}" = "${COMP_WORDS[0]} ssc issue update" ];    then _picocli_fcli_ssc_issue; return $?; fi
@@ -1430,1003 +1432,1007 @@ function _complete_fcli() {
   local cmds385=(fod oss lsc)
   local cmds386=(fod issue list)
   local cmds387=(fod issue ls)
-  local cmds388=(fod issue update)
-  local cmds389=(fod report list)
-  local cmds390=(fod report ls)
-  local cmds391=(fod report get)
-  local cmds392=(fod report create)
-  local cmds393=(fod report delete)
-  local cmds394=(fod report rm)
-  local cmds395=(fod report wait-for)
-  local cmds396=(fod report download)
-  local cmds397=(fod report list-templates)
-  local cmds398=(fod report lst)
-  local cmds399=(fod rest call)
-  local cmds400=(fod rest lookup)
-  local cmds401=(sc-dast scan)
-  local cmds402=(sc-dast scan-policy)
-  local cmds403=(sc-dast scan-settings)
-  local cmds404=(sc-dast sensor)
-  local cmds405=(sc-dast rest)
-  local cmds406=(sc-dast scan complete)
-  local cmds407=(sc-dast scan delete)
-  local cmds408=(sc-dast scan rm)
-  local cmds409=(sc-dast scan download)
-  local cmds410=(sc-dast scan get)
-  local cmds411=(sc-dast scan import-findings)
-  local cmds412=(sc-dast scan list)
-  local cmds413=(sc-dast scan ls)
-  local cmds414=(sc-dast scan pause)
-  local cmds415=(sc-dast scan publish)
-  local cmds416=(sc-dast scan resume)
-  local cmds417=(sc-dast scan start)
-  local cmds418=(sc-dast scan wait-for)
-  local cmds419=(sc-dast scan-policy get)
-  local cmds420=(sc-dast scan-policy list)
-  local cmds421=(sc-dast scan-policy ls)
-  local cmds422=(sc-dast scan-settings get)
-  local cmds423=(sc-dast scan-settings list)
-  local cmds424=(sc-dast scan-settings ls)
-  local cmds425=(sc-dast sensor disable)
-  local cmds426=(sc-dast sensor enable)
-  local cmds427=(sc-dast sensor get)
-  local cmds428=(sc-dast sensor list)
-  local cmds429=(sc-dast sensor ls)
-  local cmds430=(sc-dast rest call)
-  local cmds431=(sc-sast scan)
-  local cmds432=(sc-sast sensor)
-  local cmds433=(sc-sast sensor-pool)
-  local cmds434=(sc-sast pool)
-  local cmds435=(sc-sast rest)
-  local cmds436=(sc-sast scan cancel)
-  local cmds437=(sc-sast scan download)
-  local cmds438=(sc-sast scan list)
-  local cmds439=(sc-sast scan ls)
-  local cmds440=(sc-sast scan start)
-  local cmds441=(sc-sast scan status)
-  local cmds442=(sc-sast scan wait-for)
-  local cmds443=(sc-sast sensor list)
-  local cmds444=(sc-sast sensor ls)
-  local cmds445=(sc-sast sensor-pool list)
-  local cmds446=(sc-sast sensor-pool ls)
-  local cmds447=(sc-sast pool list)
-  local cmds448=(sc-sast pool ls)
-  local cmds449=(sc-sast rest call)
-  local cmds450=(ssc session)
-  local cmds451=(ssc action)
-  local cmds452=(ssc access-control)
-  local cmds453=(ssc ac)
-  local cmds454=(ssc alert)
-  local cmds455=(ssc app)
-  local cmds456=(ssc appversion)
-  local cmds457=(ssc av)
-  local cmds458=(ssc artifact)
-  local cmds459=(ssc attribute)
-  local cmds460=(ssc attr)
-  local cmds461=(ssc custom-tag)
-  local cmds462=(ssc tag)
-  local cmds463=(ssc issue)
-  local cmds464=(ssc issue-template)
-  local cmds465=(ssc performance-indicator)
-  local cmds466=(ssc pi)
-  local cmds467=(ssc variable)
-  local cmds468=(ssc var)
-  local cmds469=(ssc plugin)
-  local cmds470=(ssc report)
-  local cmds471=(ssc system-state)
-  local cmds472=(ssc state)
-  local cmds473=(ssc rest)
-  local cmds474=(ssc session list)
-  local cmds475=(ssc session ls)
-  local cmds476=(ssc session login)
-  local cmds477=(ssc session logout)
-  local cmds478=(ssc action get)
-  local cmds479=(ssc action help)
-  local cmds480=(ssc action import)
-  local cmds481=(ssc action list)
-  local cmds482=(ssc action ls)
-  local cmds483=(ssc action reset)
-  local cmds484=(ssc action run)
-  local cmds485=(ssc action sign)
-  local cmds486=(ssc access-control list-token-definitions)
-  local cmds487=(ssc access-control lstd)
-  local cmds488=(ssc access-control create-token)
-  local cmds489=(ssc access-control list-tokens)
-  local cmds490=(ssc access-control lst)
-  local cmds491=(ssc access-control revoke-token)
-  local cmds492=(ssc access-control update-token)
-  local cmds493=(ssc access-control create-role)
-  local cmds494=(ssc access-control delete-role)
-  local cmds495=(ssc access-control rm-role)
-  local cmds496=(ssc access-control get-role)
-  local cmds497=(ssc access-control list-roles)
-  local cmds498=(ssc access-control lsr)
-  local cmds499=(ssc access-control get-permission)
-  local cmds500=(ssc access-control list-permissions)
-  local cmds501=(ssc access-control lsp)
-  local cmds502=(ssc access-control create-local-user)
-  local cmds503=(ssc access-control update-local-user)
-  local cmds504=(ssc access-control delete-user)
-  local cmds505=(ssc access-control rm-user)
-  local cmds506=(ssc access-control get-user)
-  local cmds507=(ssc access-control list-users)
-  local cmds508=(ssc access-control lsu)
-  local cmds509=(ssc access-control list-appversion-users)
-  local cmds510=(ssc access-control lsavu)
-  local cmds511=(ssc ac list-token-definitions)
-  local cmds512=(ssc ac lstd)
-  local cmds513=(ssc ac create-token)
-  local cmds514=(ssc ac list-tokens)
-  local cmds515=(ssc ac lst)
-  local cmds516=(ssc ac revoke-token)
-  local cmds517=(ssc ac update-token)
-  local cmds518=(ssc ac create-role)
-  local cmds519=(ssc ac delete-role)
-  local cmds520=(ssc ac rm-role)
-  local cmds521=(ssc ac get-role)
-  local cmds522=(ssc ac list-roles)
-  local cmds523=(ssc ac lsr)
-  local cmds524=(ssc ac get-permission)
-  local cmds525=(ssc ac list-permissions)
-  local cmds526=(ssc ac lsp)
-  local cmds527=(ssc ac create-local-user)
-  local cmds528=(ssc ac update-local-user)
-  local cmds529=(ssc ac delete-user)
-  local cmds530=(ssc ac rm-user)
-  local cmds531=(ssc ac get-user)
-  local cmds532=(ssc ac list-users)
-  local cmds533=(ssc ac lsu)
-  local cmds534=(ssc ac list-appversion-users)
-  local cmds535=(ssc ac lsavu)
-  local cmds536=(ssc alert get-definition)
-  local cmds537=(ssc alert list-definitions)
-  local cmds538=(ssc alert lsd)
-  local cmds539=(ssc alert list)
-  local cmds540=(ssc alert ls)
-  local cmds541=(ssc app delete)
-  local cmds542=(ssc app rm)
-  local cmds543=(ssc app get)
-  local cmds544=(ssc app list)
-  local cmds545=(ssc app ls)
-  local cmds546=(ssc app update)
-  local cmds547=(ssc appversion create)
-  local cmds548=(ssc appversion delete)
-  local cmds549=(ssc appversion rm)
-  local cmds550=(ssc appversion copy-state)
-  local cmds551=(ssc appversion download-state)
-  local cmds552=(ssc appversion get)
-  local cmds553=(ssc appversion list)
-  local cmds554=(ssc appversion ls)
-  local cmds555=(ssc appversion purge-artifacts)
-  local cmds556=(ssc appversion refresh-metrics)
-  local cmds557=(ssc appversion update)
-  local cmds558=(ssc av create)
-  local cmds559=(ssc av delete)
-  local cmds560=(ssc av rm)
-  local cmds561=(ssc av copy-state)
-  local cmds562=(ssc av download-state)
-  local cmds563=(ssc av get)
-  local cmds564=(ssc av list)
-  local cmds565=(ssc av ls)
-  local cmds566=(ssc av purge-artifacts)
-  local cmds567=(ssc av refresh-metrics)
-  local cmds568=(ssc av update)
-  local cmds569=(ssc artifact approve)
-  local cmds570=(ssc artifact delete)
-  local cmds571=(ssc artifact rm)
-  local cmds572=(ssc artifact download)
-  local cmds573=(ssc artifact get)
-  local cmds574=(ssc artifact import-debricked)
-  local cmds575=(ssc artifact list)
-  local cmds576=(ssc artifact ls)
-  local cmds577=(ssc artifact purge)
-  local cmds578=(ssc artifact upload)
-  local cmds579=(ssc artifact wait-for)
-  local cmds580=(ssc attribute get-definition)
-  local cmds581=(ssc attribute list-definitions)
-  local cmds582=(ssc attribute lsd)
-  local cmds583=(ssc attribute list)
-  local cmds584=(ssc attribute ls)
-  local cmds585=(ssc attribute update)
-  local cmds586=(ssc attr get-definition)
-  local cmds587=(ssc attr list-definitions)
-  local cmds588=(ssc attr lsd)
-  local cmds589=(ssc attr list)
-  local cmds590=(ssc attr ls)
-  local cmds591=(ssc attr update)
-  local cmds592=(ssc custom-tag list)
-  local cmds593=(ssc custom-tag ls)
-  local cmds594=(ssc custom-tag get)
-  local cmds595=(ssc custom-tag delete)
-  local cmds596=(ssc custom-tag rm)
-  local cmds597=(ssc custom-tag create)
-  local cmds598=(ssc custom-tag update)
-  local cmds599=(ssc tag list)
-  local cmds600=(ssc tag ls)
-  local cmds601=(ssc tag get)
-  local cmds602=(ssc tag delete)
-  local cmds603=(ssc tag rm)
-  local cmds604=(ssc tag create)
-  local cmds605=(ssc tag update)
-  local cmds606=(ssc issue create-template)
-  local cmds607=(ssc issue delete-template)
-  local cmds608=(ssc issue rmt)
-  local cmds609=(ssc issue download-template)
-  local cmds610=(ssc issue get-template)
-  local cmds611=(ssc issue list-templates)
-  local cmds612=(ssc issue lst)
-  local cmds613=(ssc issue update-template)
-  local cmds614=(ssc issue get-filterset)
-  local cmds615=(ssc issue list-filtersets)
-  local cmds616=(ssc issue lsfs)
-  local cmds617=(ssc issue get-filter)
-  local cmds618=(ssc issue list-filters)
-  local cmds619=(ssc issue lsf)
-  local cmds620=(ssc issue get-group)
-  local cmds621=(ssc issue list-groups)
-  local cmds622=(ssc issue lsg)
-  local cmds623=(ssc issue count)
-  local cmds624=(ssc issue list)
-  local cmds625=(ssc issue ls)
-  local cmds626=(ssc issue update)
-  local cmds627=(ssc issue-template create)
-  local cmds628=(ssc issue-template delete)
-  local cmds629=(ssc issue-template rm)
-  local cmds630=(ssc issue-template download)
-  local cmds631=(ssc issue-template get)
-  local cmds632=(ssc issue-template list)
-  local cmds633=(ssc issue-template ls)
-  local cmds634=(ssc issue-template update)
-  local cmds635=(ssc performance-indicator list-definitions)
-  local cmds636=(ssc performance-indicator lsd)
-  local cmds637=(ssc performance-indicator get)
-  local cmds638=(ssc performance-indicator list)
-  local cmds639=(ssc performance-indicator ls)
-  local cmds640=(ssc pi list-definitions)
-  local cmds641=(ssc pi lsd)
-  local cmds642=(ssc pi get)
-  local cmds643=(ssc pi list)
-  local cmds644=(ssc pi ls)
-  local cmds645=(ssc variable list-definitions)
-  local cmds646=(ssc variable lsd)
-  local cmds647=(ssc variable get)
-  local cmds648=(ssc variable list)
-  local cmds649=(ssc variable ls)
-  local cmds650=(ssc var list-definitions)
-  local cmds651=(ssc var lsd)
-  local cmds652=(ssc var get)
-  local cmds653=(ssc var list)
-  local cmds654=(ssc var ls)
-  local cmds655=(ssc plugin install)
-  local cmds656=(ssc plugin uninstall)
-  local cmds657=(ssc plugin enable)
-  local cmds658=(ssc plugin disable)
-  local cmds659=(ssc plugin get)
-  local cmds660=(ssc plugin list)
-  local cmds661=(ssc plugin ls)
-  local cmds662=(ssc report create)
-  local cmds663=(ssc report list)
-  local cmds664=(ssc report ls)
-  local cmds665=(ssc report get)
-  local cmds666=(ssc report download)
-  local cmds667=(ssc report wait-for)
-  local cmds668=(ssc report delete)
-  local cmds669=(ssc report rm)
-  local cmds670=(ssc report list-parameters)
-  local cmds671=(ssc report lsp)
-  local cmds672=(ssc report create-template)
-  local cmds673=(ssc report list-templates)
-  local cmds674=(ssc report lst)
-  local cmds675=(ssc report get-template)
-  local cmds676=(ssc report download-template)
-  local cmds677=(ssc report create-template-config)
-  local cmds678=(ssc report delete-template)
-  local cmds679=(ssc report rmt)
-  local cmds680=(ssc system-state list-activities)
-  local cmds681=(ssc system-state lsa)
-  local cmds682=(ssc system-state list-events)
-  local cmds683=(ssc system-state lse)
-  local cmds684=(ssc system-state list-settings)
-  local cmds685=(ssc system-state lss)
-  local cmds686=(ssc system-state upload-seed-bundle)
-  local cmds687=(ssc system-state list-rulepacks)
-  local cmds688=(ssc system-state lsr)
-  local cmds689=(ssc system-state cancel-job)
-  local cmds690=(ssc system-state get-job)
-  local cmds691=(ssc system-state list-jobs)
-  local cmds692=(ssc system-state lsj)
-  local cmds693=(ssc system-state update-job)
-  local cmds694=(ssc system-state wait-for-job)
-  local cmds695=(ssc state list-activities)
-  local cmds696=(ssc state lsa)
-  local cmds697=(ssc state list-events)
-  local cmds698=(ssc state lse)
-  local cmds699=(ssc state list-settings)
-  local cmds700=(ssc state lss)
-  local cmds701=(ssc state upload-seed-bundle)
-  local cmds702=(ssc state list-rulepacks)
-  local cmds703=(ssc state lsr)
-  local cmds704=(ssc state cancel-job)
-  local cmds705=(ssc state get-job)
-  local cmds706=(ssc state list-jobs)
-  local cmds707=(ssc state lsj)
-  local cmds708=(ssc state update-job)
-  local cmds709=(ssc state wait-for-job)
-  local cmds710=(ssc rest call)
-  local cmds711=(tool env)
-  local cmds712=(tool bugtracker-utility)
-  local cmds713=(tool fbtu)
-  local cmds714=(tool debricked-cli)
-  local cmds715=(tool dcli)
-  local cmds716=(tool fcli)
-  local cmds717=(tool fod-uploader)
-  local cmds718=(tool fodupload)
-  local cmds719=(tool sc-client)
-  local cmds720=(tool scancentral-client)
-  local cmds721=(tool sourceanalyzer)
-  local cmds722=(tool vuln-exporter)
-  local cmds723=(tool fve)
-  local cmds724=(tool definitions)
-  local cmds725=(tool env init)
-  local cmds726=(tool env shell)
-  local cmds727=(tool env powershell)
-  local cmds728=(tool env pwsh)
-  local cmds729=(tool env github)
-  local cmds730=(tool env gitlab)
-  local cmds731=(tool env ado)
-  local cmds732=(tool env expr)
-  local cmds733=(tool bugtracker-utility install)
-  local cmds734=(tool bugtracker-utility list)
-  local cmds735=(tool bugtracker-utility ls)
-  local cmds736=(tool bugtracker-utility list-platforms)
-  local cmds737=(tool bugtracker-utility lsp)
-  local cmds738=(tool bugtracker-utility get)
-  local cmds739=(tool bugtracker-utility register)
-  local cmds740=(tool bugtracker-utility run)
-  local cmds741=(tool bugtracker-utility uninstall)
-  local cmds742=(tool fbtu install)
-  local cmds743=(tool fbtu list)
-  local cmds744=(tool fbtu ls)
-  local cmds745=(tool fbtu list-platforms)
-  local cmds746=(tool fbtu lsp)
-  local cmds747=(tool fbtu get)
-  local cmds748=(tool fbtu register)
-  local cmds749=(tool fbtu run)
-  local cmds750=(tool fbtu uninstall)
-  local cmds751=(tool debricked-cli install)
-  local cmds752=(tool debricked-cli list)
-  local cmds753=(tool debricked-cli ls)
-  local cmds754=(tool debricked-cli list-platforms)
-  local cmds755=(tool debricked-cli lsp)
-  local cmds756=(tool debricked-cli get)
-  local cmds757=(tool debricked-cli register)
-  local cmds758=(tool debricked-cli run)
-  local cmds759=(tool debricked-cli uninstall)
-  local cmds760=(tool dcli install)
-  local cmds761=(tool dcli list)
-  local cmds762=(tool dcli ls)
-  local cmds763=(tool dcli list-platforms)
-  local cmds764=(tool dcli lsp)
-  local cmds765=(tool dcli get)
-  local cmds766=(tool dcli register)
-  local cmds767=(tool dcli run)
-  local cmds768=(tool dcli uninstall)
-  local cmds769=(tool fcli install)
-  local cmds770=(tool fcli list)
-  local cmds771=(tool fcli ls)
-  local cmds772=(tool fcli list-platforms)
-  local cmds773=(tool fcli lsp)
-  local cmds774=(tool fcli get)
-  local cmds775=(tool fcli register)
-  local cmds776=(tool fcli run)
-  local cmds777=(tool fcli uninstall)
-  local cmds778=(tool fod-uploader install)
-  local cmds779=(tool fod-uploader list)
-  local cmds780=(tool fod-uploader ls)
-  local cmds781=(tool fod-uploader list-platforms)
-  local cmds782=(tool fod-uploader lsp)
-  local cmds783=(tool fod-uploader get)
-  local cmds784=(tool fod-uploader register)
-  local cmds785=(tool fod-uploader run)
-  local cmds786=(tool fod-uploader uninstall)
-  local cmds787=(tool fodupload install)
-  local cmds788=(tool fodupload list)
-  local cmds789=(tool fodupload ls)
-  local cmds790=(tool fodupload list-platforms)
-  local cmds791=(tool fodupload lsp)
-  local cmds792=(tool fodupload get)
-  local cmds793=(tool fodupload register)
-  local cmds794=(tool fodupload run)
-  local cmds795=(tool fodupload uninstall)
-  local cmds796=(tool sc-client install)
-  local cmds797=(tool sc-client list)
-  local cmds798=(tool sc-client ls)
-  local cmds799=(tool sc-client list-platforms)
-  local cmds800=(tool sc-client lsp)
-  local cmds801=(tool sc-client get)
-  local cmds802=(tool sc-client register)
-  local cmds803=(tool sc-client run)
-  local cmds804=(tool sc-client uninstall)
-  local cmds805=(tool scancentral-client install)
-  local cmds806=(tool scancentral-client list)
-  local cmds807=(tool scancentral-client ls)
-  local cmds808=(tool scancentral-client list-platforms)
-  local cmds809=(tool scancentral-client lsp)
-  local cmds810=(tool scancentral-client get)
-  local cmds811=(tool scancentral-client register)
-  local cmds812=(tool scancentral-client run)
-  local cmds813=(tool scancentral-client uninstall)
-  local cmds814=(tool sourceanalyzer list)
-  local cmds815=(tool sourceanalyzer ls)
-  local cmds816=(tool sourceanalyzer get)
-  local cmds817=(tool sourceanalyzer register)
-  local cmds818=(tool sourceanalyzer run)
-  local cmds819=(tool sourceanalyzer update-rules)
-  local cmds820=(tool vuln-exporter install)
-  local cmds821=(tool vuln-exporter list)
-  local cmds822=(tool vuln-exporter ls)
-  local cmds823=(tool vuln-exporter list-platforms)
-  local cmds824=(tool vuln-exporter lsp)
-  local cmds825=(tool vuln-exporter get)
-  local cmds826=(tool vuln-exporter register)
-  local cmds827=(tool vuln-exporter run)
-  local cmds828=(tool vuln-exporter uninstall)
-  local cmds829=(tool fve install)
-  local cmds830=(tool fve list)
-  local cmds831=(tool fve ls)
-  local cmds832=(tool fve list-platforms)
-  local cmds833=(tool fve lsp)
-  local cmds834=(tool fve get)
-  local cmds835=(tool fve register)
-  local cmds836=(tool fve run)
-  local cmds837=(tool fve uninstall)
-  local cmds838=(tool definitions list)
-  local cmds839=(tool definitions ls)
-  local cmds840=(tool definitions update)
-  local cmds841=(tool definitions reset)
-  local cmds842=(license msp-report)
-  local cmds843=(license ncd-report)
-  local cmds844=(license msp-report create)
-  local cmds845=(license msp-report create-config)
-  local cmds846=(license ncd-report create)
-  local cmds847=(license ncd-report create-config)
-  local cmds848=(license ncd-report validate-sources)
-  local cmds849=(license ncd-report get-summary)
-  local cmds850=(license ncd-report merge)
-  local cmds851=(license ncd-report list-contributors)
-  local cmds852=(license ncd-report lsc)
-  local cmds853=(license ncd-report list-repositories)
-  local cmds854=(license ncd-report lsr)
-  local cmds855=(license ncd-report update-contributor-status)
-  local cmds856=(license ncd-report ucs)
-  local cmds857=(util all-commands)
-  local cmds858=(util auto-complete)
-  local cmds859=(util crypto)
-  local cmds860=(util mcp-server)
-  local cmds861=(util state)
-  local cmds862=(util variable)
-  local cmds863=(util var)
-  local cmds864=(util all-commands usage)
-  local cmds865=(util all-commands list)
-  local cmds866=(util all-commands ls)
-  local cmds867=(util auto-complete generate)
-  local cmds868=(util crypto encrypt)
-  local cmds869=(util crypto decrypt)
-  local cmds870=(util mcp-server start)
-  local cmds871=(util state clear)
-  local cmds872=(util variable contents)
-  local cmds873=(util variable clear)
-  local cmds874=(util variable delete)
-  local cmds875=(util variable rm)
-  local cmds876=(util variable get)
-  local cmds877=(util variable list)
-  local cmds878=(util variable ls)
-  local cmds879=(util var contents)
-  local cmds880=(util var clear)
-  local cmds881=(util var delete)
-  local cmds882=(util var rm)
-  local cmds883=(util var get)
-  local cmds884=(util var list)
-  local cmds885=(util var ls)
+  local cmds388=(fod issue get)
+  local cmds389=(fod issue update)
+  local cmds390=(fod report list)
+  local cmds391=(fod report ls)
+  local cmds392=(fod report get)
+  local cmds393=(fod report create)
+  local cmds394=(fod report delete)
+  local cmds395=(fod report rm)
+  local cmds396=(fod report wait-for)
+  local cmds397=(fod report download)
+  local cmds398=(fod report list-templates)
+  local cmds399=(fod report lst)
+  local cmds400=(fod rest call)
+  local cmds401=(fod rest lookup)
+  local cmds402=(sc-dast scan)
+  local cmds403=(sc-dast scan-policy)
+  local cmds404=(sc-dast scan-settings)
+  local cmds405=(sc-dast sensor)
+  local cmds406=(sc-dast rest)
+  local cmds407=(sc-dast scan complete)
+  local cmds408=(sc-dast scan delete)
+  local cmds409=(sc-dast scan rm)
+  local cmds410=(sc-dast scan download)
+  local cmds411=(sc-dast scan get)
+  local cmds412=(sc-dast scan import-findings)
+  local cmds413=(sc-dast scan list)
+  local cmds414=(sc-dast scan ls)
+  local cmds415=(sc-dast scan pause)
+  local cmds416=(sc-dast scan publish)
+  local cmds417=(sc-dast scan resume)
+  local cmds418=(sc-dast scan start)
+  local cmds419=(sc-dast scan wait-for)
+  local cmds420=(sc-dast scan-policy get)
+  local cmds421=(sc-dast scan-policy list)
+  local cmds422=(sc-dast scan-policy ls)
+  local cmds423=(sc-dast scan-settings get)
+  local cmds424=(sc-dast scan-settings list)
+  local cmds425=(sc-dast scan-settings ls)
+  local cmds426=(sc-dast sensor disable)
+  local cmds427=(sc-dast sensor enable)
+  local cmds428=(sc-dast sensor get)
+  local cmds429=(sc-dast sensor list)
+  local cmds430=(sc-dast sensor ls)
+  local cmds431=(sc-dast rest call)
+  local cmds432=(sc-sast scan)
+  local cmds433=(sc-sast sensor)
+  local cmds434=(sc-sast sensor-pool)
+  local cmds435=(sc-sast pool)
+  local cmds436=(sc-sast rest)
+  local cmds437=(sc-sast scan cancel)
+  local cmds438=(sc-sast scan download)
+  local cmds439=(sc-sast scan list)
+  local cmds440=(sc-sast scan ls)
+  local cmds441=(sc-sast scan start)
+  local cmds442=(sc-sast scan status)
+  local cmds443=(sc-sast scan wait-for)
+  local cmds444=(sc-sast sensor list)
+  local cmds445=(sc-sast sensor ls)
+  local cmds446=(sc-sast sensor-pool list)
+  local cmds447=(sc-sast sensor-pool ls)
+  local cmds448=(sc-sast pool list)
+  local cmds449=(sc-sast pool ls)
+  local cmds450=(sc-sast rest call)
+  local cmds451=(ssc session)
+  local cmds452=(ssc action)
+  local cmds453=(ssc access-control)
+  local cmds454=(ssc ac)
+  local cmds455=(ssc alert)
+  local cmds456=(ssc app)
+  local cmds457=(ssc appversion)
+  local cmds458=(ssc av)
+  local cmds459=(ssc artifact)
+  local cmds460=(ssc attribute)
+  local cmds461=(ssc attr)
+  local cmds462=(ssc custom-tag)
+  local cmds463=(ssc tag)
+  local cmds464=(ssc issue)
+  local cmds465=(ssc issue-template)
+  local cmds466=(ssc performance-indicator)
+  local cmds467=(ssc pi)
+  local cmds468=(ssc variable)
+  local cmds469=(ssc var)
+  local cmds470=(ssc plugin)
+  local cmds471=(ssc report)
+  local cmds472=(ssc system-state)
+  local cmds473=(ssc state)
+  local cmds474=(ssc rest)
+  local cmds475=(ssc session list)
+  local cmds476=(ssc session ls)
+  local cmds477=(ssc session login)
+  local cmds478=(ssc session logout)
+  local cmds479=(ssc action get)
+  local cmds480=(ssc action help)
+  local cmds481=(ssc action import)
+  local cmds482=(ssc action list)
+  local cmds483=(ssc action ls)
+  local cmds484=(ssc action reset)
+  local cmds485=(ssc action run)
+  local cmds486=(ssc action sign)
+  local cmds487=(ssc access-control list-token-definitions)
+  local cmds488=(ssc access-control lstd)
+  local cmds489=(ssc access-control create-token)
+  local cmds490=(ssc access-control list-tokens)
+  local cmds491=(ssc access-control lst)
+  local cmds492=(ssc access-control revoke-token)
+  local cmds493=(ssc access-control update-token)
+  local cmds494=(ssc access-control create-role)
+  local cmds495=(ssc access-control delete-role)
+  local cmds496=(ssc access-control rm-role)
+  local cmds497=(ssc access-control get-role)
+  local cmds498=(ssc access-control list-roles)
+  local cmds499=(ssc access-control lsr)
+  local cmds500=(ssc access-control get-permission)
+  local cmds501=(ssc access-control list-permissions)
+  local cmds502=(ssc access-control lsp)
+  local cmds503=(ssc access-control create-local-user)
+  local cmds504=(ssc access-control update-local-user)
+  local cmds505=(ssc access-control delete-user)
+  local cmds506=(ssc access-control rm-user)
+  local cmds507=(ssc access-control get-user)
+  local cmds508=(ssc access-control list-users)
+  local cmds509=(ssc access-control lsu)
+  local cmds510=(ssc access-control list-appversion-users)
+  local cmds511=(ssc access-control lsavu)
+  local cmds512=(ssc ac list-token-definitions)
+  local cmds513=(ssc ac lstd)
+  local cmds514=(ssc ac create-token)
+  local cmds515=(ssc ac list-tokens)
+  local cmds516=(ssc ac lst)
+  local cmds517=(ssc ac revoke-token)
+  local cmds518=(ssc ac update-token)
+  local cmds519=(ssc ac create-role)
+  local cmds520=(ssc ac delete-role)
+  local cmds521=(ssc ac rm-role)
+  local cmds522=(ssc ac get-role)
+  local cmds523=(ssc ac list-roles)
+  local cmds524=(ssc ac lsr)
+  local cmds525=(ssc ac get-permission)
+  local cmds526=(ssc ac list-permissions)
+  local cmds527=(ssc ac lsp)
+  local cmds528=(ssc ac create-local-user)
+  local cmds529=(ssc ac update-local-user)
+  local cmds530=(ssc ac delete-user)
+  local cmds531=(ssc ac rm-user)
+  local cmds532=(ssc ac get-user)
+  local cmds533=(ssc ac list-users)
+  local cmds534=(ssc ac lsu)
+  local cmds535=(ssc ac list-appversion-users)
+  local cmds536=(ssc ac lsavu)
+  local cmds537=(ssc alert get-definition)
+  local cmds538=(ssc alert list-definitions)
+  local cmds539=(ssc alert lsd)
+  local cmds540=(ssc alert list)
+  local cmds541=(ssc alert ls)
+  local cmds542=(ssc app delete)
+  local cmds543=(ssc app rm)
+  local cmds544=(ssc app get)
+  local cmds545=(ssc app list)
+  local cmds546=(ssc app ls)
+  local cmds547=(ssc app update)
+  local cmds548=(ssc appversion create)
+  local cmds549=(ssc appversion delete)
+  local cmds550=(ssc appversion rm)
+  local cmds551=(ssc appversion copy-state)
+  local cmds552=(ssc appversion download-state)
+  local cmds553=(ssc appversion get)
+  local cmds554=(ssc appversion list)
+  local cmds555=(ssc appversion ls)
+  local cmds556=(ssc appversion purge-artifacts)
+  local cmds557=(ssc appversion refresh-metrics)
+  local cmds558=(ssc appversion update)
+  local cmds559=(ssc av create)
+  local cmds560=(ssc av delete)
+  local cmds561=(ssc av rm)
+  local cmds562=(ssc av copy-state)
+  local cmds563=(ssc av download-state)
+  local cmds564=(ssc av get)
+  local cmds565=(ssc av list)
+  local cmds566=(ssc av ls)
+  local cmds567=(ssc av purge-artifacts)
+  local cmds568=(ssc av refresh-metrics)
+  local cmds569=(ssc av update)
+  local cmds570=(ssc artifact approve)
+  local cmds571=(ssc artifact delete)
+  local cmds572=(ssc artifact rm)
+  local cmds573=(ssc artifact download)
+  local cmds574=(ssc artifact get)
+  local cmds575=(ssc artifact import-debricked)
+  local cmds576=(ssc artifact list)
+  local cmds577=(ssc artifact ls)
+  local cmds578=(ssc artifact purge)
+  local cmds579=(ssc artifact upload)
+  local cmds580=(ssc artifact wait-for)
+  local cmds581=(ssc attribute get-definition)
+  local cmds582=(ssc attribute list-definitions)
+  local cmds583=(ssc attribute lsd)
+  local cmds584=(ssc attribute list)
+  local cmds585=(ssc attribute ls)
+  local cmds586=(ssc attribute update)
+  local cmds587=(ssc attr get-definition)
+  local cmds588=(ssc attr list-definitions)
+  local cmds589=(ssc attr lsd)
+  local cmds590=(ssc attr list)
+  local cmds591=(ssc attr ls)
+  local cmds592=(ssc attr update)
+  local cmds593=(ssc custom-tag list)
+  local cmds594=(ssc custom-tag ls)
+  local cmds595=(ssc custom-tag get)
+  local cmds596=(ssc custom-tag delete)
+  local cmds597=(ssc custom-tag rm)
+  local cmds598=(ssc custom-tag create)
+  local cmds599=(ssc custom-tag update)
+  local cmds600=(ssc tag list)
+  local cmds601=(ssc tag ls)
+  local cmds602=(ssc tag get)
+  local cmds603=(ssc tag delete)
+  local cmds604=(ssc tag rm)
+  local cmds605=(ssc tag create)
+  local cmds606=(ssc tag update)
+  local cmds607=(ssc issue create-template)
+  local cmds608=(ssc issue delete-template)
+  local cmds609=(ssc issue rmt)
+  local cmds610=(ssc issue download-template)
+  local cmds611=(ssc issue get-template)
+  local cmds612=(ssc issue list-templates)
+  local cmds613=(ssc issue lst)
+  local cmds614=(ssc issue update-template)
+  local cmds615=(ssc issue get-filterset)
+  local cmds616=(ssc issue list-filtersets)
+  local cmds617=(ssc issue lsfs)
+  local cmds618=(ssc issue get-filter)
+  local cmds619=(ssc issue list-filters)
+  local cmds620=(ssc issue lsf)
+  local cmds621=(ssc issue get-group)
+  local cmds622=(ssc issue list-groups)
+  local cmds623=(ssc issue lsg)
+  local cmds624=(ssc issue count)
+  local cmds625=(ssc issue get)
+  local cmds626=(ssc issue list)
+  local cmds627=(ssc issue ls)
+  local cmds628=(ssc issue update)
+  local cmds629=(ssc issue-template create)
+  local cmds630=(ssc issue-template delete)
+  local cmds631=(ssc issue-template rm)
+  local cmds632=(ssc issue-template download)
+  local cmds633=(ssc issue-template get)
+  local cmds634=(ssc issue-template list)
+  local cmds635=(ssc issue-template ls)
+  local cmds636=(ssc issue-template update)
+  local cmds637=(ssc performance-indicator list-definitions)
+  local cmds638=(ssc performance-indicator lsd)
+  local cmds639=(ssc performance-indicator get)
+  local cmds640=(ssc performance-indicator list)
+  local cmds641=(ssc performance-indicator ls)
+  local cmds642=(ssc pi list-definitions)
+  local cmds643=(ssc pi lsd)
+  local cmds644=(ssc pi get)
+  local cmds645=(ssc pi list)
+  local cmds646=(ssc pi ls)
+  local cmds647=(ssc variable list-definitions)
+  local cmds648=(ssc variable lsd)
+  local cmds649=(ssc variable get)
+  local cmds650=(ssc variable list)
+  local cmds651=(ssc variable ls)
+  local cmds652=(ssc var list-definitions)
+  local cmds653=(ssc var lsd)
+  local cmds654=(ssc var get)
+  local cmds655=(ssc var list)
+  local cmds656=(ssc var ls)
+  local cmds657=(ssc plugin install)
+  local cmds658=(ssc plugin uninstall)
+  local cmds659=(ssc plugin enable)
+  local cmds660=(ssc plugin disable)
+  local cmds661=(ssc plugin get)
+  local cmds662=(ssc plugin list)
+  local cmds663=(ssc plugin ls)
+  local cmds664=(ssc report create)
+  local cmds665=(ssc report list)
+  local cmds666=(ssc report ls)
+  local cmds667=(ssc report get)
+  local cmds668=(ssc report download)
+  local cmds669=(ssc report wait-for)
+  local cmds670=(ssc report delete)
+  local cmds671=(ssc report rm)
+  local cmds672=(ssc report list-parameters)
+  local cmds673=(ssc report lsp)
+  local cmds674=(ssc report create-template)
+  local cmds675=(ssc report list-templates)
+  local cmds676=(ssc report lst)
+  local cmds677=(ssc report get-template)
+  local cmds678=(ssc report download-template)
+  local cmds679=(ssc report create-template-config)
+  local cmds680=(ssc report delete-template)
+  local cmds681=(ssc report rmt)
+  local cmds682=(ssc system-state list-activities)
+  local cmds683=(ssc system-state lsa)
+  local cmds684=(ssc system-state list-events)
+  local cmds685=(ssc system-state lse)
+  local cmds686=(ssc system-state list-settings)
+  local cmds687=(ssc system-state lss)
+  local cmds688=(ssc system-state upload-seed-bundle)
+  local cmds689=(ssc system-state list-rulepacks)
+  local cmds690=(ssc system-state lsr)
+  local cmds691=(ssc system-state cancel-job)
+  local cmds692=(ssc system-state get-job)
+  local cmds693=(ssc system-state list-jobs)
+  local cmds694=(ssc system-state lsj)
+  local cmds695=(ssc system-state update-job)
+  local cmds696=(ssc system-state wait-for-job)
+  local cmds697=(ssc state list-activities)
+  local cmds698=(ssc state lsa)
+  local cmds699=(ssc state list-events)
+  local cmds700=(ssc state lse)
+  local cmds701=(ssc state list-settings)
+  local cmds702=(ssc state lss)
+  local cmds703=(ssc state upload-seed-bundle)
+  local cmds704=(ssc state list-rulepacks)
+  local cmds705=(ssc state lsr)
+  local cmds706=(ssc state cancel-job)
+  local cmds707=(ssc state get-job)
+  local cmds708=(ssc state list-jobs)
+  local cmds709=(ssc state lsj)
+  local cmds710=(ssc state update-job)
+  local cmds711=(ssc state wait-for-job)
+  local cmds712=(ssc rest call)
+  local cmds713=(tool env)
+  local cmds714=(tool bugtracker-utility)
+  local cmds715=(tool fbtu)
+  local cmds716=(tool debricked-cli)
+  local cmds717=(tool dcli)
+  local cmds718=(tool fcli)
+  local cmds719=(tool fod-uploader)
+  local cmds720=(tool fodupload)
+  local cmds721=(tool sc-client)
+  local cmds722=(tool scancentral-client)
+  local cmds723=(tool sourceanalyzer)
+  local cmds724=(tool vuln-exporter)
+  local cmds725=(tool fve)
+  local cmds726=(tool definitions)
+  local cmds727=(tool env init)
+  local cmds728=(tool env shell)
+  local cmds729=(tool env powershell)
+  local cmds730=(tool env pwsh)
+  local cmds731=(tool env github)
+  local cmds732=(tool env gitlab)
+  local cmds733=(tool env ado)
+  local cmds734=(tool env expr)
+  local cmds735=(tool bugtracker-utility install)
+  local cmds736=(tool bugtracker-utility list)
+  local cmds737=(tool bugtracker-utility ls)
+  local cmds738=(tool bugtracker-utility list-platforms)
+  local cmds739=(tool bugtracker-utility lsp)
+  local cmds740=(tool bugtracker-utility get)
+  local cmds741=(tool bugtracker-utility register)
+  local cmds742=(tool bugtracker-utility run)
+  local cmds743=(tool bugtracker-utility uninstall)
+  local cmds744=(tool fbtu install)
+  local cmds745=(tool fbtu list)
+  local cmds746=(tool fbtu ls)
+  local cmds747=(tool fbtu list-platforms)
+  local cmds748=(tool fbtu lsp)
+  local cmds749=(tool fbtu get)
+  local cmds750=(tool fbtu register)
+  local cmds751=(tool fbtu run)
+  local cmds752=(tool fbtu uninstall)
+  local cmds753=(tool debricked-cli install)
+  local cmds754=(tool debricked-cli list)
+  local cmds755=(tool debricked-cli ls)
+  local cmds756=(tool debricked-cli list-platforms)
+  local cmds757=(tool debricked-cli lsp)
+  local cmds758=(tool debricked-cli get)
+  local cmds759=(tool debricked-cli register)
+  local cmds760=(tool debricked-cli run)
+  local cmds761=(tool debricked-cli uninstall)
+  local cmds762=(tool dcli install)
+  local cmds763=(tool dcli list)
+  local cmds764=(tool dcli ls)
+  local cmds765=(tool dcli list-platforms)
+  local cmds766=(tool dcli lsp)
+  local cmds767=(tool dcli get)
+  local cmds768=(tool dcli register)
+  local cmds769=(tool dcli run)
+  local cmds770=(tool dcli uninstall)
+  local cmds771=(tool fcli install)
+  local cmds772=(tool fcli list)
+  local cmds773=(tool fcli ls)
+  local cmds774=(tool fcli list-platforms)
+  local cmds775=(tool fcli lsp)
+  local cmds776=(tool fcli get)
+  local cmds777=(tool fcli register)
+  local cmds778=(tool fcli run)
+  local cmds779=(tool fcli uninstall)
+  local cmds780=(tool fod-uploader install)
+  local cmds781=(tool fod-uploader list)
+  local cmds782=(tool fod-uploader ls)
+  local cmds783=(tool fod-uploader list-platforms)
+  local cmds784=(tool fod-uploader lsp)
+  local cmds785=(tool fod-uploader get)
+  local cmds786=(tool fod-uploader register)
+  local cmds787=(tool fod-uploader run)
+  local cmds788=(tool fod-uploader uninstall)
+  local cmds789=(tool fodupload install)
+  local cmds790=(tool fodupload list)
+  local cmds791=(tool fodupload ls)
+  local cmds792=(tool fodupload list-platforms)
+  local cmds793=(tool fodupload lsp)
+  local cmds794=(tool fodupload get)
+  local cmds795=(tool fodupload register)
+  local cmds796=(tool fodupload run)
+  local cmds797=(tool fodupload uninstall)
+  local cmds798=(tool sc-client install)
+  local cmds799=(tool sc-client list)
+  local cmds800=(tool sc-client ls)
+  local cmds801=(tool sc-client list-platforms)
+  local cmds802=(tool sc-client lsp)
+  local cmds803=(tool sc-client get)
+  local cmds804=(tool sc-client register)
+  local cmds805=(tool sc-client run)
+  local cmds806=(tool sc-client uninstall)
+  local cmds807=(tool scancentral-client install)
+  local cmds808=(tool scancentral-client list)
+  local cmds809=(tool scancentral-client ls)
+  local cmds810=(tool scancentral-client list-platforms)
+  local cmds811=(tool scancentral-client lsp)
+  local cmds812=(tool scancentral-client get)
+  local cmds813=(tool scancentral-client register)
+  local cmds814=(tool scancentral-client run)
+  local cmds815=(tool scancentral-client uninstall)
+  local cmds816=(tool sourceanalyzer list)
+  local cmds817=(tool sourceanalyzer ls)
+  local cmds818=(tool sourceanalyzer get)
+  local cmds819=(tool sourceanalyzer register)
+  local cmds820=(tool sourceanalyzer run)
+  local cmds821=(tool sourceanalyzer update-rules)
+  local cmds822=(tool vuln-exporter install)
+  local cmds823=(tool vuln-exporter list)
+  local cmds824=(tool vuln-exporter ls)
+  local cmds825=(tool vuln-exporter list-platforms)
+  local cmds826=(tool vuln-exporter lsp)
+  local cmds827=(tool vuln-exporter get)
+  local cmds828=(tool vuln-exporter register)
+  local cmds829=(tool vuln-exporter run)
+  local cmds830=(tool vuln-exporter uninstall)
+  local cmds831=(tool fve install)
+  local cmds832=(tool fve list)
+  local cmds833=(tool fve ls)
+  local cmds834=(tool fve list-platforms)
+  local cmds835=(tool fve lsp)
+  local cmds836=(tool fve get)
+  local cmds837=(tool fve register)
+  local cmds838=(tool fve run)
+  local cmds839=(tool fve uninstall)
+  local cmds840=(tool definitions list)
+  local cmds841=(tool definitions ls)
+  local cmds842=(tool definitions update)
+  local cmds843=(tool definitions reset)
+  local cmds844=(license msp-report)
+  local cmds845=(license ncd-report)
+  local cmds846=(license msp-report create)
+  local cmds847=(license msp-report create-config)
+  local cmds848=(license ncd-report create)
+  local cmds849=(license ncd-report create-config)
+  local cmds850=(license ncd-report validate-sources)
+  local cmds851=(license ncd-report get-summary)
+  local cmds852=(license ncd-report merge)
+  local cmds853=(license ncd-report list-contributors)
+  local cmds854=(license ncd-report lsc)
+  local cmds855=(license ncd-report list-repositories)
+  local cmds856=(license ncd-report lsr)
+  local cmds857=(license ncd-report update-contributor-status)
+  local cmds858=(license ncd-report ucs)
+  local cmds859=(util all-commands)
+  local cmds860=(util auto-complete)
+  local cmds861=(util crypto)
+  local cmds862=(util mcp-server)
+  local cmds863=(util state)
+  local cmds864=(util variable)
+  local cmds865=(util var)
+  local cmds866=(util all-commands usage)
+  local cmds867=(util all-commands list)
+  local cmds868=(util all-commands ls)
+  local cmds869=(util auto-complete generate)
+  local cmds870=(util crypto encrypt)
+  local cmds871=(util crypto decrypt)
+  local cmds872=(util mcp-server start)
+  local cmds873=(util state clear)
+  local cmds874=(util variable contents)
+  local cmds875=(util variable clear)
+  local cmds876=(util variable delete)
+  local cmds877=(util variable rm)
+  local cmds878=(util variable get)
+  local cmds879=(util variable list)
+  local cmds880=(util variable ls)
+  local cmds881=(util var contents)
+  local cmds882=(util var clear)
+  local cmds883=(util var delete)
+  local cmds884=(util var rm)
+  local cmds885=(util var get)
+  local cmds886=(util var list)
+  local cmds887=(util var ls)
 
-  if CompWordsContainsArray "${cmds885[@]}"; then _picocli_fcli_util_var_ls; return $?; fi
-  if CompWordsContainsArray "${cmds884[@]}"; then _picocli_fcli_util_var_list; return $?; fi
-  if CompWordsContainsArray "${cmds883[@]}"; then _picocli_fcli_util_var_get; return $?; fi
-  if CompWordsContainsArray "${cmds882[@]}"; then _picocli_fcli_util_var_rm; return $?; fi
-  if CompWordsContainsArray "${cmds881[@]}"; then _picocli_fcli_util_var_delete; return $?; fi
-  if CompWordsContainsArray "${cmds880[@]}"; then _picocli_fcli_util_var_clear; return $?; fi
-  if CompWordsContainsArray "${cmds879[@]}"; then _picocli_fcli_util_var_contents; return $?; fi
-  if CompWordsContainsArray "${cmds878[@]}"; then _picocli_fcli_util_variable_ls; return $?; fi
-  if CompWordsContainsArray "${cmds877[@]}"; then _picocli_fcli_util_variable_list; return $?; fi
-  if CompWordsContainsArray "${cmds876[@]}"; then _picocli_fcli_util_variable_get; return $?; fi
-  if CompWordsContainsArray "${cmds875[@]}"; then _picocli_fcli_util_variable_rm; return $?; fi
-  if CompWordsContainsArray "${cmds874[@]}"; then _picocli_fcli_util_variable_delete; return $?; fi
-  if CompWordsContainsArray "${cmds873[@]}"; then _picocli_fcli_util_variable_clear; return $?; fi
-  if CompWordsContainsArray "${cmds872[@]}"; then _picocli_fcli_util_variable_contents; return $?; fi
-  if CompWordsContainsArray "${cmds871[@]}"; then _picocli_fcli_util_state_clear; return $?; fi
-  if CompWordsContainsArray "${cmds870[@]}"; then _picocli_fcli_util_mcpserver_start; return $?; fi
-  if CompWordsContainsArray "${cmds869[@]}"; then _picocli_fcli_util_crypto_decrypt; return $?; fi
-  if CompWordsContainsArray "${cmds868[@]}"; then _picocli_fcli_util_crypto_encrypt; return $?; fi
-  if CompWordsContainsArray "${cmds867[@]}"; then _picocli_fcli_util_autocomplete_generate; return $?; fi
-  if CompWordsContainsArray "${cmds866[@]}"; then _picocli_fcli_util_allcommands_ls; return $?; fi
-  if CompWordsContainsArray "${cmds865[@]}"; then _picocli_fcli_util_allcommands_list; return $?; fi
-  if CompWordsContainsArray "${cmds864[@]}"; then _picocli_fcli_util_allcommands_usage; return $?; fi
-  if CompWordsContainsArray "${cmds863[@]}"; then _picocli_fcli_util_var; return $?; fi
-  if CompWordsContainsArray "${cmds862[@]}"; then _picocli_fcli_util_variable; return $?; fi
-  if CompWordsContainsArray "${cmds861[@]}"; then _picocli_fcli_util_state; return $?; fi
-  if CompWordsContainsArray "${cmds860[@]}"; then _picocli_fcli_util_mcpserver; return $?; fi
-  if CompWordsContainsArray "${cmds859[@]}"; then _picocli_fcli_util_crypto; return $?; fi
-  if CompWordsContainsArray "${cmds858[@]}"; then _picocli_fcli_util_autocomplete; return $?; fi
-  if CompWordsContainsArray "${cmds857[@]}"; then _picocli_fcli_util_allcommands; return $?; fi
-  if CompWordsContainsArray "${cmds856[@]}"; then _picocli_fcli_license_ncdreport_ucs; return $?; fi
-  if CompWordsContainsArray "${cmds855[@]}"; then _picocli_fcli_license_ncdreport_updatecontributorstatus; return $?; fi
-  if CompWordsContainsArray "${cmds854[@]}"; then _picocli_fcli_license_ncdreport_lsr; return $?; fi
-  if CompWordsContainsArray "${cmds853[@]}"; then _picocli_fcli_license_ncdreport_listrepositories; return $?; fi
-  if CompWordsContainsArray "${cmds852[@]}"; then _picocli_fcli_license_ncdreport_lsc; return $?; fi
-  if CompWordsContainsArray "${cmds851[@]}"; then _picocli_fcli_license_ncdreport_listcontributors; return $?; fi
-  if CompWordsContainsArray "${cmds850[@]}"; then _picocli_fcli_license_ncdreport_merge; return $?; fi
-  if CompWordsContainsArray "${cmds849[@]}"; then _picocli_fcli_license_ncdreport_getsummary; return $?; fi
-  if CompWordsContainsArray "${cmds848[@]}"; then _picocli_fcli_license_ncdreport_validatesources; return $?; fi
-  if CompWordsContainsArray "${cmds847[@]}"; then _picocli_fcli_license_ncdreport_createconfig; return $?; fi
-  if CompWordsContainsArray "${cmds846[@]}"; then _picocli_fcli_license_ncdreport_create; return $?; fi
-  if CompWordsContainsArray "${cmds845[@]}"; then _picocli_fcli_license_mspreport_createconfig; return $?; fi
-  if CompWordsContainsArray "${cmds844[@]}"; then _picocli_fcli_license_mspreport_create; return $?; fi
-  if CompWordsContainsArray "${cmds843[@]}"; then _picocli_fcli_license_ncdreport; return $?; fi
-  if CompWordsContainsArray "${cmds842[@]}"; then _picocli_fcli_license_mspreport; return $?; fi
-  if CompWordsContainsArray "${cmds841[@]}"; then _picocli_fcli_tool_definitions_reset; return $?; fi
-  if CompWordsContainsArray "${cmds840[@]}"; then _picocli_fcli_tool_definitions_update; return $?; fi
-  if CompWordsContainsArray "${cmds839[@]}"; then _picocli_fcli_tool_definitions_ls; return $?; fi
-  if CompWordsContainsArray "${cmds838[@]}"; then _picocli_fcli_tool_definitions_list; return $?; fi
-  if CompWordsContainsArray "${cmds837[@]}"; then _picocli_fcli_tool_fve_uninstall; return $?; fi
-  if CompWordsContainsArray "${cmds836[@]}"; then _picocli_fcli_tool_fve_run; return $?; fi
-  if CompWordsContainsArray "${cmds835[@]}"; then _picocli_fcli_tool_fve_register; return $?; fi
-  if CompWordsContainsArray "${cmds834[@]}"; then _picocli_fcli_tool_fve_get; return $?; fi
-  if CompWordsContainsArray "${cmds833[@]}"; then _picocli_fcli_tool_fve_lsp; return $?; fi
-  if CompWordsContainsArray "${cmds832[@]}"; then _picocli_fcli_tool_fve_listplatforms; return $?; fi
-  if CompWordsContainsArray "${cmds831[@]}"; then _picocli_fcli_tool_fve_ls; return $?; fi
-  if CompWordsContainsArray "${cmds830[@]}"; then _picocli_fcli_tool_fve_list; return $?; fi
-  if CompWordsContainsArray "${cmds829[@]}"; then _picocli_fcli_tool_fve_install; return $?; fi
-  if CompWordsContainsArray "${cmds828[@]}"; then _picocli_fcli_tool_vulnexporter_uninstall; return $?; fi
-  if CompWordsContainsArray "${cmds827[@]}"; then _picocli_fcli_tool_vulnexporter_run; return $?; fi
-  if CompWordsContainsArray "${cmds826[@]}"; then _picocli_fcli_tool_vulnexporter_register; return $?; fi
-  if CompWordsContainsArray "${cmds825[@]}"; then _picocli_fcli_tool_vulnexporter_get; return $?; fi
-  if CompWordsContainsArray "${cmds824[@]}"; then _picocli_fcli_tool_vulnexporter_lsp; return $?; fi
-  if CompWordsContainsArray "${cmds823[@]}"; then _picocli_fcli_tool_vulnexporter_listplatforms; return $?; fi
-  if CompWordsContainsArray "${cmds822[@]}"; then _picocli_fcli_tool_vulnexporter_ls; return $?; fi
-  if CompWordsContainsArray "${cmds821[@]}"; then _picocli_fcli_tool_vulnexporter_list; return $?; fi
-  if CompWordsContainsArray "${cmds820[@]}"; then _picocli_fcli_tool_vulnexporter_install; return $?; fi
-  if CompWordsContainsArray "${cmds819[@]}"; then _picocli_fcli_tool_sourceanalyzer_updaterules; return $?; fi
-  if CompWordsContainsArray "${cmds818[@]}"; then _picocli_fcli_tool_sourceanalyzer_run; return $?; fi
-  if CompWordsContainsArray "${cmds817[@]}"; then _picocli_fcli_tool_sourceanalyzer_register; return $?; fi
-  if CompWordsContainsArray "${cmds816[@]}"; then _picocli_fcli_tool_sourceanalyzer_get; return $?; fi
-  if CompWordsContainsArray "${cmds815[@]}"; then _picocli_fcli_tool_sourceanalyzer_ls; return $?; fi
-  if CompWordsContainsArray "${cmds814[@]}"; then _picocli_fcli_tool_sourceanalyzer_list; return $?; fi
-  if CompWordsContainsArray "${cmds813[@]}"; then _picocli_fcli_tool_scancentralclient_uninstall; return $?; fi
-  if CompWordsContainsArray "${cmds812[@]}"; then _picocli_fcli_tool_scancentralclient_run; return $?; fi
-  if CompWordsContainsArray "${cmds811[@]}"; then _picocli_fcli_tool_scancentralclient_register; return $?; fi
-  if CompWordsContainsArray "${cmds810[@]}"; then _picocli_fcli_tool_scancentralclient_get; return $?; fi
-  if CompWordsContainsArray "${cmds809[@]}"; then _picocli_fcli_tool_scancentralclient_lsp; return $?; fi
-  if CompWordsContainsArray "${cmds808[@]}"; then _picocli_fcli_tool_scancentralclient_listplatforms; return $?; fi
-  if CompWordsContainsArray "${cmds807[@]}"; then _picocli_fcli_tool_scancentralclient_ls; return $?; fi
-  if CompWordsContainsArray "${cmds806[@]}"; then _picocli_fcli_tool_scancentralclient_list; return $?; fi
-  if CompWordsContainsArray "${cmds805[@]}"; then _picocli_fcli_tool_scancentralclient_install; return $?; fi
-  if CompWordsContainsArray "${cmds804[@]}"; then _picocli_fcli_tool_scclient_uninstall; return $?; fi
-  if CompWordsContainsArray "${cmds803[@]}"; then _picocli_fcli_tool_scclient_run; return $?; fi
-  if CompWordsContainsArray "${cmds802[@]}"; then _picocli_fcli_tool_scclient_register; return $?; fi
-  if CompWordsContainsArray "${cmds801[@]}"; then _picocli_fcli_tool_scclient_get; return $?; fi
-  if CompWordsContainsArray "${cmds800[@]}"; then _picocli_fcli_tool_scclient_lsp; return $?; fi
-  if CompWordsContainsArray "${cmds799[@]}"; then _picocli_fcli_tool_scclient_listplatforms; return $?; fi
-  if CompWordsContainsArray "${cmds798[@]}"; then _picocli_fcli_tool_scclient_ls; return $?; fi
-  if CompWordsContainsArray "${cmds797[@]}"; then _picocli_fcli_tool_scclient_list; return $?; fi
-  if CompWordsContainsArray "${cmds796[@]}"; then _picocli_fcli_tool_scclient_install; return $?; fi
-  if CompWordsContainsArray "${cmds795[@]}"; then _picocli_fcli_tool_fodupload_uninstall; return $?; fi
-  if CompWordsContainsArray "${cmds794[@]}"; then _picocli_fcli_tool_fodupload_run; return $?; fi
-  if CompWordsContainsArray "${cmds793[@]}"; then _picocli_fcli_tool_fodupload_register; return $?; fi
-  if CompWordsContainsArray "${cmds792[@]}"; then _picocli_fcli_tool_fodupload_get; return $?; fi
-  if CompWordsContainsArray "${cmds791[@]}"; then _picocli_fcli_tool_fodupload_lsp; return $?; fi
-  if CompWordsContainsArray "${cmds790[@]}"; then _picocli_fcli_tool_fodupload_listplatforms; return $?; fi
-  if CompWordsContainsArray "${cmds789[@]}"; then _picocli_fcli_tool_fodupload_ls; return $?; fi
-  if CompWordsContainsArray "${cmds788[@]}"; then _picocli_fcli_tool_fodupload_list; return $?; fi
-  if CompWordsContainsArray "${cmds787[@]}"; then _picocli_fcli_tool_fodupload_install; return $?; fi
-  if CompWordsContainsArray "${cmds786[@]}"; then _picocli_fcli_tool_foduploader_uninstall; return $?; fi
-  if CompWordsContainsArray "${cmds785[@]}"; then _picocli_fcli_tool_foduploader_run; return $?; fi
-  if CompWordsContainsArray "${cmds784[@]}"; then _picocli_fcli_tool_foduploader_register; return $?; fi
-  if CompWordsContainsArray "${cmds783[@]}"; then _picocli_fcli_tool_foduploader_get; return $?; fi
-  if CompWordsContainsArray "${cmds782[@]}"; then _picocli_fcli_tool_foduploader_lsp; return $?; fi
-  if CompWordsContainsArray "${cmds781[@]}"; then _picocli_fcli_tool_foduploader_listplatforms; return $?; fi
-  if CompWordsContainsArray "${cmds780[@]}"; then _picocli_fcli_tool_foduploader_ls; return $?; fi
-  if CompWordsContainsArray "${cmds779[@]}"; then _picocli_fcli_tool_foduploader_list; return $?; fi
-  if CompWordsContainsArray "${cmds778[@]}"; then _picocli_fcli_tool_foduploader_install; return $?; fi
-  if CompWordsContainsArray "${cmds777[@]}"; then _picocli_fcli_tool_fcli_uninstall; return $?; fi
-  if CompWordsContainsArray "${cmds776[@]}"; then _picocli_fcli_tool_fcli_run; return $?; fi
-  if CompWordsContainsArray "${cmds775[@]}"; then _picocli_fcli_tool_fcli_register; return $?; fi
-  if CompWordsContainsArray "${cmds774[@]}"; then _picocli_fcli_tool_fcli_get; return $?; fi
-  if CompWordsContainsArray "${cmds773[@]}"; then _picocli_fcli_tool_fcli_lsp; return $?; fi
-  if CompWordsContainsArray "${cmds772[@]}"; then _picocli_fcli_tool_fcli_listplatforms; return $?; fi
-  if CompWordsContainsArray "${cmds771[@]}"; then _picocli_fcli_tool_fcli_ls; return $?; fi
-  if CompWordsContainsArray "${cmds770[@]}"; then _picocli_fcli_tool_fcli_list; return $?; fi
-  if CompWordsContainsArray "${cmds769[@]}"; then _picocli_fcli_tool_fcli_install; return $?; fi
-  if CompWordsContainsArray "${cmds768[@]}"; then _picocli_fcli_tool_dcli_uninstall; return $?; fi
-  if CompWordsContainsArray "${cmds767[@]}"; then _picocli_fcli_tool_dcli_run; return $?; fi
-  if CompWordsContainsArray "${cmds766[@]}"; then _picocli_fcli_tool_dcli_register; return $?; fi
-  if CompWordsContainsArray "${cmds765[@]}"; then _picocli_fcli_tool_dcli_get; return $?; fi
-  if CompWordsContainsArray "${cmds764[@]}"; then _picocli_fcli_tool_dcli_lsp; return $?; fi
-  if CompWordsContainsArray "${cmds763[@]}"; then _picocli_fcli_tool_dcli_listplatforms; return $?; fi
-  if CompWordsContainsArray "${cmds762[@]}"; then _picocli_fcli_tool_dcli_ls; return $?; fi
-  if CompWordsContainsArray "${cmds761[@]}"; then _picocli_fcli_tool_dcli_list; return $?; fi
-  if CompWordsContainsArray "${cmds760[@]}"; then _picocli_fcli_tool_dcli_install; return $?; fi
-  if CompWordsContainsArray "${cmds759[@]}"; then _picocli_fcli_tool_debrickedcli_uninstall; return $?; fi
-  if CompWordsContainsArray "${cmds758[@]}"; then _picocli_fcli_tool_debrickedcli_run; return $?; fi
-  if CompWordsContainsArray "${cmds757[@]}"; then _picocli_fcli_tool_debrickedcli_register; return $?; fi
-  if CompWordsContainsArray "${cmds756[@]}"; then _picocli_fcli_tool_debrickedcli_get; return $?; fi
-  if CompWordsContainsArray "${cmds755[@]}"; then _picocli_fcli_tool_debrickedcli_lsp; return $?; fi
-  if CompWordsContainsArray "${cmds754[@]}"; then _picocli_fcli_tool_debrickedcli_listplatforms; return $?; fi
-  if CompWordsContainsArray "${cmds753[@]}"; then _picocli_fcli_tool_debrickedcli_ls; return $?; fi
-  if CompWordsContainsArray "${cmds752[@]}"; then _picocli_fcli_tool_debrickedcli_list; return $?; fi
-  if CompWordsContainsArray "${cmds751[@]}"; then _picocli_fcli_tool_debrickedcli_install; return $?; fi
-  if CompWordsContainsArray "${cmds750[@]}"; then _picocli_fcli_tool_fbtu_uninstall; return $?; fi
-  if CompWordsContainsArray "${cmds749[@]}"; then _picocli_fcli_tool_fbtu_run; return $?; fi
-  if CompWordsContainsArray "${cmds748[@]}"; then _picocli_fcli_tool_fbtu_register; return $?; fi
-  if CompWordsContainsArray "${cmds747[@]}"; then _picocli_fcli_tool_fbtu_get; return $?; fi
-  if CompWordsContainsArray "${cmds746[@]}"; then _picocli_fcli_tool_fbtu_lsp; return $?; fi
-  if CompWordsContainsArray "${cmds745[@]}"; then _picocli_fcli_tool_fbtu_listplatforms; return $?; fi
-  if CompWordsContainsArray "${cmds744[@]}"; then _picocli_fcli_tool_fbtu_ls; return $?; fi
-  if CompWordsContainsArray "${cmds743[@]}"; then _picocli_fcli_tool_fbtu_list; return $?; fi
-  if CompWordsContainsArray "${cmds742[@]}"; then _picocli_fcli_tool_fbtu_install; return $?; fi
-  if CompWordsContainsArray "${cmds741[@]}"; then _picocli_fcli_tool_bugtrackerutility_uninstall; return $?; fi
-  if CompWordsContainsArray "${cmds740[@]}"; then _picocli_fcli_tool_bugtrackerutility_run; return $?; fi
-  if CompWordsContainsArray "${cmds739[@]}"; then _picocli_fcli_tool_bugtrackerutility_register; return $?; fi
-  if CompWordsContainsArray "${cmds738[@]}"; then _picocli_fcli_tool_bugtrackerutility_get; return $?; fi
-  if CompWordsContainsArray "${cmds737[@]}"; then _picocli_fcli_tool_bugtrackerutility_lsp; return $?; fi
-  if CompWordsContainsArray "${cmds736[@]}"; then _picocli_fcli_tool_bugtrackerutility_listplatforms; return $?; fi
-  if CompWordsContainsArray "${cmds735[@]}"; then _picocli_fcli_tool_bugtrackerutility_ls; return $?; fi
-  if CompWordsContainsArray "${cmds734[@]}"; then _picocli_fcli_tool_bugtrackerutility_list; return $?; fi
-  if CompWordsContainsArray "${cmds733[@]}"; then _picocli_fcli_tool_bugtrackerutility_install; return $?; fi
-  if CompWordsContainsArray "${cmds732[@]}"; then _picocli_fcli_tool_env_expr; return $?; fi
-  if CompWordsContainsArray "${cmds731[@]}"; then _picocli_fcli_tool_env_ado; return $?; fi
-  if CompWordsContainsArray "${cmds730[@]}"; then _picocli_fcli_tool_env_gitlab; return $?; fi
-  if CompWordsContainsArray "${cmds729[@]}"; then _picocli_fcli_tool_env_github; return $?; fi
-  if CompWordsContainsArray "${cmds728[@]}"; then _picocli_fcli_tool_env_pwsh; return $?; fi
-  if CompWordsContainsArray "${cmds727[@]}"; then _picocli_fcli_tool_env_powershell; return $?; fi
-  if CompWordsContainsArray "${cmds726[@]}"; then _picocli_fcli_tool_env_shell; return $?; fi
-  if CompWordsContainsArray "${cmds725[@]}"; then _picocli_fcli_tool_env_init; return $?; fi
-  if CompWordsContainsArray "${cmds724[@]}"; then _picocli_fcli_tool_definitions; return $?; fi
-  if CompWordsContainsArray "${cmds723[@]}"; then _picocli_fcli_tool_fve; return $?; fi
-  if CompWordsContainsArray "${cmds722[@]}"; then _picocli_fcli_tool_vulnexporter; return $?; fi
-  if CompWordsContainsArray "${cmds721[@]}"; then _picocli_fcli_tool_sourceanalyzer; return $?; fi
-  if CompWordsContainsArray "${cmds720[@]}"; then _picocli_fcli_tool_scancentralclient; return $?; fi
-  if CompWordsContainsArray "${cmds719[@]}"; then _picocli_fcli_tool_scclient; return $?; fi
-  if CompWordsContainsArray "${cmds718[@]}"; then _picocli_fcli_tool_fodupload; return $?; fi
-  if CompWordsContainsArray "${cmds717[@]}"; then _picocli_fcli_tool_foduploader; return $?; fi
-  if CompWordsContainsArray "${cmds716[@]}"; then _picocli_fcli_tool_fcli; return $?; fi
-  if CompWordsContainsArray "${cmds715[@]}"; then _picocli_fcli_tool_dcli; return $?; fi
-  if CompWordsContainsArray "${cmds714[@]}"; then _picocli_fcli_tool_debrickedcli; return $?; fi
-  if CompWordsContainsArray "${cmds713[@]}"; then _picocli_fcli_tool_fbtu; return $?; fi
-  if CompWordsContainsArray "${cmds712[@]}"; then _picocli_fcli_tool_bugtrackerutility; return $?; fi
-  if CompWordsContainsArray "${cmds711[@]}"; then _picocli_fcli_tool_env; return $?; fi
-  if CompWordsContainsArray "${cmds710[@]}"; then _picocli_fcli_ssc_rest_call; return $?; fi
-  if CompWordsContainsArray "${cmds709[@]}"; then _picocli_fcli_ssc_state_waitforjob; return $?; fi
-  if CompWordsContainsArray "${cmds708[@]}"; then _picocli_fcli_ssc_state_updatejob; return $?; fi
-  if CompWordsContainsArray "${cmds707[@]}"; then _picocli_fcli_ssc_state_lsj; return $?; fi
-  if CompWordsContainsArray "${cmds706[@]}"; then _picocli_fcli_ssc_state_listjobs; return $?; fi
-  if CompWordsContainsArray "${cmds705[@]}"; then _picocli_fcli_ssc_state_getjob; return $?; fi
-  if CompWordsContainsArray "${cmds704[@]}"; then _picocli_fcli_ssc_state_canceljob; return $?; fi
-  if CompWordsContainsArray "${cmds703[@]}"; then _picocli_fcli_ssc_state_lsr; return $?; fi
-  if CompWordsContainsArray "${cmds702[@]}"; then _picocli_fcli_ssc_state_listrulepacks; return $?; fi
-  if CompWordsContainsArray "${cmds701[@]}"; then _picocli_fcli_ssc_state_uploadseedbundle; return $?; fi
-  if CompWordsContainsArray "${cmds700[@]}"; then _picocli_fcli_ssc_state_lss; return $?; fi
-  if CompWordsContainsArray "${cmds699[@]}"; then _picocli_fcli_ssc_state_listsettings; return $?; fi
-  if CompWordsContainsArray "${cmds698[@]}"; then _picocli_fcli_ssc_state_lse; return $?; fi
-  if CompWordsContainsArray "${cmds697[@]}"; then _picocli_fcli_ssc_state_listevents; return $?; fi
-  if CompWordsContainsArray "${cmds696[@]}"; then _picocli_fcli_ssc_state_lsa; return $?; fi
-  if CompWordsContainsArray "${cmds695[@]}"; then _picocli_fcli_ssc_state_listactivities; return $?; fi
-  if CompWordsContainsArray "${cmds694[@]}"; then _picocli_fcli_ssc_systemstate_waitforjob; return $?; fi
-  if CompWordsContainsArray "${cmds693[@]}"; then _picocli_fcli_ssc_systemstate_updatejob; return $?; fi
-  if CompWordsContainsArray "${cmds692[@]}"; then _picocli_fcli_ssc_systemstate_lsj; return $?; fi
-  if CompWordsContainsArray "${cmds691[@]}"; then _picocli_fcli_ssc_systemstate_listjobs; return $?; fi
-  if CompWordsContainsArray "${cmds690[@]}"; then _picocli_fcli_ssc_systemstate_getjob; return $?; fi
-  if CompWordsContainsArray "${cmds689[@]}"; then _picocli_fcli_ssc_systemstate_canceljob; return $?; fi
-  if CompWordsContainsArray "${cmds688[@]}"; then _picocli_fcli_ssc_systemstate_lsr; return $?; fi
-  if CompWordsContainsArray "${cmds687[@]}"; then _picocli_fcli_ssc_systemstate_listrulepacks; return $?; fi
-  if CompWordsContainsArray "${cmds686[@]}"; then _picocli_fcli_ssc_systemstate_uploadseedbundle; return $?; fi
-  if CompWordsContainsArray "${cmds685[@]}"; then _picocli_fcli_ssc_systemstate_lss; return $?; fi
-  if CompWordsContainsArray "${cmds684[@]}"; then _picocli_fcli_ssc_systemstate_listsettings; return $?; fi
-  if CompWordsContainsArray "${cmds683[@]}"; then _picocli_fcli_ssc_systemstate_lse; return $?; fi
-  if CompWordsContainsArray "${cmds682[@]}"; then _picocli_fcli_ssc_systemstate_listevents; return $?; fi
-  if CompWordsContainsArray "${cmds681[@]}"; then _picocli_fcli_ssc_systemstate_lsa; return $?; fi
-  if CompWordsContainsArray "${cmds680[@]}"; then _picocli_fcli_ssc_systemstate_listactivities; return $?; fi
-  if CompWordsContainsArray "${cmds679[@]}"; then _picocli_fcli_ssc_report_rmt; return $?; fi
-  if CompWordsContainsArray "${cmds678[@]}"; then _picocli_fcli_ssc_report_deletetemplate; return $?; fi
-  if CompWordsContainsArray "${cmds677[@]}"; then _picocli_fcli_ssc_report_createtemplateconfig; return $?; fi
-  if CompWordsContainsArray "${cmds676[@]}"; then _picocli_fcli_ssc_report_downloadtemplate; return $?; fi
-  if CompWordsContainsArray "${cmds675[@]}"; then _picocli_fcli_ssc_report_gettemplate; return $?; fi
-  if CompWordsContainsArray "${cmds674[@]}"; then _picocli_fcli_ssc_report_lst; return $?; fi
-  if CompWordsContainsArray "${cmds673[@]}"; then _picocli_fcli_ssc_report_listtemplates; return $?; fi
-  if CompWordsContainsArray "${cmds672[@]}"; then _picocli_fcli_ssc_report_createtemplate; return $?; fi
-  if CompWordsContainsArray "${cmds671[@]}"; then _picocli_fcli_ssc_report_lsp; return $?; fi
-  if CompWordsContainsArray "${cmds670[@]}"; then _picocli_fcli_ssc_report_listparameters; return $?; fi
-  if CompWordsContainsArray "${cmds669[@]}"; then _picocli_fcli_ssc_report_rm; return $?; fi
-  if CompWordsContainsArray "${cmds668[@]}"; then _picocli_fcli_ssc_report_delete; return $?; fi
-  if CompWordsContainsArray "${cmds667[@]}"; then _picocli_fcli_ssc_report_waitfor; return $?; fi
-  if CompWordsContainsArray "${cmds666[@]}"; then _picocli_fcli_ssc_report_download; return $?; fi
-  if CompWordsContainsArray "${cmds665[@]}"; then _picocli_fcli_ssc_report_get; return $?; fi
-  if CompWordsContainsArray "${cmds664[@]}"; then _picocli_fcli_ssc_report_ls; return $?; fi
-  if CompWordsContainsArray "${cmds663[@]}"; then _picocli_fcli_ssc_report_list; return $?; fi
-  if CompWordsContainsArray "${cmds662[@]}"; then _picocli_fcli_ssc_report_create; return $?; fi
-  if CompWordsContainsArray "${cmds661[@]}"; then _picocli_fcli_ssc_plugin_ls; return $?; fi
-  if CompWordsContainsArray "${cmds660[@]}"; then _picocli_fcli_ssc_plugin_list; return $?; fi
-  if CompWordsContainsArray "${cmds659[@]}"; then _picocli_fcli_ssc_plugin_get; return $?; fi
-  if CompWordsContainsArray "${cmds658[@]}"; then _picocli_fcli_ssc_plugin_disable; return $?; fi
-  if CompWordsContainsArray "${cmds657[@]}"; then _picocli_fcli_ssc_plugin_enable; return $?; fi
-  if CompWordsContainsArray "${cmds656[@]}"; then _picocli_fcli_ssc_plugin_uninstall; return $?; fi
-  if CompWordsContainsArray "${cmds655[@]}"; then _picocli_fcli_ssc_plugin_install; return $?; fi
-  if CompWordsContainsArray "${cmds654[@]}"; then _picocli_fcli_ssc_var_ls; return $?; fi
-  if CompWordsContainsArray "${cmds653[@]}"; then _picocli_fcli_ssc_var_list; return $?; fi
-  if CompWordsContainsArray "${cmds652[@]}"; then _picocli_fcli_ssc_var_get; return $?; fi
-  if CompWordsContainsArray "${cmds651[@]}"; then _picocli_fcli_ssc_var_lsd; return $?; fi
-  if CompWordsContainsArray "${cmds650[@]}"; then _picocli_fcli_ssc_var_listdefinitions; return $?; fi
-  if CompWordsContainsArray "${cmds649[@]}"; then _picocli_fcli_ssc_variable_ls; return $?; fi
-  if CompWordsContainsArray "${cmds648[@]}"; then _picocli_fcli_ssc_variable_list; return $?; fi
-  if CompWordsContainsArray "${cmds647[@]}"; then _picocli_fcli_ssc_variable_get; return $?; fi
-  if CompWordsContainsArray "${cmds646[@]}"; then _picocli_fcli_ssc_variable_lsd; return $?; fi
-  if CompWordsContainsArray "${cmds645[@]}"; then _picocli_fcli_ssc_variable_listdefinitions; return $?; fi
-  if CompWordsContainsArray "${cmds644[@]}"; then _picocli_fcli_ssc_pi_ls; return $?; fi
-  if CompWordsContainsArray "${cmds643[@]}"; then _picocli_fcli_ssc_pi_list; return $?; fi
-  if CompWordsContainsArray "${cmds642[@]}"; then _picocli_fcli_ssc_pi_get; return $?; fi
-  if CompWordsContainsArray "${cmds641[@]}"; then _picocli_fcli_ssc_pi_lsd; return $?; fi
-  if CompWordsContainsArray "${cmds640[@]}"; then _picocli_fcli_ssc_pi_listdefinitions; return $?; fi
-  if CompWordsContainsArray "${cmds639[@]}"; then _picocli_fcli_ssc_performanceindicator_ls; return $?; fi
-  if CompWordsContainsArray "${cmds638[@]}"; then _picocli_fcli_ssc_performanceindicator_list; return $?; fi
-  if CompWordsContainsArray "${cmds637[@]}"; then _picocli_fcli_ssc_performanceindicator_get; return $?; fi
-  if CompWordsContainsArray "${cmds636[@]}"; then _picocli_fcli_ssc_performanceindicator_lsd; return $?; fi
-  if CompWordsContainsArray "${cmds635[@]}"; then _picocli_fcli_ssc_performanceindicator_listdefinitions; return $?; fi
-  if CompWordsContainsArray "${cmds634[@]}"; then _picocli_fcli_ssc_issuetemplate_update; return $?; fi
-  if CompWordsContainsArray "${cmds633[@]}"; then _picocli_fcli_ssc_issuetemplate_ls; return $?; fi
-  if CompWordsContainsArray "${cmds632[@]}"; then _picocli_fcli_ssc_issuetemplate_list; return $?; fi
-  if CompWordsContainsArray "${cmds631[@]}"; then _picocli_fcli_ssc_issuetemplate_get; return $?; fi
-  if CompWordsContainsArray "${cmds630[@]}"; then _picocli_fcli_ssc_issuetemplate_download; return $?; fi
-  if CompWordsContainsArray "${cmds629[@]}"; then _picocli_fcli_ssc_issuetemplate_rm; return $?; fi
-  if CompWordsContainsArray "${cmds628[@]}"; then _picocli_fcli_ssc_issuetemplate_delete; return $?; fi
-  if CompWordsContainsArray "${cmds627[@]}"; then _picocli_fcli_ssc_issuetemplate_create; return $?; fi
-  if CompWordsContainsArray "${cmds626[@]}"; then _picocli_fcli_ssc_issue_update; return $?; fi
-  if CompWordsContainsArray "${cmds625[@]}"; then _picocli_fcli_ssc_issue_ls; return $?; fi
-  if CompWordsContainsArray "${cmds624[@]}"; then _picocli_fcli_ssc_issue_list; return $?; fi
-  if CompWordsContainsArray "${cmds623[@]}"; then _picocli_fcli_ssc_issue_count; return $?; fi
-  if CompWordsContainsArray "${cmds622[@]}"; then _picocli_fcli_ssc_issue_lsg; return $?; fi
-  if CompWordsContainsArray "${cmds621[@]}"; then _picocli_fcli_ssc_issue_listgroups; return $?; fi
-  if CompWordsContainsArray "${cmds620[@]}"; then _picocli_fcli_ssc_issue_getgroup; return $?; fi
-  if CompWordsContainsArray "${cmds619[@]}"; then _picocli_fcli_ssc_issue_lsf; return $?; fi
-  if CompWordsContainsArray "${cmds618[@]}"; then _picocli_fcli_ssc_issue_listfilters; return $?; fi
-  if CompWordsContainsArray "${cmds617[@]}"; then _picocli_fcli_ssc_issue_getfilter; return $?; fi
-  if CompWordsContainsArray "${cmds616[@]}"; then _picocli_fcli_ssc_issue_lsfs; return $?; fi
-  if CompWordsContainsArray "${cmds615[@]}"; then _picocli_fcli_ssc_issue_listfiltersets; return $?; fi
-  if CompWordsContainsArray "${cmds614[@]}"; then _picocli_fcli_ssc_issue_getfilterset; return $?; fi
-  if CompWordsContainsArray "${cmds613[@]}"; then _picocli_fcli_ssc_issue_updatetemplate; return $?; fi
-  if CompWordsContainsArray "${cmds612[@]}"; then _picocli_fcli_ssc_issue_lst; return $?; fi
-  if CompWordsContainsArray "${cmds611[@]}"; then _picocli_fcli_ssc_issue_listtemplates; return $?; fi
-  if CompWordsContainsArray "${cmds610[@]}"; then _picocli_fcli_ssc_issue_gettemplate; return $?; fi
-  if CompWordsContainsArray "${cmds609[@]}"; then _picocli_fcli_ssc_issue_downloadtemplate; return $?; fi
-  if CompWordsContainsArray "${cmds608[@]}"; then _picocli_fcli_ssc_issue_rmt; return $?; fi
-  if CompWordsContainsArray "${cmds607[@]}"; then _picocli_fcli_ssc_issue_deletetemplate; return $?; fi
-  if CompWordsContainsArray "${cmds606[@]}"; then _picocli_fcli_ssc_issue_createtemplate; return $?; fi
-  if CompWordsContainsArray "${cmds605[@]}"; then _picocli_fcli_ssc_tag_update; return $?; fi
-  if CompWordsContainsArray "${cmds604[@]}"; then _picocli_fcli_ssc_tag_create; return $?; fi
-  if CompWordsContainsArray "${cmds603[@]}"; then _picocli_fcli_ssc_tag_rm; return $?; fi
-  if CompWordsContainsArray "${cmds602[@]}"; then _picocli_fcli_ssc_tag_delete; return $?; fi
-  if CompWordsContainsArray "${cmds601[@]}"; then _picocli_fcli_ssc_tag_get; return $?; fi
-  if CompWordsContainsArray "${cmds600[@]}"; then _picocli_fcli_ssc_tag_ls; return $?; fi
-  if CompWordsContainsArray "${cmds599[@]}"; then _picocli_fcli_ssc_tag_list; return $?; fi
-  if CompWordsContainsArray "${cmds598[@]}"; then _picocli_fcli_ssc_customtag_update; return $?; fi
-  if CompWordsContainsArray "${cmds597[@]}"; then _picocli_fcli_ssc_customtag_create; return $?; fi
-  if CompWordsContainsArray "${cmds596[@]}"; then _picocli_fcli_ssc_customtag_rm; return $?; fi
-  if CompWordsContainsArray "${cmds595[@]}"; then _picocli_fcli_ssc_customtag_delete; return $?; fi
-  if CompWordsContainsArray "${cmds594[@]}"; then _picocli_fcli_ssc_customtag_get; return $?; fi
-  if CompWordsContainsArray "${cmds593[@]}"; then _picocli_fcli_ssc_customtag_ls; return $?; fi
-  if CompWordsContainsArray "${cmds592[@]}"; then _picocli_fcli_ssc_customtag_list; return $?; fi
-  if CompWordsContainsArray "${cmds591[@]}"; then _picocli_fcli_ssc_attr_update; return $?; fi
-  if CompWordsContainsArray "${cmds590[@]}"; then _picocli_fcli_ssc_attr_ls; return $?; fi
-  if CompWordsContainsArray "${cmds589[@]}"; then _picocli_fcli_ssc_attr_list; return $?; fi
-  if CompWordsContainsArray "${cmds588[@]}"; then _picocli_fcli_ssc_attr_lsd; return $?; fi
-  if CompWordsContainsArray "${cmds587[@]}"; then _picocli_fcli_ssc_attr_listdefinitions; return $?; fi
-  if CompWordsContainsArray "${cmds586[@]}"; then _picocli_fcli_ssc_attr_getdefinition; return $?; fi
-  if CompWordsContainsArray "${cmds585[@]}"; then _picocli_fcli_ssc_attribute_update; return $?; fi
-  if CompWordsContainsArray "${cmds584[@]}"; then _picocli_fcli_ssc_attribute_ls; return $?; fi
-  if CompWordsContainsArray "${cmds583[@]}"; then _picocli_fcli_ssc_attribute_list; return $?; fi
-  if CompWordsContainsArray "${cmds582[@]}"; then _picocli_fcli_ssc_attribute_lsd; return $?; fi
-  if CompWordsContainsArray "${cmds581[@]}"; then _picocli_fcli_ssc_attribute_listdefinitions; return $?; fi
-  if CompWordsContainsArray "${cmds580[@]}"; then _picocli_fcli_ssc_attribute_getdefinition; return $?; fi
-  if CompWordsContainsArray "${cmds579[@]}"; then _picocli_fcli_ssc_artifact_waitfor; return $?; fi
-  if CompWordsContainsArray "${cmds578[@]}"; then _picocli_fcli_ssc_artifact_upload; return $?; fi
-  if CompWordsContainsArray "${cmds577[@]}"; then _picocli_fcli_ssc_artifact_purge; return $?; fi
-  if CompWordsContainsArray "${cmds576[@]}"; then _picocli_fcli_ssc_artifact_ls; return $?; fi
-  if CompWordsContainsArray "${cmds575[@]}"; then _picocli_fcli_ssc_artifact_list; return $?; fi
-  if CompWordsContainsArray "${cmds574[@]}"; then _picocli_fcli_ssc_artifact_importdebricked; return $?; fi
-  if CompWordsContainsArray "${cmds573[@]}"; then _picocli_fcli_ssc_artifact_get; return $?; fi
-  if CompWordsContainsArray "${cmds572[@]}"; then _picocli_fcli_ssc_artifact_download; return $?; fi
-  if CompWordsContainsArray "${cmds571[@]}"; then _picocli_fcli_ssc_artifact_rm; return $?; fi
-  if CompWordsContainsArray "${cmds570[@]}"; then _picocli_fcli_ssc_artifact_delete; return $?; fi
-  if CompWordsContainsArray "${cmds569[@]}"; then _picocli_fcli_ssc_artifact_approve; return $?; fi
-  if CompWordsContainsArray "${cmds568[@]}"; then _picocli_fcli_ssc_av_update; return $?; fi
-  if CompWordsContainsArray "${cmds567[@]}"; then _picocli_fcli_ssc_av_refreshmetrics; return $?; fi
-  if CompWordsContainsArray "${cmds566[@]}"; then _picocli_fcli_ssc_av_purgeartifacts; return $?; fi
-  if CompWordsContainsArray "${cmds565[@]}"; then _picocli_fcli_ssc_av_ls; return $?; fi
-  if CompWordsContainsArray "${cmds564[@]}"; then _picocli_fcli_ssc_av_list; return $?; fi
-  if CompWordsContainsArray "${cmds563[@]}"; then _picocli_fcli_ssc_av_get; return $?; fi
-  if CompWordsContainsArray "${cmds562[@]}"; then _picocli_fcli_ssc_av_downloadstate; return $?; fi
-  if CompWordsContainsArray "${cmds561[@]}"; then _picocli_fcli_ssc_av_copystate; return $?; fi
-  if CompWordsContainsArray "${cmds560[@]}"; then _picocli_fcli_ssc_av_rm; return $?; fi
-  if CompWordsContainsArray "${cmds559[@]}"; then _picocli_fcli_ssc_av_delete; return $?; fi
-  if CompWordsContainsArray "${cmds558[@]}"; then _picocli_fcli_ssc_av_create; return $?; fi
-  if CompWordsContainsArray "${cmds557[@]}"; then _picocli_fcli_ssc_appversion_update; return $?; fi
-  if CompWordsContainsArray "${cmds556[@]}"; then _picocli_fcli_ssc_appversion_refreshmetrics; return $?; fi
-  if CompWordsContainsArray "${cmds555[@]}"; then _picocli_fcli_ssc_appversion_purgeartifacts; return $?; fi
-  if CompWordsContainsArray "${cmds554[@]}"; then _picocli_fcli_ssc_appversion_ls; return $?; fi
-  if CompWordsContainsArray "${cmds553[@]}"; then _picocli_fcli_ssc_appversion_list; return $?; fi
-  if CompWordsContainsArray "${cmds552[@]}"; then _picocli_fcli_ssc_appversion_get; return $?; fi
-  if CompWordsContainsArray "${cmds551[@]}"; then _picocli_fcli_ssc_appversion_downloadstate; return $?; fi
-  if CompWordsContainsArray "${cmds550[@]}"; then _picocli_fcli_ssc_appversion_copystate; return $?; fi
-  if CompWordsContainsArray "${cmds549[@]}"; then _picocli_fcli_ssc_appversion_rm; return $?; fi
-  if CompWordsContainsArray "${cmds548[@]}"; then _picocli_fcli_ssc_appversion_delete; return $?; fi
-  if CompWordsContainsArray "${cmds547[@]}"; then _picocli_fcli_ssc_appversion_create; return $?; fi
-  if CompWordsContainsArray "${cmds546[@]}"; then _picocli_fcli_ssc_app_update; return $?; fi
-  if CompWordsContainsArray "${cmds545[@]}"; then _picocli_fcli_ssc_app_ls; return $?; fi
-  if CompWordsContainsArray "${cmds544[@]}"; then _picocli_fcli_ssc_app_list; return $?; fi
-  if CompWordsContainsArray "${cmds543[@]}"; then _picocli_fcli_ssc_app_get; return $?; fi
-  if CompWordsContainsArray "${cmds542[@]}"; then _picocli_fcli_ssc_app_rm; return $?; fi
-  if CompWordsContainsArray "${cmds541[@]}"; then _picocli_fcli_ssc_app_delete; return $?; fi
-  if CompWordsContainsArray "${cmds540[@]}"; then _picocli_fcli_ssc_alert_ls; return $?; fi
-  if CompWordsContainsArray "${cmds539[@]}"; then _picocli_fcli_ssc_alert_list; return $?; fi
-  if CompWordsContainsArray "${cmds538[@]}"; then _picocli_fcli_ssc_alert_lsd; return $?; fi
-  if CompWordsContainsArray "${cmds537[@]}"; then _picocli_fcli_ssc_alert_listdefinitions; return $?; fi
-  if CompWordsContainsArray "${cmds536[@]}"; then _picocli_fcli_ssc_alert_getdefinition; return $?; fi
-  if CompWordsContainsArray "${cmds535[@]}"; then _picocli_fcli_ssc_ac_lsavu; return $?; fi
-  if CompWordsContainsArray "${cmds534[@]}"; then _picocli_fcli_ssc_ac_listappversionusers; return $?; fi
-  if CompWordsContainsArray "${cmds533[@]}"; then _picocli_fcli_ssc_ac_lsu; return $?; fi
-  if CompWordsContainsArray "${cmds532[@]}"; then _picocli_fcli_ssc_ac_listusers; return $?; fi
-  if CompWordsContainsArray "${cmds531[@]}"; then _picocli_fcli_ssc_ac_getuser; return $?; fi
-  if CompWordsContainsArray "${cmds530[@]}"; then _picocli_fcli_ssc_ac_rmuser; return $?; fi
-  if CompWordsContainsArray "${cmds529[@]}"; then _picocli_fcli_ssc_ac_deleteuser; return $?; fi
-  if CompWordsContainsArray "${cmds528[@]}"; then _picocli_fcli_ssc_ac_updatelocaluser; return $?; fi
-  if CompWordsContainsArray "${cmds527[@]}"; then _picocli_fcli_ssc_ac_createlocaluser; return $?; fi
-  if CompWordsContainsArray "${cmds526[@]}"; then _picocli_fcli_ssc_ac_lsp; return $?; fi
-  if CompWordsContainsArray "${cmds525[@]}"; then _picocli_fcli_ssc_ac_listpermissions; return $?; fi
-  if CompWordsContainsArray "${cmds524[@]}"; then _picocli_fcli_ssc_ac_getpermission; return $?; fi
-  if CompWordsContainsArray "${cmds523[@]}"; then _picocli_fcli_ssc_ac_lsr; return $?; fi
-  if CompWordsContainsArray "${cmds522[@]}"; then _picocli_fcli_ssc_ac_listroles; return $?; fi
-  if CompWordsContainsArray "${cmds521[@]}"; then _picocli_fcli_ssc_ac_getrole; return $?; fi
-  if CompWordsContainsArray "${cmds520[@]}"; then _picocli_fcli_ssc_ac_rmrole; return $?; fi
-  if CompWordsContainsArray "${cmds519[@]}"; then _picocli_fcli_ssc_ac_deleterole; return $?; fi
-  if CompWordsContainsArray "${cmds518[@]}"; then _picocli_fcli_ssc_ac_createrole; return $?; fi
-  if CompWordsContainsArray "${cmds517[@]}"; then _picocli_fcli_ssc_ac_updatetoken; return $?; fi
-  if CompWordsContainsArray "${cmds516[@]}"; then _picocli_fcli_ssc_ac_revoketoken; return $?; fi
-  if CompWordsContainsArray "${cmds515[@]}"; then _picocli_fcli_ssc_ac_lst; return $?; fi
-  if CompWordsContainsArray "${cmds514[@]}"; then _picocli_fcli_ssc_ac_listtokens; return $?; fi
-  if CompWordsContainsArray "${cmds513[@]}"; then _picocli_fcli_ssc_ac_createtoken; return $?; fi
-  if CompWordsContainsArray "${cmds512[@]}"; then _picocli_fcli_ssc_ac_lstd; return $?; fi
-  if CompWordsContainsArray "${cmds511[@]}"; then _picocli_fcli_ssc_ac_listtokendefinitions; return $?; fi
-  if CompWordsContainsArray "${cmds510[@]}"; then _picocli_fcli_ssc_accesscontrol_lsavu; return $?; fi
-  if CompWordsContainsArray "${cmds509[@]}"; then _picocli_fcli_ssc_accesscontrol_listappversionusers; return $?; fi
-  if CompWordsContainsArray "${cmds508[@]}"; then _picocli_fcli_ssc_accesscontrol_lsu; return $?; fi
-  if CompWordsContainsArray "${cmds507[@]}"; then _picocli_fcli_ssc_accesscontrol_listusers; return $?; fi
-  if CompWordsContainsArray "${cmds506[@]}"; then _picocli_fcli_ssc_accesscontrol_getuser; return $?; fi
-  if CompWordsContainsArray "${cmds505[@]}"; then _picocli_fcli_ssc_accesscontrol_rmuser; return $?; fi
-  if CompWordsContainsArray "${cmds504[@]}"; then _picocli_fcli_ssc_accesscontrol_deleteuser; return $?; fi
-  if CompWordsContainsArray "${cmds503[@]}"; then _picocli_fcli_ssc_accesscontrol_updatelocaluser; return $?; fi
-  if CompWordsContainsArray "${cmds502[@]}"; then _picocli_fcli_ssc_accesscontrol_createlocaluser; return $?; fi
-  if CompWordsContainsArray "${cmds501[@]}"; then _picocli_fcli_ssc_accesscontrol_lsp; return $?; fi
-  if CompWordsContainsArray "${cmds500[@]}"; then _picocli_fcli_ssc_accesscontrol_listpermissions; return $?; fi
-  if CompWordsContainsArray "${cmds499[@]}"; then _picocli_fcli_ssc_accesscontrol_getpermission; return $?; fi
-  if CompWordsContainsArray "${cmds498[@]}"; then _picocli_fcli_ssc_accesscontrol_lsr; return $?; fi
-  if CompWordsContainsArray "${cmds497[@]}"; then _picocli_fcli_ssc_accesscontrol_listroles; return $?; fi
-  if CompWordsContainsArray "${cmds496[@]}"; then _picocli_fcli_ssc_accesscontrol_getrole; return $?; fi
-  if CompWordsContainsArray "${cmds495[@]}"; then _picocli_fcli_ssc_accesscontrol_rmrole; return $?; fi
-  if CompWordsContainsArray "${cmds494[@]}"; then _picocli_fcli_ssc_accesscontrol_deleterole; return $?; fi
-  if CompWordsContainsArray "${cmds493[@]}"; then _picocli_fcli_ssc_accesscontrol_createrole; return $?; fi
-  if CompWordsContainsArray "${cmds492[@]}"; then _picocli_fcli_ssc_accesscontrol_updatetoken; return $?; fi
-  if CompWordsContainsArray "${cmds491[@]}"; then _picocli_fcli_ssc_accesscontrol_revoketoken; return $?; fi
-  if CompWordsContainsArray "${cmds490[@]}"; then _picocli_fcli_ssc_accesscontrol_lst; return $?; fi
-  if CompWordsContainsArray "${cmds489[@]}"; then _picocli_fcli_ssc_accesscontrol_listtokens; return $?; fi
-  if CompWordsContainsArray "${cmds488[@]}"; then _picocli_fcli_ssc_accesscontrol_createtoken; return $?; fi
-  if CompWordsContainsArray "${cmds487[@]}"; then _picocli_fcli_ssc_accesscontrol_lstd; return $?; fi
-  if CompWordsContainsArray "${cmds486[@]}"; then _picocli_fcli_ssc_accesscontrol_listtokendefinitions; return $?; fi
-  if CompWordsContainsArray "${cmds485[@]}"; then _picocli_fcli_ssc_action_sign; return $?; fi
-  if CompWordsContainsArray "${cmds484[@]}"; then _picocli_fcli_ssc_action_run; return $?; fi
-  if CompWordsContainsArray "${cmds483[@]}"; then _picocli_fcli_ssc_action_reset; return $?; fi
-  if CompWordsContainsArray "${cmds482[@]}"; then _picocli_fcli_ssc_action_ls; return $?; fi
-  if CompWordsContainsArray "${cmds481[@]}"; then _picocli_fcli_ssc_action_list; return $?; fi
-  if CompWordsContainsArray "${cmds480[@]}"; then _picocli_fcli_ssc_action_import; return $?; fi
-  if CompWordsContainsArray "${cmds479[@]}"; then _picocli_fcli_ssc_action_help; return $?; fi
-  if CompWordsContainsArray "${cmds478[@]}"; then _picocli_fcli_ssc_action_get; return $?; fi
-  if CompWordsContainsArray "${cmds477[@]}"; then _picocli_fcli_ssc_session_logout; return $?; fi
-  if CompWordsContainsArray "${cmds476[@]}"; then _picocli_fcli_ssc_session_login; return $?; fi
-  if CompWordsContainsArray "${cmds475[@]}"; then _picocli_fcli_ssc_session_ls; return $?; fi
-  if CompWordsContainsArray "${cmds474[@]}"; then _picocli_fcli_ssc_session_list; return $?; fi
-  if CompWordsContainsArray "${cmds473[@]}"; then _picocli_fcli_ssc_rest; return $?; fi
-  if CompWordsContainsArray "${cmds472[@]}"; then _picocli_fcli_ssc_state; return $?; fi
-  if CompWordsContainsArray "${cmds471[@]}"; then _picocli_fcli_ssc_systemstate; return $?; fi
-  if CompWordsContainsArray "${cmds470[@]}"; then _picocli_fcli_ssc_report; return $?; fi
-  if CompWordsContainsArray "${cmds469[@]}"; then _picocli_fcli_ssc_plugin; return $?; fi
-  if CompWordsContainsArray "${cmds468[@]}"; then _picocli_fcli_ssc_var; return $?; fi
-  if CompWordsContainsArray "${cmds467[@]}"; then _picocli_fcli_ssc_variable; return $?; fi
-  if CompWordsContainsArray "${cmds466[@]}"; then _picocli_fcli_ssc_pi; return $?; fi
-  if CompWordsContainsArray "${cmds465[@]}"; then _picocli_fcli_ssc_performanceindicator; return $?; fi
-  if CompWordsContainsArray "${cmds464[@]}"; then _picocli_fcli_ssc_issuetemplate; return $?; fi
-  if CompWordsContainsArray "${cmds463[@]}"; then _picocli_fcli_ssc_issue; return $?; fi
-  if CompWordsContainsArray "${cmds462[@]}"; then _picocli_fcli_ssc_tag; return $?; fi
-  if CompWordsContainsArray "${cmds461[@]}"; then _picocli_fcli_ssc_customtag; return $?; fi
-  if CompWordsContainsArray "${cmds460[@]}"; then _picocli_fcli_ssc_attr; return $?; fi
-  if CompWordsContainsArray "${cmds459[@]}"; then _picocli_fcli_ssc_attribute; return $?; fi
-  if CompWordsContainsArray "${cmds458[@]}"; then _picocli_fcli_ssc_artifact; return $?; fi
-  if CompWordsContainsArray "${cmds457[@]}"; then _picocli_fcli_ssc_av; return $?; fi
-  if CompWordsContainsArray "${cmds456[@]}"; then _picocli_fcli_ssc_appversion; return $?; fi
-  if CompWordsContainsArray "${cmds455[@]}"; then _picocli_fcli_ssc_app; return $?; fi
-  if CompWordsContainsArray "${cmds454[@]}"; then _picocli_fcli_ssc_alert; return $?; fi
-  if CompWordsContainsArray "${cmds453[@]}"; then _picocli_fcli_ssc_ac; return $?; fi
-  if CompWordsContainsArray "${cmds452[@]}"; then _picocli_fcli_ssc_accesscontrol; return $?; fi
-  if CompWordsContainsArray "${cmds451[@]}"; then _picocli_fcli_ssc_action; return $?; fi
-  if CompWordsContainsArray "${cmds450[@]}"; then _picocli_fcli_ssc_session; return $?; fi
-  if CompWordsContainsArray "${cmds449[@]}"; then _picocli_fcli_scsast_rest_call; return $?; fi
-  if CompWordsContainsArray "${cmds448[@]}"; then _picocli_fcli_scsast_pool_ls; return $?; fi
-  if CompWordsContainsArray "${cmds447[@]}"; then _picocli_fcli_scsast_pool_list; return $?; fi
-  if CompWordsContainsArray "${cmds446[@]}"; then _picocli_fcli_scsast_sensorpool_ls; return $?; fi
-  if CompWordsContainsArray "${cmds445[@]}"; then _picocli_fcli_scsast_sensorpool_list; return $?; fi
-  if CompWordsContainsArray "${cmds444[@]}"; then _picocli_fcli_scsast_sensor_ls; return $?; fi
-  if CompWordsContainsArray "${cmds443[@]}"; then _picocli_fcli_scsast_sensor_list; return $?; fi
-  if CompWordsContainsArray "${cmds442[@]}"; then _picocli_fcli_scsast_scan_waitfor; return $?; fi
-  if CompWordsContainsArray "${cmds441[@]}"; then _picocli_fcli_scsast_scan_status; return $?; fi
-  if CompWordsContainsArray "${cmds440[@]}"; then _picocli_fcli_scsast_scan_start; return $?; fi
-  if CompWordsContainsArray "${cmds439[@]}"; then _picocli_fcli_scsast_scan_ls; return $?; fi
-  if CompWordsContainsArray "${cmds438[@]}"; then _picocli_fcli_scsast_scan_list; return $?; fi
-  if CompWordsContainsArray "${cmds437[@]}"; then _picocli_fcli_scsast_scan_download; return $?; fi
-  if CompWordsContainsArray "${cmds436[@]}"; then _picocli_fcli_scsast_scan_cancel; return $?; fi
-  if CompWordsContainsArray "${cmds435[@]}"; then _picocli_fcli_scsast_rest; return $?; fi
-  if CompWordsContainsArray "${cmds434[@]}"; then _picocli_fcli_scsast_pool; return $?; fi
-  if CompWordsContainsArray "${cmds433[@]}"; then _picocli_fcli_scsast_sensorpool; return $?; fi
-  if CompWordsContainsArray "${cmds432[@]}"; then _picocli_fcli_scsast_sensor; return $?; fi
-  if CompWordsContainsArray "${cmds431[@]}"; then _picocli_fcli_scsast_scan; return $?; fi
-  if CompWordsContainsArray "${cmds430[@]}"; then _picocli_fcli_scdast_rest_call; return $?; fi
-  if CompWordsContainsArray "${cmds429[@]}"; then _picocli_fcli_scdast_sensor_ls; return $?; fi
-  if CompWordsContainsArray "${cmds428[@]}"; then _picocli_fcli_scdast_sensor_list; return $?; fi
-  if CompWordsContainsArray "${cmds427[@]}"; then _picocli_fcli_scdast_sensor_get; return $?; fi
-  if CompWordsContainsArray "${cmds426[@]}"; then _picocli_fcli_scdast_sensor_enable; return $?; fi
-  if CompWordsContainsArray "${cmds425[@]}"; then _picocli_fcli_scdast_sensor_disable; return $?; fi
-  if CompWordsContainsArray "${cmds424[@]}"; then _picocli_fcli_scdast_scansettings_ls; return $?; fi
-  if CompWordsContainsArray "${cmds423[@]}"; then _picocli_fcli_scdast_scansettings_list; return $?; fi
-  if CompWordsContainsArray "${cmds422[@]}"; then _picocli_fcli_scdast_scansettings_get; return $?; fi
-  if CompWordsContainsArray "${cmds421[@]}"; then _picocli_fcli_scdast_scanpolicy_ls; return $?; fi
-  if CompWordsContainsArray "${cmds420[@]}"; then _picocli_fcli_scdast_scanpolicy_list; return $?; fi
-  if CompWordsContainsArray "${cmds419[@]}"; then _picocli_fcli_scdast_scanpolicy_get; return $?; fi
-  if CompWordsContainsArray "${cmds418[@]}"; then _picocli_fcli_scdast_scan_waitfor; return $?; fi
-  if CompWordsContainsArray "${cmds417[@]}"; then _picocli_fcli_scdast_scan_start; return $?; fi
-  if CompWordsContainsArray "${cmds416[@]}"; then _picocli_fcli_scdast_scan_resume; return $?; fi
-  if CompWordsContainsArray "${cmds415[@]}"; then _picocli_fcli_scdast_scan_publish; return $?; fi
-  if CompWordsContainsArray "${cmds414[@]}"; then _picocli_fcli_scdast_scan_pause; return $?; fi
-  if CompWordsContainsArray "${cmds413[@]}"; then _picocli_fcli_scdast_scan_ls; return $?; fi
-  if CompWordsContainsArray "${cmds412[@]}"; then _picocli_fcli_scdast_scan_list; return $?; fi
-  if CompWordsContainsArray "${cmds411[@]}"; then _picocli_fcli_scdast_scan_importfindings; return $?; fi
-  if CompWordsContainsArray "${cmds410[@]}"; then _picocli_fcli_scdast_scan_get; return $?; fi
-  if CompWordsContainsArray "${cmds409[@]}"; then _picocli_fcli_scdast_scan_download; return $?; fi
-  if CompWordsContainsArray "${cmds408[@]}"; then _picocli_fcli_scdast_scan_rm; return $?; fi
-  if CompWordsContainsArray "${cmds407[@]}"; then _picocli_fcli_scdast_scan_delete; return $?; fi
-  if CompWordsContainsArray "${cmds406[@]}"; then _picocli_fcli_scdast_scan_complete; return $?; fi
-  if CompWordsContainsArray "${cmds405[@]}"; then _picocli_fcli_scdast_rest; return $?; fi
-  if CompWordsContainsArray "${cmds404[@]}"; then _picocli_fcli_scdast_sensor; return $?; fi
-  if CompWordsContainsArray "${cmds403[@]}"; then _picocli_fcli_scdast_scansettings; return $?; fi
-  if CompWordsContainsArray "${cmds402[@]}"; then _picocli_fcli_scdast_scanpolicy; return $?; fi
-  if CompWordsContainsArray "${cmds401[@]}"; then _picocli_fcli_scdast_scan; return $?; fi
-  if CompWordsContainsArray "${cmds400[@]}"; then _picocli_fcli_fod_rest_lookup; return $?; fi
-  if CompWordsContainsArray "${cmds399[@]}"; then _picocli_fcli_fod_rest_call; return $?; fi
-  if CompWordsContainsArray "${cmds398[@]}"; then _picocli_fcli_fod_report_lst; return $?; fi
-  if CompWordsContainsArray "${cmds397[@]}"; then _picocli_fcli_fod_report_listtemplates; return $?; fi
-  if CompWordsContainsArray "${cmds396[@]}"; then _picocli_fcli_fod_report_download; return $?; fi
-  if CompWordsContainsArray "${cmds395[@]}"; then _picocli_fcli_fod_report_waitfor; return $?; fi
-  if CompWordsContainsArray "${cmds394[@]}"; then _picocli_fcli_fod_report_rm; return $?; fi
-  if CompWordsContainsArray "${cmds393[@]}"; then _picocli_fcli_fod_report_delete; return $?; fi
-  if CompWordsContainsArray "${cmds392[@]}"; then _picocli_fcli_fod_report_create; return $?; fi
-  if CompWordsContainsArray "${cmds391[@]}"; then _picocli_fcli_fod_report_get; return $?; fi
-  if CompWordsContainsArray "${cmds390[@]}"; then _picocli_fcli_fod_report_ls; return $?; fi
-  if CompWordsContainsArray "${cmds389[@]}"; then _picocli_fcli_fod_report_list; return $?; fi
-  if CompWordsContainsArray "${cmds388[@]}"; then _picocli_fcli_fod_issue_update; return $?; fi
+  if CompWordsContainsArray "${cmds887[@]}"; then _picocli_fcli_util_var_ls; return $?; fi
+  if CompWordsContainsArray "${cmds886[@]}"; then _picocli_fcli_util_var_list; return $?; fi
+  if CompWordsContainsArray "${cmds885[@]}"; then _picocli_fcli_util_var_get; return $?; fi
+  if CompWordsContainsArray "${cmds884[@]}"; then _picocli_fcli_util_var_rm; return $?; fi
+  if CompWordsContainsArray "${cmds883[@]}"; then _picocli_fcli_util_var_delete; return $?; fi
+  if CompWordsContainsArray "${cmds882[@]}"; then _picocli_fcli_util_var_clear; return $?; fi
+  if CompWordsContainsArray "${cmds881[@]}"; then _picocli_fcli_util_var_contents; return $?; fi
+  if CompWordsContainsArray "${cmds880[@]}"; then _picocli_fcli_util_variable_ls; return $?; fi
+  if CompWordsContainsArray "${cmds879[@]}"; then _picocli_fcli_util_variable_list; return $?; fi
+  if CompWordsContainsArray "${cmds878[@]}"; then _picocli_fcli_util_variable_get; return $?; fi
+  if CompWordsContainsArray "${cmds877[@]}"; then _picocli_fcli_util_variable_rm; return $?; fi
+  if CompWordsContainsArray "${cmds876[@]}"; then _picocli_fcli_util_variable_delete; return $?; fi
+  if CompWordsContainsArray "${cmds875[@]}"; then _picocli_fcli_util_variable_clear; return $?; fi
+  if CompWordsContainsArray "${cmds874[@]}"; then _picocli_fcli_util_variable_contents; return $?; fi
+  if CompWordsContainsArray "${cmds873[@]}"; then _picocli_fcli_util_state_clear; return $?; fi
+  if CompWordsContainsArray "${cmds872[@]}"; then _picocli_fcli_util_mcpserver_start; return $?; fi
+  if CompWordsContainsArray "${cmds871[@]}"; then _picocli_fcli_util_crypto_decrypt; return $?; fi
+  if CompWordsContainsArray "${cmds870[@]}"; then _picocli_fcli_util_crypto_encrypt; return $?; fi
+  if CompWordsContainsArray "${cmds869[@]}"; then _picocli_fcli_util_autocomplete_generate; return $?; fi
+  if CompWordsContainsArray "${cmds868[@]}"; then _picocli_fcli_util_allcommands_ls; return $?; fi
+  if CompWordsContainsArray "${cmds867[@]}"; then _picocli_fcli_util_allcommands_list; return $?; fi
+  if CompWordsContainsArray "${cmds866[@]}"; then _picocli_fcli_util_allcommands_usage; return $?; fi
+  if CompWordsContainsArray "${cmds865[@]}"; then _picocli_fcli_util_var; return $?; fi
+  if CompWordsContainsArray "${cmds864[@]}"; then _picocli_fcli_util_variable; return $?; fi
+  if CompWordsContainsArray "${cmds863[@]}"; then _picocli_fcli_util_state; return $?; fi
+  if CompWordsContainsArray "${cmds862[@]}"; then _picocli_fcli_util_mcpserver; return $?; fi
+  if CompWordsContainsArray "${cmds861[@]}"; then _picocli_fcli_util_crypto; return $?; fi
+  if CompWordsContainsArray "${cmds860[@]}"; then _picocli_fcli_util_autocomplete; return $?; fi
+  if CompWordsContainsArray "${cmds859[@]}"; then _picocli_fcli_util_allcommands; return $?; fi
+  if CompWordsContainsArray "${cmds858[@]}"; then _picocli_fcli_license_ncdreport_ucs; return $?; fi
+  if CompWordsContainsArray "${cmds857[@]}"; then _picocli_fcli_license_ncdreport_updatecontributorstatus; return $?; fi
+  if CompWordsContainsArray "${cmds856[@]}"; then _picocli_fcli_license_ncdreport_lsr; return $?; fi
+  if CompWordsContainsArray "${cmds855[@]}"; then _picocli_fcli_license_ncdreport_listrepositories; return $?; fi
+  if CompWordsContainsArray "${cmds854[@]}"; then _picocli_fcli_license_ncdreport_lsc; return $?; fi
+  if CompWordsContainsArray "${cmds853[@]}"; then _picocli_fcli_license_ncdreport_listcontributors; return $?; fi
+  if CompWordsContainsArray "${cmds852[@]}"; then _picocli_fcli_license_ncdreport_merge; return $?; fi
+  if CompWordsContainsArray "${cmds851[@]}"; then _picocli_fcli_license_ncdreport_getsummary; return $?; fi
+  if CompWordsContainsArray "${cmds850[@]}"; then _picocli_fcli_license_ncdreport_validatesources; return $?; fi
+  if CompWordsContainsArray "${cmds849[@]}"; then _picocli_fcli_license_ncdreport_createconfig; return $?; fi
+  if CompWordsContainsArray "${cmds848[@]}"; then _picocli_fcli_license_ncdreport_create; return $?; fi
+  if CompWordsContainsArray "${cmds847[@]}"; then _picocli_fcli_license_mspreport_createconfig; return $?; fi
+  if CompWordsContainsArray "${cmds846[@]}"; then _picocli_fcli_license_mspreport_create; return $?; fi
+  if CompWordsContainsArray "${cmds845[@]}"; then _picocli_fcli_license_ncdreport; return $?; fi
+  if CompWordsContainsArray "${cmds844[@]}"; then _picocli_fcli_license_mspreport; return $?; fi
+  if CompWordsContainsArray "${cmds843[@]}"; then _picocli_fcli_tool_definitions_reset; return $?; fi
+  if CompWordsContainsArray "${cmds842[@]}"; then _picocli_fcli_tool_definitions_update; return $?; fi
+  if CompWordsContainsArray "${cmds841[@]}"; then _picocli_fcli_tool_definitions_ls; return $?; fi
+  if CompWordsContainsArray "${cmds840[@]}"; then _picocli_fcli_tool_definitions_list; return $?; fi
+  if CompWordsContainsArray "${cmds839[@]}"; then _picocli_fcli_tool_fve_uninstall; return $?; fi
+  if CompWordsContainsArray "${cmds838[@]}"; then _picocli_fcli_tool_fve_run; return $?; fi
+  if CompWordsContainsArray "${cmds837[@]}"; then _picocli_fcli_tool_fve_register; return $?; fi
+  if CompWordsContainsArray "${cmds836[@]}"; then _picocli_fcli_tool_fve_get; return $?; fi
+  if CompWordsContainsArray "${cmds835[@]}"; then _picocli_fcli_tool_fve_lsp; return $?; fi
+  if CompWordsContainsArray "${cmds834[@]}"; then _picocli_fcli_tool_fve_listplatforms; return $?; fi
+  if CompWordsContainsArray "${cmds833[@]}"; then _picocli_fcli_tool_fve_ls; return $?; fi
+  if CompWordsContainsArray "${cmds832[@]}"; then _picocli_fcli_tool_fve_list; return $?; fi
+  if CompWordsContainsArray "${cmds831[@]}"; then _picocli_fcli_tool_fve_install; return $?; fi
+  if CompWordsContainsArray "${cmds830[@]}"; then _picocli_fcli_tool_vulnexporter_uninstall; return $?; fi
+  if CompWordsContainsArray "${cmds829[@]}"; then _picocli_fcli_tool_vulnexporter_run; return $?; fi
+  if CompWordsContainsArray "${cmds828[@]}"; then _picocli_fcli_tool_vulnexporter_register; return $?; fi
+  if CompWordsContainsArray "${cmds827[@]}"; then _picocli_fcli_tool_vulnexporter_get; return $?; fi
+  if CompWordsContainsArray "${cmds826[@]}"; then _picocli_fcli_tool_vulnexporter_lsp; return $?; fi
+  if CompWordsContainsArray "${cmds825[@]}"; then _picocli_fcli_tool_vulnexporter_listplatforms; return $?; fi
+  if CompWordsContainsArray "${cmds824[@]}"; then _picocli_fcli_tool_vulnexporter_ls; return $?; fi
+  if CompWordsContainsArray "${cmds823[@]}"; then _picocli_fcli_tool_vulnexporter_list; return $?; fi
+  if CompWordsContainsArray "${cmds822[@]}"; then _picocli_fcli_tool_vulnexporter_install; return $?; fi
+  if CompWordsContainsArray "${cmds821[@]}"; then _picocli_fcli_tool_sourceanalyzer_updaterules; return $?; fi
+  if CompWordsContainsArray "${cmds820[@]}"; then _picocli_fcli_tool_sourceanalyzer_run; return $?; fi
+  if CompWordsContainsArray "${cmds819[@]}"; then _picocli_fcli_tool_sourceanalyzer_register; return $?; fi
+  if CompWordsContainsArray "${cmds818[@]}"; then _picocli_fcli_tool_sourceanalyzer_get; return $?; fi
+  if CompWordsContainsArray "${cmds817[@]}"; then _picocli_fcli_tool_sourceanalyzer_ls; return $?; fi
+  if CompWordsContainsArray "${cmds816[@]}"; then _picocli_fcli_tool_sourceanalyzer_list; return $?; fi
+  if CompWordsContainsArray "${cmds815[@]}"; then _picocli_fcli_tool_scancentralclient_uninstall; return $?; fi
+  if CompWordsContainsArray "${cmds814[@]}"; then _picocli_fcli_tool_scancentralclient_run; return $?; fi
+  if CompWordsContainsArray "${cmds813[@]}"; then _picocli_fcli_tool_scancentralclient_register; return $?; fi
+  if CompWordsContainsArray "${cmds812[@]}"; then _picocli_fcli_tool_scancentralclient_get; return $?; fi
+  if CompWordsContainsArray "${cmds811[@]}"; then _picocli_fcli_tool_scancentralclient_lsp; return $?; fi
+  if CompWordsContainsArray "${cmds810[@]}"; then _picocli_fcli_tool_scancentralclient_listplatforms; return $?; fi
+  if CompWordsContainsArray "${cmds809[@]}"; then _picocli_fcli_tool_scancentralclient_ls; return $?; fi
+  if CompWordsContainsArray "${cmds808[@]}"; then _picocli_fcli_tool_scancentralclient_list; return $?; fi
+  if CompWordsContainsArray "${cmds807[@]}"; then _picocli_fcli_tool_scancentralclient_install; return $?; fi
+  if CompWordsContainsArray "${cmds806[@]}"; then _picocli_fcli_tool_scclient_uninstall; return $?; fi
+  if CompWordsContainsArray "${cmds805[@]}"; then _picocli_fcli_tool_scclient_run; return $?; fi
+  if CompWordsContainsArray "${cmds804[@]}"; then _picocli_fcli_tool_scclient_register; return $?; fi
+  if CompWordsContainsArray "${cmds803[@]}"; then _picocli_fcli_tool_scclient_get; return $?; fi
+  if CompWordsContainsArray "${cmds802[@]}"; then _picocli_fcli_tool_scclient_lsp; return $?; fi
+  if CompWordsContainsArray "${cmds801[@]}"; then _picocli_fcli_tool_scclient_listplatforms; return $?; fi
+  if CompWordsContainsArray "${cmds800[@]}"; then _picocli_fcli_tool_scclient_ls; return $?; fi
+  if CompWordsContainsArray "${cmds799[@]}"; then _picocli_fcli_tool_scclient_list; return $?; fi
+  if CompWordsContainsArray "${cmds798[@]}"; then _picocli_fcli_tool_scclient_install; return $?; fi
+  if CompWordsContainsArray "${cmds797[@]}"; then _picocli_fcli_tool_fodupload_uninstall; return $?; fi
+  if CompWordsContainsArray "${cmds796[@]}"; then _picocli_fcli_tool_fodupload_run; return $?; fi
+  if CompWordsContainsArray "${cmds795[@]}"; then _picocli_fcli_tool_fodupload_register; return $?; fi
+  if CompWordsContainsArray "${cmds794[@]}"; then _picocli_fcli_tool_fodupload_get; return $?; fi
+  if CompWordsContainsArray "${cmds793[@]}"; then _picocli_fcli_tool_fodupload_lsp; return $?; fi
+  if CompWordsContainsArray "${cmds792[@]}"; then _picocli_fcli_tool_fodupload_listplatforms; return $?; fi
+  if CompWordsContainsArray "${cmds791[@]}"; then _picocli_fcli_tool_fodupload_ls; return $?; fi
+  if CompWordsContainsArray "${cmds790[@]}"; then _picocli_fcli_tool_fodupload_list; return $?; fi
+  if CompWordsContainsArray "${cmds789[@]}"; then _picocli_fcli_tool_fodupload_install; return $?; fi
+  if CompWordsContainsArray "${cmds788[@]}"; then _picocli_fcli_tool_foduploader_uninstall; return $?; fi
+  if CompWordsContainsArray "${cmds787[@]}"; then _picocli_fcli_tool_foduploader_run; return $?; fi
+  if CompWordsContainsArray "${cmds786[@]}"; then _picocli_fcli_tool_foduploader_register; return $?; fi
+  if CompWordsContainsArray "${cmds785[@]}"; then _picocli_fcli_tool_foduploader_get; return $?; fi
+  if CompWordsContainsArray "${cmds784[@]}"; then _picocli_fcli_tool_foduploader_lsp; return $?; fi
+  if CompWordsContainsArray "${cmds783[@]}"; then _picocli_fcli_tool_foduploader_listplatforms; return $?; fi
+  if CompWordsContainsArray "${cmds782[@]}"; then _picocli_fcli_tool_foduploader_ls; return $?; fi
+  if CompWordsContainsArray "${cmds781[@]}"; then _picocli_fcli_tool_foduploader_list; return $?; fi
+  if CompWordsContainsArray "${cmds780[@]}"; then _picocli_fcli_tool_foduploader_install; return $?; fi
+  if CompWordsContainsArray "${cmds779[@]}"; then _picocli_fcli_tool_fcli_uninstall; return $?; fi
+  if CompWordsContainsArray "${cmds778[@]}"; then _picocli_fcli_tool_fcli_run; return $?; fi
+  if CompWordsContainsArray "${cmds777[@]}"; then _picocli_fcli_tool_fcli_register; return $?; fi
+  if CompWordsContainsArray "${cmds776[@]}"; then _picocli_fcli_tool_fcli_get; return $?; fi
+  if CompWordsContainsArray "${cmds775[@]}"; then _picocli_fcli_tool_fcli_lsp; return $?; fi
+  if CompWordsContainsArray "${cmds774[@]}"; then _picocli_fcli_tool_fcli_listplatforms; return $?; fi
+  if CompWordsContainsArray "${cmds773[@]}"; then _picocli_fcli_tool_fcli_ls; return $?; fi
+  if CompWordsContainsArray "${cmds772[@]}"; then _picocli_fcli_tool_fcli_list; return $?; fi
+  if CompWordsContainsArray "${cmds771[@]}"; then _picocli_fcli_tool_fcli_install; return $?; fi
+  if CompWordsContainsArray "${cmds770[@]}"; then _picocli_fcli_tool_dcli_uninstall; return $?; fi
+  if CompWordsContainsArray "${cmds769[@]}"; then _picocli_fcli_tool_dcli_run; return $?; fi
+  if CompWordsContainsArray "${cmds768[@]}"; then _picocli_fcli_tool_dcli_register; return $?; fi
+  if CompWordsContainsArray "${cmds767[@]}"; then _picocli_fcli_tool_dcli_get; return $?; fi
+  if CompWordsContainsArray "${cmds766[@]}"; then _picocli_fcli_tool_dcli_lsp; return $?; fi
+  if CompWordsContainsArray "${cmds765[@]}"; then _picocli_fcli_tool_dcli_listplatforms; return $?; fi
+  if CompWordsContainsArray "${cmds764[@]}"; then _picocli_fcli_tool_dcli_ls; return $?; fi
+  if CompWordsContainsArray "${cmds763[@]}"; then _picocli_fcli_tool_dcli_list; return $?; fi
+  if CompWordsContainsArray "${cmds762[@]}"; then _picocli_fcli_tool_dcli_install; return $?; fi
+  if CompWordsContainsArray "${cmds761[@]}"; then _picocli_fcli_tool_debrickedcli_uninstall; return $?; fi
+  if CompWordsContainsArray "${cmds760[@]}"; then _picocli_fcli_tool_debrickedcli_run; return $?; fi
+  if CompWordsContainsArray "${cmds759[@]}"; then _picocli_fcli_tool_debrickedcli_register; return $?; fi
+  if CompWordsContainsArray "${cmds758[@]}"; then _picocli_fcli_tool_debrickedcli_get; return $?; fi
+  if CompWordsContainsArray "${cmds757[@]}"; then _picocli_fcli_tool_debrickedcli_lsp; return $?; fi
+  if CompWordsContainsArray "${cmds756[@]}"; then _picocli_fcli_tool_debrickedcli_listplatforms; return $?; fi
+  if CompWordsContainsArray "${cmds755[@]}"; then _picocli_fcli_tool_debrickedcli_ls; return $?; fi
+  if CompWordsContainsArray "${cmds754[@]}"; then _picocli_fcli_tool_debrickedcli_list; return $?; fi
+  if CompWordsContainsArray "${cmds753[@]}"; then _picocli_fcli_tool_debrickedcli_install; return $?; fi
+  if CompWordsContainsArray "${cmds752[@]}"; then _picocli_fcli_tool_fbtu_uninstall; return $?; fi
+  if CompWordsContainsArray "${cmds751[@]}"; then _picocli_fcli_tool_fbtu_run; return $?; fi
+  if CompWordsContainsArray "${cmds750[@]}"; then _picocli_fcli_tool_fbtu_register; return $?; fi
+  if CompWordsContainsArray "${cmds749[@]}"; then _picocli_fcli_tool_fbtu_get; return $?; fi
+  if CompWordsContainsArray "${cmds748[@]}"; then _picocli_fcli_tool_fbtu_lsp; return $?; fi
+  if CompWordsContainsArray "${cmds747[@]}"; then _picocli_fcli_tool_fbtu_listplatforms; return $?; fi
+  if CompWordsContainsArray "${cmds746[@]}"; then _picocli_fcli_tool_fbtu_ls; return $?; fi
+  if CompWordsContainsArray "${cmds745[@]}"; then _picocli_fcli_tool_fbtu_list; return $?; fi
+  if CompWordsContainsArray "${cmds744[@]}"; then _picocli_fcli_tool_fbtu_install; return $?; fi
+  if CompWordsContainsArray "${cmds743[@]}"; then _picocli_fcli_tool_bugtrackerutility_uninstall; return $?; fi
+  if CompWordsContainsArray "${cmds742[@]}"; then _picocli_fcli_tool_bugtrackerutility_run; return $?; fi
+  if CompWordsContainsArray "${cmds741[@]}"; then _picocli_fcli_tool_bugtrackerutility_register; return $?; fi
+  if CompWordsContainsArray "${cmds740[@]}"; then _picocli_fcli_tool_bugtrackerutility_get; return $?; fi
+  if CompWordsContainsArray "${cmds739[@]}"; then _picocli_fcli_tool_bugtrackerutility_lsp; return $?; fi
+  if CompWordsContainsArray "${cmds738[@]}"; then _picocli_fcli_tool_bugtrackerutility_listplatforms; return $?; fi
+  if CompWordsContainsArray "${cmds737[@]}"; then _picocli_fcli_tool_bugtrackerutility_ls; return $?; fi
+  if CompWordsContainsArray "${cmds736[@]}"; then _picocli_fcli_tool_bugtrackerutility_list; return $?; fi
+  if CompWordsContainsArray "${cmds735[@]}"; then _picocli_fcli_tool_bugtrackerutility_install; return $?; fi
+  if CompWordsContainsArray "${cmds734[@]}"; then _picocli_fcli_tool_env_expr; return $?; fi
+  if CompWordsContainsArray "${cmds733[@]}"; then _picocli_fcli_tool_env_ado; return $?; fi
+  if CompWordsContainsArray "${cmds732[@]}"; then _picocli_fcli_tool_env_gitlab; return $?; fi
+  if CompWordsContainsArray "${cmds731[@]}"; then _picocli_fcli_tool_env_github; return $?; fi
+  if CompWordsContainsArray "${cmds730[@]}"; then _picocli_fcli_tool_env_pwsh; return $?; fi
+  if CompWordsContainsArray "${cmds729[@]}"; then _picocli_fcli_tool_env_powershell; return $?; fi
+  if CompWordsContainsArray "${cmds728[@]}"; then _picocli_fcli_tool_env_shell; return $?; fi
+  if CompWordsContainsArray "${cmds727[@]}"; then _picocli_fcli_tool_env_init; return $?; fi
+  if CompWordsContainsArray "${cmds726[@]}"; then _picocli_fcli_tool_definitions; return $?; fi
+  if CompWordsContainsArray "${cmds725[@]}"; then _picocli_fcli_tool_fve; return $?; fi
+  if CompWordsContainsArray "${cmds724[@]}"; then _picocli_fcli_tool_vulnexporter; return $?; fi
+  if CompWordsContainsArray "${cmds723[@]}"; then _picocli_fcli_tool_sourceanalyzer; return $?; fi
+  if CompWordsContainsArray "${cmds722[@]}"; then _picocli_fcli_tool_scancentralclient; return $?; fi
+  if CompWordsContainsArray "${cmds721[@]}"; then _picocli_fcli_tool_scclient; return $?; fi
+  if CompWordsContainsArray "${cmds720[@]}"; then _picocli_fcli_tool_fodupload; return $?; fi
+  if CompWordsContainsArray "${cmds719[@]}"; then _picocli_fcli_tool_foduploader; return $?; fi
+  if CompWordsContainsArray "${cmds718[@]}"; then _picocli_fcli_tool_fcli; return $?; fi
+  if CompWordsContainsArray "${cmds717[@]}"; then _picocli_fcli_tool_dcli; return $?; fi
+  if CompWordsContainsArray "${cmds716[@]}"; then _picocli_fcli_tool_debrickedcli; return $?; fi
+  if CompWordsContainsArray "${cmds715[@]}"; then _picocli_fcli_tool_fbtu; return $?; fi
+  if CompWordsContainsArray "${cmds714[@]}"; then _picocli_fcli_tool_bugtrackerutility; return $?; fi
+  if CompWordsContainsArray "${cmds713[@]}"; then _picocli_fcli_tool_env; return $?; fi
+  if CompWordsContainsArray "${cmds712[@]}"; then _picocli_fcli_ssc_rest_call; return $?; fi
+  if CompWordsContainsArray "${cmds711[@]}"; then _picocli_fcli_ssc_state_waitforjob; return $?; fi
+  if CompWordsContainsArray "${cmds710[@]}"; then _picocli_fcli_ssc_state_updatejob; return $?; fi
+  if CompWordsContainsArray "${cmds709[@]}"; then _picocli_fcli_ssc_state_lsj; return $?; fi
+  if CompWordsContainsArray "${cmds708[@]}"; then _picocli_fcli_ssc_state_listjobs; return $?; fi
+  if CompWordsContainsArray "${cmds707[@]}"; then _picocli_fcli_ssc_state_getjob; return $?; fi
+  if CompWordsContainsArray "${cmds706[@]}"; then _picocli_fcli_ssc_state_canceljob; return $?; fi
+  if CompWordsContainsArray "${cmds705[@]}"; then _picocli_fcli_ssc_state_lsr; return $?; fi
+  if CompWordsContainsArray "${cmds704[@]}"; then _picocli_fcli_ssc_state_listrulepacks; return $?; fi
+  if CompWordsContainsArray "${cmds703[@]}"; then _picocli_fcli_ssc_state_uploadseedbundle; return $?; fi
+  if CompWordsContainsArray "${cmds702[@]}"; then _picocli_fcli_ssc_state_lss; return $?; fi
+  if CompWordsContainsArray "${cmds701[@]}"; then _picocli_fcli_ssc_state_listsettings; return $?; fi
+  if CompWordsContainsArray "${cmds700[@]}"; then _picocli_fcli_ssc_state_lse; return $?; fi
+  if CompWordsContainsArray "${cmds699[@]}"; then _picocli_fcli_ssc_state_listevents; return $?; fi
+  if CompWordsContainsArray "${cmds698[@]}"; then _picocli_fcli_ssc_state_lsa; return $?; fi
+  if CompWordsContainsArray "${cmds697[@]}"; then _picocli_fcli_ssc_state_listactivities; return $?; fi
+  if CompWordsContainsArray "${cmds696[@]}"; then _picocli_fcli_ssc_systemstate_waitforjob; return $?; fi
+  if CompWordsContainsArray "${cmds695[@]}"; then _picocli_fcli_ssc_systemstate_updatejob; return $?; fi
+  if CompWordsContainsArray "${cmds694[@]}"; then _picocli_fcli_ssc_systemstate_lsj; return $?; fi
+  if CompWordsContainsArray "${cmds693[@]}"; then _picocli_fcli_ssc_systemstate_listjobs; return $?; fi
+  if CompWordsContainsArray "${cmds692[@]}"; then _picocli_fcli_ssc_systemstate_getjob; return $?; fi
+  if CompWordsContainsArray "${cmds691[@]}"; then _picocli_fcli_ssc_systemstate_canceljob; return $?; fi
+  if CompWordsContainsArray "${cmds690[@]}"; then _picocli_fcli_ssc_systemstate_lsr; return $?; fi
+  if CompWordsContainsArray "${cmds689[@]}"; then _picocli_fcli_ssc_systemstate_listrulepacks; return $?; fi
+  if CompWordsContainsArray "${cmds688[@]}"; then _picocli_fcli_ssc_systemstate_uploadseedbundle; return $?; fi
+  if CompWordsContainsArray "${cmds687[@]}"; then _picocli_fcli_ssc_systemstate_lss; return $?; fi
+  if CompWordsContainsArray "${cmds686[@]}"; then _picocli_fcli_ssc_systemstate_listsettings; return $?; fi
+  if CompWordsContainsArray "${cmds685[@]}"; then _picocli_fcli_ssc_systemstate_lse; return $?; fi
+  if CompWordsContainsArray "${cmds684[@]}"; then _picocli_fcli_ssc_systemstate_listevents; return $?; fi
+  if CompWordsContainsArray "${cmds683[@]}"; then _picocli_fcli_ssc_systemstate_lsa; return $?; fi
+  if CompWordsContainsArray "${cmds682[@]}"; then _picocli_fcli_ssc_systemstate_listactivities; return $?; fi
+  if CompWordsContainsArray "${cmds681[@]}"; then _picocli_fcli_ssc_report_rmt; return $?; fi
+  if CompWordsContainsArray "${cmds680[@]}"; then _picocli_fcli_ssc_report_deletetemplate; return $?; fi
+  if CompWordsContainsArray "${cmds679[@]}"; then _picocli_fcli_ssc_report_createtemplateconfig; return $?; fi
+  if CompWordsContainsArray "${cmds678[@]}"; then _picocli_fcli_ssc_report_downloadtemplate; return $?; fi
+  if CompWordsContainsArray "${cmds677[@]}"; then _picocli_fcli_ssc_report_gettemplate; return $?; fi
+  if CompWordsContainsArray "${cmds676[@]}"; then _picocli_fcli_ssc_report_lst; return $?; fi
+  if CompWordsContainsArray "${cmds675[@]}"; then _picocli_fcli_ssc_report_listtemplates; return $?; fi
+  if CompWordsContainsArray "${cmds674[@]}"; then _picocli_fcli_ssc_report_createtemplate; return $?; fi
+  if CompWordsContainsArray "${cmds673[@]}"; then _picocli_fcli_ssc_report_lsp; return $?; fi
+  if CompWordsContainsArray "${cmds672[@]}"; then _picocli_fcli_ssc_report_listparameters; return $?; fi
+  if CompWordsContainsArray "${cmds671[@]}"; then _picocli_fcli_ssc_report_rm; return $?; fi
+  if CompWordsContainsArray "${cmds670[@]}"; then _picocli_fcli_ssc_report_delete; return $?; fi
+  if CompWordsContainsArray "${cmds669[@]}"; then _picocli_fcli_ssc_report_waitfor; return $?; fi
+  if CompWordsContainsArray "${cmds668[@]}"; then _picocli_fcli_ssc_report_download; return $?; fi
+  if CompWordsContainsArray "${cmds667[@]}"; then _picocli_fcli_ssc_report_get; return $?; fi
+  if CompWordsContainsArray "${cmds666[@]}"; then _picocli_fcli_ssc_report_ls; return $?; fi
+  if CompWordsContainsArray "${cmds665[@]}"; then _picocli_fcli_ssc_report_list; return $?; fi
+  if CompWordsContainsArray "${cmds664[@]}"; then _picocli_fcli_ssc_report_create; return $?; fi
+  if CompWordsContainsArray "${cmds663[@]}"; then _picocli_fcli_ssc_plugin_ls; return $?; fi
+  if CompWordsContainsArray "${cmds662[@]}"; then _picocli_fcli_ssc_plugin_list; return $?; fi
+  if CompWordsContainsArray "${cmds661[@]}"; then _picocli_fcli_ssc_plugin_get; return $?; fi
+  if CompWordsContainsArray "${cmds660[@]}"; then _picocli_fcli_ssc_plugin_disable; return $?; fi
+  if CompWordsContainsArray "${cmds659[@]}"; then _picocli_fcli_ssc_plugin_enable; return $?; fi
+  if CompWordsContainsArray "${cmds658[@]}"; then _picocli_fcli_ssc_plugin_uninstall; return $?; fi
+  if CompWordsContainsArray "${cmds657[@]}"; then _picocli_fcli_ssc_plugin_install; return $?; fi
+  if CompWordsContainsArray "${cmds656[@]}"; then _picocli_fcli_ssc_var_ls; return $?; fi
+  if CompWordsContainsArray "${cmds655[@]}"; then _picocli_fcli_ssc_var_list; return $?; fi
+  if CompWordsContainsArray "${cmds654[@]}"; then _picocli_fcli_ssc_var_get; return $?; fi
+  if CompWordsContainsArray "${cmds653[@]}"; then _picocli_fcli_ssc_var_lsd; return $?; fi
+  if CompWordsContainsArray "${cmds652[@]}"; then _picocli_fcli_ssc_var_listdefinitions; return $?; fi
+  if CompWordsContainsArray "${cmds651[@]}"; then _picocli_fcli_ssc_variable_ls; return $?; fi
+  if CompWordsContainsArray "${cmds650[@]}"; then _picocli_fcli_ssc_variable_list; return $?; fi
+  if CompWordsContainsArray "${cmds649[@]}"; then _picocli_fcli_ssc_variable_get; return $?; fi
+  if CompWordsContainsArray "${cmds648[@]}"; then _picocli_fcli_ssc_variable_lsd; return $?; fi
+  if CompWordsContainsArray "${cmds647[@]}"; then _picocli_fcli_ssc_variable_listdefinitions; return $?; fi
+  if CompWordsContainsArray "${cmds646[@]}"; then _picocli_fcli_ssc_pi_ls; return $?; fi
+  if CompWordsContainsArray "${cmds645[@]}"; then _picocli_fcli_ssc_pi_list; return $?; fi
+  if CompWordsContainsArray "${cmds644[@]}"; then _picocli_fcli_ssc_pi_get; return $?; fi
+  if CompWordsContainsArray "${cmds643[@]}"; then _picocli_fcli_ssc_pi_lsd; return $?; fi
+  if CompWordsContainsArray "${cmds642[@]}"; then _picocli_fcli_ssc_pi_listdefinitions; return $?; fi
+  if CompWordsContainsArray "${cmds641[@]}"; then _picocli_fcli_ssc_performanceindicator_ls; return $?; fi
+  if CompWordsContainsArray "${cmds640[@]}"; then _picocli_fcli_ssc_performanceindicator_list; return $?; fi
+  if CompWordsContainsArray "${cmds639[@]}"; then _picocli_fcli_ssc_performanceindicator_get; return $?; fi
+  if CompWordsContainsArray "${cmds638[@]}"; then _picocli_fcli_ssc_performanceindicator_lsd; return $?; fi
+  if CompWordsContainsArray "${cmds637[@]}"; then _picocli_fcli_ssc_performanceindicator_listdefinitions; return $?; fi
+  if CompWordsContainsArray "${cmds636[@]}"; then _picocli_fcli_ssc_issuetemplate_update; return $?; fi
+  if CompWordsContainsArray "${cmds635[@]}"; then _picocli_fcli_ssc_issuetemplate_ls; return $?; fi
+  if CompWordsContainsArray "${cmds634[@]}"; then _picocli_fcli_ssc_issuetemplate_list; return $?; fi
+  if CompWordsContainsArray "${cmds633[@]}"; then _picocli_fcli_ssc_issuetemplate_get; return $?; fi
+  if CompWordsContainsArray "${cmds632[@]}"; then _picocli_fcli_ssc_issuetemplate_download; return $?; fi
+  if CompWordsContainsArray "${cmds631[@]}"; then _picocli_fcli_ssc_issuetemplate_rm; return $?; fi
+  if CompWordsContainsArray "${cmds630[@]}"; then _picocli_fcli_ssc_issuetemplate_delete; return $?; fi
+  if CompWordsContainsArray "${cmds629[@]}"; then _picocli_fcli_ssc_issuetemplate_create; return $?; fi
+  if CompWordsContainsArray "${cmds628[@]}"; then _picocli_fcli_ssc_issue_update; return $?; fi
+  if CompWordsContainsArray "${cmds627[@]}"; then _picocli_fcli_ssc_issue_ls; return $?; fi
+  if CompWordsContainsArray "${cmds626[@]}"; then _picocli_fcli_ssc_issue_list; return $?; fi
+  if CompWordsContainsArray "${cmds625[@]}"; then _picocli_fcli_ssc_issue_get; return $?; fi
+  if CompWordsContainsArray "${cmds624[@]}"; then _picocli_fcli_ssc_issue_count; return $?; fi
+  if CompWordsContainsArray "${cmds623[@]}"; then _picocli_fcli_ssc_issue_lsg; return $?; fi
+  if CompWordsContainsArray "${cmds622[@]}"; then _picocli_fcli_ssc_issue_listgroups; return $?; fi
+  if CompWordsContainsArray "${cmds621[@]}"; then _picocli_fcli_ssc_issue_getgroup; return $?; fi
+  if CompWordsContainsArray "${cmds620[@]}"; then _picocli_fcli_ssc_issue_lsf; return $?; fi
+  if CompWordsContainsArray "${cmds619[@]}"; then _picocli_fcli_ssc_issue_listfilters; return $?; fi
+  if CompWordsContainsArray "${cmds618[@]}"; then _picocli_fcli_ssc_issue_getfilter; return $?; fi
+  if CompWordsContainsArray "${cmds617[@]}"; then _picocli_fcli_ssc_issue_lsfs; return $?; fi
+  if CompWordsContainsArray "${cmds616[@]}"; then _picocli_fcli_ssc_issue_listfiltersets; return $?; fi
+  if CompWordsContainsArray "${cmds615[@]}"; then _picocli_fcli_ssc_issue_getfilterset; return $?; fi
+  if CompWordsContainsArray "${cmds614[@]}"; then _picocli_fcli_ssc_issue_updatetemplate; return $?; fi
+  if CompWordsContainsArray "${cmds613[@]}"; then _picocli_fcli_ssc_issue_lst; return $?; fi
+  if CompWordsContainsArray "${cmds612[@]}"; then _picocli_fcli_ssc_issue_listtemplates; return $?; fi
+  if CompWordsContainsArray "${cmds611[@]}"; then _picocli_fcli_ssc_issue_gettemplate; return $?; fi
+  if CompWordsContainsArray "${cmds610[@]}"; then _picocli_fcli_ssc_issue_downloadtemplate; return $?; fi
+  if CompWordsContainsArray "${cmds609[@]}"; then _picocli_fcli_ssc_issue_rmt; return $?; fi
+  if CompWordsContainsArray "${cmds608[@]}"; then _picocli_fcli_ssc_issue_deletetemplate; return $?; fi
+  if CompWordsContainsArray "${cmds607[@]}"; then _picocli_fcli_ssc_issue_createtemplate; return $?; fi
+  if CompWordsContainsArray "${cmds606[@]}"; then _picocli_fcli_ssc_tag_update; return $?; fi
+  if CompWordsContainsArray "${cmds605[@]}"; then _picocli_fcli_ssc_tag_create; return $?; fi
+  if CompWordsContainsArray "${cmds604[@]}"; then _picocli_fcli_ssc_tag_rm; return $?; fi
+  if CompWordsContainsArray "${cmds603[@]}"; then _picocli_fcli_ssc_tag_delete; return $?; fi
+  if CompWordsContainsArray "${cmds602[@]}"; then _picocli_fcli_ssc_tag_get; return $?; fi
+  if CompWordsContainsArray "${cmds601[@]}"; then _picocli_fcli_ssc_tag_ls; return $?; fi
+  if CompWordsContainsArray "${cmds600[@]}"; then _picocli_fcli_ssc_tag_list; return $?; fi
+  if CompWordsContainsArray "${cmds599[@]}"; then _picocli_fcli_ssc_customtag_update; return $?; fi
+  if CompWordsContainsArray "${cmds598[@]}"; then _picocli_fcli_ssc_customtag_create; return $?; fi
+  if CompWordsContainsArray "${cmds597[@]}"; then _picocli_fcli_ssc_customtag_rm; return $?; fi
+  if CompWordsContainsArray "${cmds596[@]}"; then _picocli_fcli_ssc_customtag_delete; return $?; fi
+  if CompWordsContainsArray "${cmds595[@]}"; then _picocli_fcli_ssc_customtag_get; return $?; fi
+  if CompWordsContainsArray "${cmds594[@]}"; then _picocli_fcli_ssc_customtag_ls; return $?; fi
+  if CompWordsContainsArray "${cmds593[@]}"; then _picocli_fcli_ssc_customtag_list; return $?; fi
+  if CompWordsContainsArray "${cmds592[@]}"; then _picocli_fcli_ssc_attr_update; return $?; fi
+  if CompWordsContainsArray "${cmds591[@]}"; then _picocli_fcli_ssc_attr_ls; return $?; fi
+  if CompWordsContainsArray "${cmds590[@]}"; then _picocli_fcli_ssc_attr_list; return $?; fi
+  if CompWordsContainsArray "${cmds589[@]}"; then _picocli_fcli_ssc_attr_lsd; return $?; fi
+  if CompWordsContainsArray "${cmds588[@]}"; then _picocli_fcli_ssc_attr_listdefinitions; return $?; fi
+  if CompWordsContainsArray "${cmds587[@]}"; then _picocli_fcli_ssc_attr_getdefinition; return $?; fi
+  if CompWordsContainsArray "${cmds586[@]}"; then _picocli_fcli_ssc_attribute_update; return $?; fi
+  if CompWordsContainsArray "${cmds585[@]}"; then _picocli_fcli_ssc_attribute_ls; return $?; fi
+  if CompWordsContainsArray "${cmds584[@]}"; then _picocli_fcli_ssc_attribute_list; return $?; fi
+  if CompWordsContainsArray "${cmds583[@]}"; then _picocli_fcli_ssc_attribute_lsd; return $?; fi
+  if CompWordsContainsArray "${cmds582[@]}"; then _picocli_fcli_ssc_attribute_listdefinitions; return $?; fi
+  if CompWordsContainsArray "${cmds581[@]}"; then _picocli_fcli_ssc_attribute_getdefinition; return $?; fi
+  if CompWordsContainsArray "${cmds580[@]}"; then _picocli_fcli_ssc_artifact_waitfor; return $?; fi
+  if CompWordsContainsArray "${cmds579[@]}"; then _picocli_fcli_ssc_artifact_upload; return $?; fi
+  if CompWordsContainsArray "${cmds578[@]}"; then _picocli_fcli_ssc_artifact_purge; return $?; fi
+  if CompWordsContainsArray "${cmds577[@]}"; then _picocli_fcli_ssc_artifact_ls; return $?; fi
+  if CompWordsContainsArray "${cmds576[@]}"; then _picocli_fcli_ssc_artifact_list; return $?; fi
+  if CompWordsContainsArray "${cmds575[@]}"; then _picocli_fcli_ssc_artifact_importdebricked; return $?; fi
+  if CompWordsContainsArray "${cmds574[@]}"; then _picocli_fcli_ssc_artifact_get; return $?; fi
+  if CompWordsContainsArray "${cmds573[@]}"; then _picocli_fcli_ssc_artifact_download; return $?; fi
+  if CompWordsContainsArray "${cmds572[@]}"; then _picocli_fcli_ssc_artifact_rm; return $?; fi
+  if CompWordsContainsArray "${cmds571[@]}"; then _picocli_fcli_ssc_artifact_delete; return $?; fi
+  if CompWordsContainsArray "${cmds570[@]}"; then _picocli_fcli_ssc_artifact_approve; return $?; fi
+  if CompWordsContainsArray "${cmds569[@]}"; then _picocli_fcli_ssc_av_update; return $?; fi
+  if CompWordsContainsArray "${cmds568[@]}"; then _picocli_fcli_ssc_av_refreshmetrics; return $?; fi
+  if CompWordsContainsArray "${cmds567[@]}"; then _picocli_fcli_ssc_av_purgeartifacts; return $?; fi
+  if CompWordsContainsArray "${cmds566[@]}"; then _picocli_fcli_ssc_av_ls; return $?; fi
+  if CompWordsContainsArray "${cmds565[@]}"; then _picocli_fcli_ssc_av_list; return $?; fi
+  if CompWordsContainsArray "${cmds564[@]}"; then _picocli_fcli_ssc_av_get; return $?; fi
+  if CompWordsContainsArray "${cmds563[@]}"; then _picocli_fcli_ssc_av_downloadstate; return $?; fi
+  if CompWordsContainsArray "${cmds562[@]}"; then _picocli_fcli_ssc_av_copystate; return $?; fi
+  if CompWordsContainsArray "${cmds561[@]}"; then _picocli_fcli_ssc_av_rm; return $?; fi
+  if CompWordsContainsArray "${cmds560[@]}"; then _picocli_fcli_ssc_av_delete; return $?; fi
+  if CompWordsContainsArray "${cmds559[@]}"; then _picocli_fcli_ssc_av_create; return $?; fi
+  if CompWordsContainsArray "${cmds558[@]}"; then _picocli_fcli_ssc_appversion_update; return $?; fi
+  if CompWordsContainsArray "${cmds557[@]}"; then _picocli_fcli_ssc_appversion_refreshmetrics; return $?; fi
+  if CompWordsContainsArray "${cmds556[@]}"; then _picocli_fcli_ssc_appversion_purgeartifacts; return $?; fi
+  if CompWordsContainsArray "${cmds555[@]}"; then _picocli_fcli_ssc_appversion_ls; return $?; fi
+  if CompWordsContainsArray "${cmds554[@]}"; then _picocli_fcli_ssc_appversion_list; return $?; fi
+  if CompWordsContainsArray "${cmds553[@]}"; then _picocli_fcli_ssc_appversion_get; return $?; fi
+  if CompWordsContainsArray "${cmds552[@]}"; then _picocli_fcli_ssc_appversion_downloadstate; return $?; fi
+  if CompWordsContainsArray "${cmds551[@]}"; then _picocli_fcli_ssc_appversion_copystate; return $?; fi
+  if CompWordsContainsArray "${cmds550[@]}"; then _picocli_fcli_ssc_appversion_rm; return $?; fi
+  if CompWordsContainsArray "${cmds549[@]}"; then _picocli_fcli_ssc_appversion_delete; return $?; fi
+  if CompWordsContainsArray "${cmds548[@]}"; then _picocli_fcli_ssc_appversion_create; return $?; fi
+  if CompWordsContainsArray "${cmds547[@]}"; then _picocli_fcli_ssc_app_update; return $?; fi
+  if CompWordsContainsArray "${cmds546[@]}"; then _picocli_fcli_ssc_app_ls; return $?; fi
+  if CompWordsContainsArray "${cmds545[@]}"; then _picocli_fcli_ssc_app_list; return $?; fi
+  if CompWordsContainsArray "${cmds544[@]}"; then _picocli_fcli_ssc_app_get; return $?; fi
+  if CompWordsContainsArray "${cmds543[@]}"; then _picocli_fcli_ssc_app_rm; return $?; fi
+  if CompWordsContainsArray "${cmds542[@]}"; then _picocli_fcli_ssc_app_delete; return $?; fi
+  if CompWordsContainsArray "${cmds541[@]}"; then _picocli_fcli_ssc_alert_ls; return $?; fi
+  if CompWordsContainsArray "${cmds540[@]}"; then _picocli_fcli_ssc_alert_list; return $?; fi
+  if CompWordsContainsArray "${cmds539[@]}"; then _picocli_fcli_ssc_alert_lsd; return $?; fi
+  if CompWordsContainsArray "${cmds538[@]}"; then _picocli_fcli_ssc_alert_listdefinitions; return $?; fi
+  if CompWordsContainsArray "${cmds537[@]}"; then _picocli_fcli_ssc_alert_getdefinition; return $?; fi
+  if CompWordsContainsArray "${cmds536[@]}"; then _picocli_fcli_ssc_ac_lsavu; return $?; fi
+  if CompWordsContainsArray "${cmds535[@]}"; then _picocli_fcli_ssc_ac_listappversionusers; return $?; fi
+  if CompWordsContainsArray "${cmds534[@]}"; then _picocli_fcli_ssc_ac_lsu; return $?; fi
+  if CompWordsContainsArray "${cmds533[@]}"; then _picocli_fcli_ssc_ac_listusers; return $?; fi
+  if CompWordsContainsArray "${cmds532[@]}"; then _picocli_fcli_ssc_ac_getuser; return $?; fi
+  if CompWordsContainsArray "${cmds531[@]}"; then _picocli_fcli_ssc_ac_rmuser; return $?; fi
+  if CompWordsContainsArray "${cmds530[@]}"; then _picocli_fcli_ssc_ac_deleteuser; return $?; fi
+  if CompWordsContainsArray "${cmds529[@]}"; then _picocli_fcli_ssc_ac_updatelocaluser; return $?; fi
+  if CompWordsContainsArray "${cmds528[@]}"; then _picocli_fcli_ssc_ac_createlocaluser; return $?; fi
+  if CompWordsContainsArray "${cmds527[@]}"; then _picocli_fcli_ssc_ac_lsp; return $?; fi
+  if CompWordsContainsArray "${cmds526[@]}"; then _picocli_fcli_ssc_ac_listpermissions; return $?; fi
+  if CompWordsContainsArray "${cmds525[@]}"; then _picocli_fcli_ssc_ac_getpermission; return $?; fi
+  if CompWordsContainsArray "${cmds524[@]}"; then _picocli_fcli_ssc_ac_lsr; return $?; fi
+  if CompWordsContainsArray "${cmds523[@]}"; then _picocli_fcli_ssc_ac_listroles; return $?; fi
+  if CompWordsContainsArray "${cmds522[@]}"; then _picocli_fcli_ssc_ac_getrole; return $?; fi
+  if CompWordsContainsArray "${cmds521[@]}"; then _picocli_fcli_ssc_ac_rmrole; return $?; fi
+  if CompWordsContainsArray "${cmds520[@]}"; then _picocli_fcli_ssc_ac_deleterole; return $?; fi
+  if CompWordsContainsArray "${cmds519[@]}"; then _picocli_fcli_ssc_ac_createrole; return $?; fi
+  if CompWordsContainsArray "${cmds518[@]}"; then _picocli_fcli_ssc_ac_updatetoken; return $?; fi
+  if CompWordsContainsArray "${cmds517[@]}"; then _picocli_fcli_ssc_ac_revoketoken; return $?; fi
+  if CompWordsContainsArray "${cmds516[@]}"; then _picocli_fcli_ssc_ac_lst; return $?; fi
+  if CompWordsContainsArray "${cmds515[@]}"; then _picocli_fcli_ssc_ac_listtokens; return $?; fi
+  if CompWordsContainsArray "${cmds514[@]}"; then _picocli_fcli_ssc_ac_createtoken; return $?; fi
+  if CompWordsContainsArray "${cmds513[@]}"; then _picocli_fcli_ssc_ac_lstd; return $?; fi
+  if CompWordsContainsArray "${cmds512[@]}"; then _picocli_fcli_ssc_ac_listtokendefinitions; return $?; fi
+  if CompWordsContainsArray "${cmds511[@]}"; then _picocli_fcli_ssc_accesscontrol_lsavu; return $?; fi
+  if CompWordsContainsArray "${cmds510[@]}"; then _picocli_fcli_ssc_accesscontrol_listappversionusers; return $?; fi
+  if CompWordsContainsArray "${cmds509[@]}"; then _picocli_fcli_ssc_accesscontrol_lsu; return $?; fi
+  if CompWordsContainsArray "${cmds508[@]}"; then _picocli_fcli_ssc_accesscontrol_listusers; return $?; fi
+  if CompWordsContainsArray "${cmds507[@]}"; then _picocli_fcli_ssc_accesscontrol_getuser; return $?; fi
+  if CompWordsContainsArray "${cmds506[@]}"; then _picocli_fcli_ssc_accesscontrol_rmuser; return $?; fi
+  if CompWordsContainsArray "${cmds505[@]}"; then _picocli_fcli_ssc_accesscontrol_deleteuser; return $?; fi
+  if CompWordsContainsArray "${cmds504[@]}"; then _picocli_fcli_ssc_accesscontrol_updatelocaluser; return $?; fi
+  if CompWordsContainsArray "${cmds503[@]}"; then _picocli_fcli_ssc_accesscontrol_createlocaluser; return $?; fi
+  if CompWordsContainsArray "${cmds502[@]}"; then _picocli_fcli_ssc_accesscontrol_lsp; return $?; fi
+  if CompWordsContainsArray "${cmds501[@]}"; then _picocli_fcli_ssc_accesscontrol_listpermissions; return $?; fi
+  if CompWordsContainsArray "${cmds500[@]}"; then _picocli_fcli_ssc_accesscontrol_getpermission; return $?; fi
+  if CompWordsContainsArray "${cmds499[@]}"; then _picocli_fcli_ssc_accesscontrol_lsr; return $?; fi
+  if CompWordsContainsArray "${cmds498[@]}"; then _picocli_fcli_ssc_accesscontrol_listroles; return $?; fi
+  if CompWordsContainsArray "${cmds497[@]}"; then _picocli_fcli_ssc_accesscontrol_getrole; return $?; fi
+  if CompWordsContainsArray "${cmds496[@]}"; then _picocli_fcli_ssc_accesscontrol_rmrole; return $?; fi
+  if CompWordsContainsArray "${cmds495[@]}"; then _picocli_fcli_ssc_accesscontrol_deleterole; return $?; fi
+  if CompWordsContainsArray "${cmds494[@]}"; then _picocli_fcli_ssc_accesscontrol_createrole; return $?; fi
+  if CompWordsContainsArray "${cmds493[@]}"; then _picocli_fcli_ssc_accesscontrol_updatetoken; return $?; fi
+  if CompWordsContainsArray "${cmds492[@]}"; then _picocli_fcli_ssc_accesscontrol_revoketoken; return $?; fi
+  if CompWordsContainsArray "${cmds491[@]}"; then _picocli_fcli_ssc_accesscontrol_lst; return $?; fi
+  if CompWordsContainsArray "${cmds490[@]}"; then _picocli_fcli_ssc_accesscontrol_listtokens; return $?; fi
+  if CompWordsContainsArray "${cmds489[@]}"; then _picocli_fcli_ssc_accesscontrol_createtoken; return $?; fi
+  if CompWordsContainsArray "${cmds488[@]}"; then _picocli_fcli_ssc_accesscontrol_lstd; return $?; fi
+  if CompWordsContainsArray "${cmds487[@]}"; then _picocli_fcli_ssc_accesscontrol_listtokendefinitions; return $?; fi
+  if CompWordsContainsArray "${cmds486[@]}"; then _picocli_fcli_ssc_action_sign; return $?; fi
+  if CompWordsContainsArray "${cmds485[@]}"; then _picocli_fcli_ssc_action_run; return $?; fi
+  if CompWordsContainsArray "${cmds484[@]}"; then _picocli_fcli_ssc_action_reset; return $?; fi
+  if CompWordsContainsArray "${cmds483[@]}"; then _picocli_fcli_ssc_action_ls; return $?; fi
+  if CompWordsContainsArray "${cmds482[@]}"; then _picocli_fcli_ssc_action_list; return $?; fi
+  if CompWordsContainsArray "${cmds481[@]}"; then _picocli_fcli_ssc_action_import; return $?; fi
+  if CompWordsContainsArray "${cmds480[@]}"; then _picocli_fcli_ssc_action_help; return $?; fi
+  if CompWordsContainsArray "${cmds479[@]}"; then _picocli_fcli_ssc_action_get; return $?; fi
+  if CompWordsContainsArray "${cmds478[@]}"; then _picocli_fcli_ssc_session_logout; return $?; fi
+  if CompWordsContainsArray "${cmds477[@]}"; then _picocli_fcli_ssc_session_login; return $?; fi
+  if CompWordsContainsArray "${cmds476[@]}"; then _picocli_fcli_ssc_session_ls; return $?; fi
+  if CompWordsContainsArray "${cmds475[@]}"; then _picocli_fcli_ssc_session_list; return $?; fi
+  if CompWordsContainsArray "${cmds474[@]}"; then _picocli_fcli_ssc_rest; return $?; fi
+  if CompWordsContainsArray "${cmds473[@]}"; then _picocli_fcli_ssc_state; return $?; fi
+  if CompWordsContainsArray "${cmds472[@]}"; then _picocli_fcli_ssc_systemstate; return $?; fi
+  if CompWordsContainsArray "${cmds471[@]}"; then _picocli_fcli_ssc_report; return $?; fi
+  if CompWordsContainsArray "${cmds470[@]}"; then _picocli_fcli_ssc_plugin; return $?; fi
+  if CompWordsContainsArray "${cmds469[@]}"; then _picocli_fcli_ssc_var; return $?; fi
+  if CompWordsContainsArray "${cmds468[@]}"; then _picocli_fcli_ssc_variable; return $?; fi
+  if CompWordsContainsArray "${cmds467[@]}"; then _picocli_fcli_ssc_pi; return $?; fi
+  if CompWordsContainsArray "${cmds466[@]}"; then _picocli_fcli_ssc_performanceindicator; return $?; fi
+  if CompWordsContainsArray "${cmds465[@]}"; then _picocli_fcli_ssc_issuetemplate; return $?; fi
+  if CompWordsContainsArray "${cmds464[@]}"; then _picocli_fcli_ssc_issue; return $?; fi
+  if CompWordsContainsArray "${cmds463[@]}"; then _picocli_fcli_ssc_tag; return $?; fi
+  if CompWordsContainsArray "${cmds462[@]}"; then _picocli_fcli_ssc_customtag; return $?; fi
+  if CompWordsContainsArray "${cmds461[@]}"; then _picocli_fcli_ssc_attr; return $?; fi
+  if CompWordsContainsArray "${cmds460[@]}"; then _picocli_fcli_ssc_attribute; return $?; fi
+  if CompWordsContainsArray "${cmds459[@]}"; then _picocli_fcli_ssc_artifact; return $?; fi
+  if CompWordsContainsArray "${cmds458[@]}"; then _picocli_fcli_ssc_av; return $?; fi
+  if CompWordsContainsArray "${cmds457[@]}"; then _picocli_fcli_ssc_appversion; return $?; fi
+  if CompWordsContainsArray "${cmds456[@]}"; then _picocli_fcli_ssc_app; return $?; fi
+  if CompWordsContainsArray "${cmds455[@]}"; then _picocli_fcli_ssc_alert; return $?; fi
+  if CompWordsContainsArray "${cmds454[@]}"; then _picocli_fcli_ssc_ac; return $?; fi
+  if CompWordsContainsArray "${cmds453[@]}"; then _picocli_fcli_ssc_accesscontrol; return $?; fi
+  if CompWordsContainsArray "${cmds452[@]}"; then _picocli_fcli_ssc_action; return $?; fi
+  if CompWordsContainsArray "${cmds451[@]}"; then _picocli_fcli_ssc_session; return $?; fi
+  if CompWordsContainsArray "${cmds450[@]}"; then _picocli_fcli_scsast_rest_call; return $?; fi
+  if CompWordsContainsArray "${cmds449[@]}"; then _picocli_fcli_scsast_pool_ls; return $?; fi
+  if CompWordsContainsArray "${cmds448[@]}"; then _picocli_fcli_scsast_pool_list; return $?; fi
+  if CompWordsContainsArray "${cmds447[@]}"; then _picocli_fcli_scsast_sensorpool_ls; return $?; fi
+  if CompWordsContainsArray "${cmds446[@]}"; then _picocli_fcli_scsast_sensorpool_list; return $?; fi
+  if CompWordsContainsArray "${cmds445[@]}"; then _picocli_fcli_scsast_sensor_ls; return $?; fi
+  if CompWordsContainsArray "${cmds444[@]}"; then _picocli_fcli_scsast_sensor_list; return $?; fi
+  if CompWordsContainsArray "${cmds443[@]}"; then _picocli_fcli_scsast_scan_waitfor; return $?; fi
+  if CompWordsContainsArray "${cmds442[@]}"; then _picocli_fcli_scsast_scan_status; return $?; fi
+  if CompWordsContainsArray "${cmds441[@]}"; then _picocli_fcli_scsast_scan_start; return $?; fi
+  if CompWordsContainsArray "${cmds440[@]}"; then _picocli_fcli_scsast_scan_ls; return $?; fi
+  if CompWordsContainsArray "${cmds439[@]}"; then _picocli_fcli_scsast_scan_list; return $?; fi
+  if CompWordsContainsArray "${cmds438[@]}"; then _picocli_fcli_scsast_scan_download; return $?; fi
+  if CompWordsContainsArray "${cmds437[@]}"; then _picocli_fcli_scsast_scan_cancel; return $?; fi
+  if CompWordsContainsArray "${cmds436[@]}"; then _picocli_fcli_scsast_rest; return $?; fi
+  if CompWordsContainsArray "${cmds435[@]}"; then _picocli_fcli_scsast_pool; return $?; fi
+  if CompWordsContainsArray "${cmds434[@]}"; then _picocli_fcli_scsast_sensorpool; return $?; fi
+  if CompWordsContainsArray "${cmds433[@]}"; then _picocli_fcli_scsast_sensor; return $?; fi
+  if CompWordsContainsArray "${cmds432[@]}"; then _picocli_fcli_scsast_scan; return $?; fi
+  if CompWordsContainsArray "${cmds431[@]}"; then _picocli_fcli_scdast_rest_call; return $?; fi
+  if CompWordsContainsArray "${cmds430[@]}"; then _picocli_fcli_scdast_sensor_ls; return $?; fi
+  if CompWordsContainsArray "${cmds429[@]}"; then _picocli_fcli_scdast_sensor_list; return $?; fi
+  if CompWordsContainsArray "${cmds428[@]}"; then _picocli_fcli_scdast_sensor_get; return $?; fi
+  if CompWordsContainsArray "${cmds427[@]}"; then _picocli_fcli_scdast_sensor_enable; return $?; fi
+  if CompWordsContainsArray "${cmds426[@]}"; then _picocli_fcli_scdast_sensor_disable; return $?; fi
+  if CompWordsContainsArray "${cmds425[@]}"; then _picocli_fcli_scdast_scansettings_ls; return $?; fi
+  if CompWordsContainsArray "${cmds424[@]}"; then _picocli_fcli_scdast_scansettings_list; return $?; fi
+  if CompWordsContainsArray "${cmds423[@]}"; then _picocli_fcli_scdast_scansettings_get; return $?; fi
+  if CompWordsContainsArray "${cmds422[@]}"; then _picocli_fcli_scdast_scanpolicy_ls; return $?; fi
+  if CompWordsContainsArray "${cmds421[@]}"; then _picocli_fcli_scdast_scanpolicy_list; return $?; fi
+  if CompWordsContainsArray "${cmds420[@]}"; then _picocli_fcli_scdast_scanpolicy_get; return $?; fi
+  if CompWordsContainsArray "${cmds419[@]}"; then _picocli_fcli_scdast_scan_waitfor; return $?; fi
+  if CompWordsContainsArray "${cmds418[@]}"; then _picocli_fcli_scdast_scan_start; return $?; fi
+  if CompWordsContainsArray "${cmds417[@]}"; then _picocli_fcli_scdast_scan_resume; return $?; fi
+  if CompWordsContainsArray "${cmds416[@]}"; then _picocli_fcli_scdast_scan_publish; return $?; fi
+  if CompWordsContainsArray "${cmds415[@]}"; then _picocli_fcli_scdast_scan_pause; return $?; fi
+  if CompWordsContainsArray "${cmds414[@]}"; then _picocli_fcli_scdast_scan_ls; return $?; fi
+  if CompWordsContainsArray "${cmds413[@]}"; then _picocli_fcli_scdast_scan_list; return $?; fi
+  if CompWordsContainsArray "${cmds412[@]}"; then _picocli_fcli_scdast_scan_importfindings; return $?; fi
+  if CompWordsContainsArray "${cmds411[@]}"; then _picocli_fcli_scdast_scan_get; return $?; fi
+  if CompWordsContainsArray "${cmds410[@]}"; then _picocli_fcli_scdast_scan_download; return $?; fi
+  if CompWordsContainsArray "${cmds409[@]}"; then _picocli_fcli_scdast_scan_rm; return $?; fi
+  if CompWordsContainsArray "${cmds408[@]}"; then _picocli_fcli_scdast_scan_delete; return $?; fi
+  if CompWordsContainsArray "${cmds407[@]}"; then _picocli_fcli_scdast_scan_complete; return $?; fi
+  if CompWordsContainsArray "${cmds406[@]}"; then _picocli_fcli_scdast_rest; return $?; fi
+  if CompWordsContainsArray "${cmds405[@]}"; then _picocli_fcli_scdast_sensor; return $?; fi
+  if CompWordsContainsArray "${cmds404[@]}"; then _picocli_fcli_scdast_scansettings; return $?; fi
+  if CompWordsContainsArray "${cmds403[@]}"; then _picocli_fcli_scdast_scanpolicy; return $?; fi
+  if CompWordsContainsArray "${cmds402[@]}"; then _picocli_fcli_scdast_scan; return $?; fi
+  if CompWordsContainsArray "${cmds401[@]}"; then _picocli_fcli_fod_rest_lookup; return $?; fi
+  if CompWordsContainsArray "${cmds400[@]}"; then _picocli_fcli_fod_rest_call; return $?; fi
+  if CompWordsContainsArray "${cmds399[@]}"; then _picocli_fcli_fod_report_lst; return $?; fi
+  if CompWordsContainsArray "${cmds398[@]}"; then _picocli_fcli_fod_report_listtemplates; return $?; fi
+  if CompWordsContainsArray "${cmds397[@]}"; then _picocli_fcli_fod_report_download; return $?; fi
+  if CompWordsContainsArray "${cmds396[@]}"; then _picocli_fcli_fod_report_waitfor; return $?; fi
+  if CompWordsContainsArray "${cmds395[@]}"; then _picocli_fcli_fod_report_rm; return $?; fi
+  if CompWordsContainsArray "${cmds394[@]}"; then _picocli_fcli_fod_report_delete; return $?; fi
+  if CompWordsContainsArray "${cmds393[@]}"; then _picocli_fcli_fod_report_create; return $?; fi
+  if CompWordsContainsArray "${cmds392[@]}"; then _picocli_fcli_fod_report_get; return $?; fi
+  if CompWordsContainsArray "${cmds391[@]}"; then _picocli_fcli_fod_report_ls; return $?; fi
+  if CompWordsContainsArray "${cmds390[@]}"; then _picocli_fcli_fod_report_list; return $?; fi
+  if CompWordsContainsArray "${cmds389[@]}"; then _picocli_fcli_fod_issue_update; return $?; fi
+  if CompWordsContainsArray "${cmds388[@]}"; then _picocli_fcli_fod_issue_get; return $?; fi
   if CompWordsContainsArray "${cmds387[@]}"; then _picocli_fcli_fod_issue_ls; return $?; fi
   if CompWordsContainsArray "${cmds386[@]}"; then _picocli_fcli_fod_issue_list; return $?; fi
   if CompWordsContainsArray "${cmds385[@]}"; then _picocli_fcli_fod_oss_lsc; return $?; fi
@@ -4442,7 +4448,7 @@ function _picocli_fcli_aiassist_mcp_startstdio() {
 
   local extraCompGenOpts=()  local commands=""
   local flag_opts="-h --help --debug"
-  local arg_opts="--env-prefix --log-file --log-level --log-mask --module -m --import --work-threads --progress-threads --job-safe-return --progress-interval --async-bg-threads"
+  local arg_opts="--env-prefix --log-file --log-level --log-mask --module -m --import --server-name --work-threads --progress-threads --job-safe-return --progress-interval --async-bg-threads"
   local logLevel_option_args=("TRACE" "DEBUG" "INFO" "WARN" "ERROR" "NONE") # --log-level values
   local level_option_args=("high" "medium" "low" "none") # --log-mask values
   local module_option_args=("fod" "ssc" "sc-sast" "sc-dast" "aviator") # --module values
@@ -4475,6 +4481,9 @@ function _picocli_fcli_aiassist_mcp_startstdio() {
       return $?
       ;;
     --import)
+      return
+      ;;
+    --server-name)
       return
       ;;
     --work-threads)
@@ -5387,7 +5396,7 @@ function _picocli_fcli_ai_mcp_startstdio() {
 
   local extraCompGenOpts=()  local commands=""
   local flag_opts="-h --help --debug"
-  local arg_opts="--env-prefix --log-file --log-level --log-mask --module -m --import --work-threads --progress-threads --job-safe-return --progress-interval --async-bg-threads"
+  local arg_opts="--env-prefix --log-file --log-level --log-mask --module -m --import --server-name --work-threads --progress-threads --job-safe-return --progress-interval --async-bg-threads"
   local logLevel_option_args=("TRACE" "DEBUG" "INFO" "WARN" "ERROR" "NONE") # --log-level values
   local level_option_args=("high" "medium" "low" "none") # --log-mask values
   local module_option_args=("fod" "ssc" "sc-sast" "sc-dast" "aviator") # --module values
@@ -5420,6 +5429,9 @@ function _picocli_fcli_ai_mcp_startstdio() {
       return $?
       ;;
     --import)
+      return
+      ;;
+    --server-name)
       return
       ;;
     --work-threads)
@@ -7306,8 +7318,8 @@ function _picocli_fcli_aviator_ssc_audit() {
   local prev_word=${COMP_WORDS[COMP_CWORD-1]}
 
   local extraCompGenOpts=()  local commands=""
-  local flag_opts="-h --help --debug --refresh --no-filterset --skip-if-exceeding-quota --test-exceeding-quota --default-quota-fallback"
-  local arg_opts="--env-prefix --log-file --log-level --log-mask --ssc-session -o --output --style --store --to-file --progress --delim --appversion --av --aviator-session --av-session --refresh-timeout --filterset --fs --app --tag-mapping --folder --folder-priority-order"
+  local flag_opts="-h --help --debug --refresh --no-filterset --skip-if-exceeding-quota --test-exceeding-quota --default-quota-fallback --force-reaudit"
+  local arg_opts="--env-prefix --log-file --log-level --log-mask --ssc-session -o --output --style --store --to-file --progress --delim --appversion --av --aviator-session --av-session --refresh-timeout --filterset --fs --app --tag-mapping --folder --folder-priority-order --source-encodings"
   local logLevel_option_args=("TRACE" "DEBUG" "INFO" "WARN" "ERROR" "NONE") # --log-level values
   local level_option_args=("high" "medium" "low" "none") # --log-mask values
   local typeargs_option_args=("csv" "table" "expr" "json" "xml" "yaml") # --output values
@@ -7388,6 +7400,9 @@ function _picocli_fcli_aviator_ssc_audit() {
       return
       ;;
     --folder-priority-order)
+      return
+      ;;
+    --source-encodings)
       return
       ;;
   esac
@@ -7484,7 +7499,7 @@ function _picocli_fcli_aviator_ssc_applyremediations() {
 
   local extraCompGenOpts=()  local commands=""
   local flag_opts="-h --help --debug --latest --all"
-  local arg_opts="--env-prefix --log-file --log-level --log-mask --ssc-session -o --output --style --store --to-file --progress --artifact-id --since --appversion --av --delim --source-dir"
+  local arg_opts="--env-prefix --log-file --log-level --log-mask --ssc-session -o --output --style --store --to-file --progress --artifact-id --since --appversion --av --delim --source-dir --source-encodings"
   local logLevel_option_args=("TRACE" "DEBUG" "INFO" "WARN" "ERROR" "NONE") # --log-level values
   local level_option_args=("high" "medium" "low" "none") # --log-mask values
   local typeargs_option_args=("csv" "table" "expr" "json" "xml" "yaml") # --output values
@@ -7553,6 +7568,9 @@ function _picocli_fcli_aviator_ssc_applyremediations() {
       return
       ;;
     --source-dir)
+      return
+      ;;
+    --source-encodings)
       return
       ;;
   esac
@@ -12683,7 +12701,7 @@ function _picocli_fcli_fod_issue() {
   # Get completion data
   local curr_word=${COMP_WORDS[COMP_CWORD]}
 
-  local extraCompGenOpts=()  local commands="list ls update"
+  local extraCompGenOpts=()  local commands="list ls get update"
   local flag_opts="-h --help"
   local arg_opts=""
 
@@ -12877,8 +12895,8 @@ function _picocli_fcli_fod_session_login() {
   local prev_word=${COMP_WORDS[COMP_CWORD-1]}
 
   local extraCompGenOpts=()  local commands=""
-  local flag_opts="-h --help --debug --insecure -k"
-  local arg_opts="--env-prefix --log-file --log-level --log-mask -o --output --style --store --to-file --scopes --user -u --password -p -t --tenant --client-id --client-secret --header -H --socket-timeout --connect-timeout --url --fod-session"
+  local flag_opts="-h --help --debug --totp --insecure -k"
+  local arg_opts="--env-prefix --log-file --log-level --log-mask -o --output --style --store --to-file --scopes --user -u --password -p -t --tenant --code -c --client-id --client-secret --header -H --socket-timeout --connect-timeout --url --fod-session"
   local logLevel_option_args=("TRACE" "DEBUG" "INFO" "WARN" "ERROR" "NONE") # --log-level values
   local level_option_args=("high" "medium" "low" "none") # --log-mask values
   local typeargs_option_args=("csv" "table" "expr" "json" "xml" "yaml") # --output values
@@ -12935,6 +12953,9 @@ function _picocli_fcli_fod_session_login() {
       return
       ;;
     -t|--tenant)
+      return
+      ;;
+    --code|-c)
       return
       ;;
     --client-id)
@@ -17978,7 +17999,7 @@ function _picocli_fcli_fod_aviator_applyremediations() {
 
   local extraCompGenOpts=()  local commands=""
   local flag_opts="-h --help --debug"
-  local arg_opts="--env-prefix --log-file --log-level --log-mask --fod-session -o --output --style --store --to-file --progress --delim --release --rel --source-dir"
+  local arg_opts="--env-prefix --log-file --log-level --log-mask --fod-session -o --output --style --store --to-file --progress --delim --release --rel --source-dir --source-encodings"
   local logLevel_option_args=("TRACE" "DEBUG" "INFO" "WARN" "ERROR" "NONE") # --log-level values
   local level_option_args=("high" "medium" "low" "none") # --log-mask values
   local typeargs_option_args=("csv" "table" "expr" "json" "xml" "yaml") # --output values
@@ -18041,6 +18062,9 @@ function _picocli_fcli_fod_aviator_applyremediations() {
       return
       ;;
     --source-dir)
+      return
+      ;;
+    --source-encodings)
       return
       ;;
   esac
@@ -24257,7 +24281,7 @@ function _picocli_fcli_fod_dastscan_start() {
 
   local extraCompGenOpts=()  local commands=""
   local flag_opts="-h --help --debug --validate-entitlement"
-  local arg_opts="--env-prefix --log-file --log-level --log-mask --fod-session --delim --release --rel -o --output --style --store --to-file --in-progress --in-progress-action --wait-interval --max-attempts --progress"
+  local arg_opts="--env-prefix --log-file --log-level --log-mask --fod-session --delim --release --rel -o --output --style --store --to-file --in-progress --in-progress-action --wait-interval --max-attempts --vpn --progress"
   local logLevel_option_args=("TRACE" "DEBUG" "INFO" "WARN" "ERROR" "NONE") # --log-level values
   local level_option_args=("high" "medium" "low" "none") # --log-mask values
   local typeargs_option_args=("csv" "table" "expr" "json" "xml" "yaml") # --output values
@@ -24324,6 +24348,9 @@ function _picocli_fcli_fod_dastscan_start() {
       return
       ;;
     --max-attempts)
+      return
+      ;;
+    --vpn)
       return
       ;;
     --progress)
@@ -25430,7 +25457,7 @@ function _picocli_fcli_fod_dast_start() {
 
   local extraCompGenOpts=()  local commands=""
   local flag_opts="-h --help --debug --validate-entitlement"
-  local arg_opts="--env-prefix --log-file --log-level --log-mask --fod-session --delim --release --rel -o --output --style --store --to-file --in-progress --in-progress-action --wait-interval --max-attempts --progress"
+  local arg_opts="--env-prefix --log-file --log-level --log-mask --fod-session --delim --release --rel -o --output --style --store --to-file --in-progress --in-progress-action --wait-interval --max-attempts --vpn --progress"
   local logLevel_option_args=("TRACE" "DEBUG" "INFO" "WARN" "ERROR" "NONE") # --log-level values
   local level_option_args=("high" "medium" "low" "none") # --log-mask values
   local typeargs_option_args=("csv" "table" "expr" "json" "xml" "yaml") # --output values
@@ -25497,6 +25524,9 @@ function _picocli_fcli_fod_dast_start() {
       return
       ;;
     --max-attempts)
+      return
+      ;;
+    --vpn)
       return
       ;;
     --progress)
@@ -30096,6 +30126,87 @@ function _picocli_fcli_fod_issue_ls() {
   fi
 }
 
+# Generates completions for the options and subcommands of the `get` subcommand.
+function _picocli_fcli_fod_issue_get() {
+  # Get completion data
+  local curr_word=${COMP_WORDS[COMP_CWORD]}
+  local prev_word=${COMP_WORDS[COMP_CWORD-1]}
+
+  local extraCompGenOpts=()  local commands=""
+  local flag_opts="-h --help --debug"
+  local arg_opts="--env-prefix --log-file --log-level --log-mask --fod-session -o --output --style --store --to-file --delim --release --rel --embed"
+  local logLevel_option_args=("TRACE" "DEBUG" "INFO" "WARN" "ERROR" "NONE") # --log-level values
+  local level_option_args=("high" "medium" "low" "none") # --log-mask values
+  local typeargs_option_args=("csv" "table" "expr" "json" "xml" "yaml") # --output values
+  local style_option_args=("header" "no-header" "pretty" "no-pretty" "flat" "no-flat" "array" "single" "border" "no-border" "md-border" "wrap" "no-wrap" "fast-output" "no-fast-output" "envelope" "no-envelope") # --style values
+  local embedSuppliers_option_args=("allData" "summary" "details" "recommendations" "history" "requestResponse" "headers" "parameters" "traces") # --embed values
+
+  type compopt &>/dev/null && compopt +o default
+
+  case ${prev_word} in
+    --env-prefix)
+      return
+      ;;
+    --log-file)
+      local IFS=$'\n'
+      type compopt &>/dev/null && compopt -o filenames
+      COMPREPLY=( $( compgen -f -- "${curr_word}" ) ) # files
+      return $?
+      ;;
+    --log-level)
+      local IFS=$'\n'
+      COMPREPLY=( $( compReplyArray "${logLevel_option_args[@]}" ) )
+      return $?
+      ;;
+    --log-mask)
+      local IFS=$'\n'
+      COMPREPLY=( $( compReplyArray "${level_option_args[@]}" ) )
+      return $?
+      ;;
+    --fod-session)
+      return
+      ;;
+    -o|--output)
+      local IFS=$'\n'
+      COMPREPLY=( $( compReplyArray "${typeargs_option_args[@]}" ) )
+      return $?
+      ;;
+    --style)
+      local IFS=$'\n'
+      COMPREPLY=( $( compReplyArray "${style_option_args[@]}" ) )
+      return $?
+      ;;
+    --store)
+      return
+      ;;
+    --to-file)
+      local IFS=$'\n'
+      type compopt &>/dev/null && compopt -o filenames
+      COMPREPLY=( $( compgen -f -- "${curr_word}" ) ) # files
+      return $?
+      ;;
+    --delim)
+      return
+      ;;
+    --release|--rel)
+      return
+      ;;
+    --embed)
+      local IFS=$'\n'
+      COMPREPLY=( $( compReplyArray "${embedSuppliers_option_args[@]}" ) )
+      return $?
+      ;;
+  esac
+
+  if [[ "${curr_word}" == -* ]]; then
+    COMPREPLY=( $(compgen -W "${flag_opts} ${arg_opts}" -- "${curr_word}") )
+  else
+    local positionals=""
+    local IFS=$'\n'
+    COMPREPLY=( $(compgen ${extraCompGenOpts[@]} -W "${commands// /$'\n'}${IFS}${positionals}" -- "${curr_word}") )
+  fi
+}
+
 # Generates completions for the options and subcommands of the `update` subcommand.
 function _picocli_fcli_fod_issue_update() {
   # Get completion data
@@ -34601,7 +34712,7 @@ function _picocli_fcli_ssc_issue() {
   # Get completion data
   local curr_word=${COMP_WORDS[COMP_CWORD]}
 
-  local extraCompGenOpts=()  local commands="create-template delete-template rmt download-template get-template list-templates lst update-template get-filterset list-filtersets lsfs get-filter list-filters lsf get-group list-groups lsg count list ls update"
+  local extraCompGenOpts=()  local commands="create-template delete-template rmt download-template get-template list-templates lst update-template get-filterset list-filtersets lsfs get-filter list-filters lsf get-group list-groups lsg count get list ls update"
   local flag_opts="-h --help"
   local arg_opts=""
 
@@ -46605,6 +46716,87 @@ function _picocli_fcli_ssc_issue_count() {
       ;;
     --filter)
       return
+      ;;
+  esac
+
+  if [[ "${curr_word}" == -* ]]; then
+    COMPREPLY=( $(compgen -W "${flag_opts} ${arg_opts}" -- "${curr_word}") )
+  else
+    local positionals=""
+    local IFS=$'\n'
+    COMPREPLY=( $(compgen ${extraCompGenOpts[@]} -W "${commands// /$'\n'}${IFS}${positionals}" -- "${curr_word}") )
+  fi
+}
+
+# Generates completions for the options and subcommands of the `get` subcommand.
+function _picocli_fcli_ssc_issue_get() {
+  # Get completion data
+  local curr_word=${COMP_WORDS[COMP_CWORD]}
+  local prev_word=${COMP_WORDS[COMP_CWORD-1]}
+
+  local extraCompGenOpts=()  local commands=""
+  local flag_opts="-h --help --debug"
+  local arg_opts="--env-prefix --log-file --log-level --log-mask --ssc-session -o --output --style --store --to-file --delim --appversion --av --embed"
+  local logLevel_option_args=("TRACE" "DEBUG" "INFO" "WARN" "ERROR" "NONE") # --log-level values
+  local level_option_args=("high" "medium" "low" "none") # --log-mask values
+  local typeargs_option_args=("csv" "table" "expr" "json" "xml" "yaml") # --output values
+  local style_option_args=("header" "no-header" "pretty" "no-pretty" "flat" "no-flat" "array" "single" "border" "no-border" "md-border" "wrap" "no-wrap" "fast-output" "no-fast-output" "envelope" "no-envelope") # --style values
+  local embedSuppliers_option_args=("details" "comments" "auditHistory") # --embed values
+
+  type compopt &>/dev/null && compopt +o default
+
+  case ${prev_word} in
+    --env-prefix)
+      return
+      ;;
+    --log-file)
+      local IFS=$'\n'
+      type compopt &>/dev/null && compopt -o filenames
+      COMPREPLY=( $( compgen -f -- "${curr_word}" ) ) # files
+      return $?
+      ;;
+    --log-level)
+      local IFS=$'\n'
+      COMPREPLY=( $( compReplyArray "${logLevel_option_args[@]}" ) )
+      return $?
+      ;;
+    --log-mask)
+      local IFS=$'\n'
+      COMPREPLY=( $( compReplyArray "${level_option_args[@]}" ) )
+      return $?
+      ;;
+    --ssc-session)
+      return
+      ;;
+    -o|--output)
+      local IFS=$'\n'
+      COMPREPLY=( $( compReplyArray "${typeargs_option_args[@]}" ) )
+      return $?
+      ;;
+    --style)
+      local IFS=$'\n'
+      COMPREPLY=( $( compReplyArray "${style_option_args[@]}" ) )
+      return $?
+      ;;
+    --store)
+      return
+      ;;
+    --to-file)
+      local IFS=$'\n'
+      type compopt &>/dev/null && compopt -o filenames
+      COMPREPLY=( $( compgen -f -- "${curr_word}" ) ) # files
+      return $?
+      ;;
+    --delim)
+      return
+      ;;
+    --appversion|--av)
+      return
+      ;;
+    --embed)
+      local IFS=$'\n'
+      COMPREPLY=( $( compReplyArray "${embedSuppliers_option_args[@]}" ) )
+      return $?
       ;;
   esac
 
