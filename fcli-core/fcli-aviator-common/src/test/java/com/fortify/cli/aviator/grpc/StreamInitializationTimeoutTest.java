@@ -44,10 +44,11 @@ import com.fortify.aviator.grpc.CorrelationServiceGrpc;
 import com.fortify.cli.aviator.audit.model.IssueData;
 import com.fortify.cli.aviator.audit.model.UserPrompt;
 import com.fortify.cli.aviator.config.IAviatorLogger;
-import com.fortify.cli.aviator.dast.DastIssue;
-import com.fortify.cli.aviator.dast.DastSession;
-import com.fortify.cli.aviator.fpr.Vulnerability;
-import com.fortify.cli.aviator.fpr.utils.SourceDecoders;
+import com.fortify.cli.common.cli.util.FcliExecutionContextHolder;
+import com.fortify.cli.common.fpr.Vulnerability;
+import com.fortify.cli.common.fpr.dast.DastIssue;
+import com.fortify.cli.common.fpr.dast.DastSession;
+import com.fortify.cli.common.fpr.utils.SourceDecoders;
 
 import io.grpc.CallOptions;
 import io.grpc.Channel;
@@ -196,7 +197,8 @@ class StreamInitializationTimeoutTest {
     void sastInitializationTimeoutReleasesCallingThreadAndCancelsRpc() throws Exception {
         var workers = Executors.newFixedThreadPool(2);
         var caller = Executors.newSingleThreadExecutor();
-        try (var scheduler = new ManualScheduler();
+           try (var context = FcliExecutionContextHolder.pushNew();
+               var scheduler = new ManualScheduler();
              var client = AviatorGrpcClientHelper.createClient("127.0.0.1:1", AviatorRequestPolicy.WAIT_FOR_READY)) {
             var channel = new SilentChannel();
             try (var processor = new AviatorStreamProcessor(client, LOGGER,
@@ -225,7 +227,8 @@ class StreamInitializationTimeoutTest {
     void sastInitializationTimeoutReleasesCallerOnRealChannel(boolean silentServer) throws Exception {
         var workers = Executors.newFixedThreadPool(2);
         var caller = Executors.newSingleThreadExecutor();
-        try (var scheduler = new ManualScheduler();
+           try (var context = FcliExecutionContextHolder.pushNew();
+               var scheduler = new ManualScheduler();
              var silent = new ServerSocket(0, 1, InetAddress.getLoopbackAddress());
              var client = AviatorGrpcClientHelper.createClient("127.0.0.1:1", AviatorRequestPolicy.WAIT_FOR_READY)) {
             // Unreachable port: wait-for-ready keeps the call queued. Silent socket: connects, never answers.
